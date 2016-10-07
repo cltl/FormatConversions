@@ -184,36 +184,74 @@ def set_metadata(nafobj, filename):
     nafobj.set_header(header)
 
 
+def collect_file_info(inputdir):
+
+    my_files = {}
+    for f in os.listdir(inputdir):
+        parts = f.split('.')
+        filename = parts[0]
+        paragraph = int(parts[2])
+        sentence = int(parts[4])
+        if filename in my_files:
+            file_info = my_files.get(filename)
+        else:
+            file_info = {}
+        if paragraph in file_info:
+            file_info[paragraph].insert(sentence-1, sentence)
+        else:
+            file_info[paragraph] = [sentence]
+        my_files[filename] = file_info
+    return my_files
 
 
 def convert2naf(inputdir, outputdir = None):
 
-    global offset
+    global offset, pid
     
-    current_file = ''
-    raw = ''
-    word_count = 1
-    nafobj = KafNafParser(type="NAF")
-    for f in os.listdir(inputdir):
-        parts = f.split('.')
-        filename = parts[0]
-        paragraph = parts[2]
-        sentence = parts[4]
-        if filename != current_file:
-            nafobj.set_raw(raw)
-            if outputdir is None:
-                outputdir = inputdir
-            nafobj.dump(outputdir + filename + '.naf')
-            nafobj = KafNafParser(type="NAF")
-            offset = 0
-            raw = ''
-            word_count = 1
-            current_file = filename
-            set_metadata(nafobj, filename)
-        token_info = [paragraph, sentence, word_count]
-        word_count, raw = convert2naf_file(inputdir + f, nafobj, token_info, raw)
-    nafobj.set_raw(raw)
-    nafobj.dump(outputdir + filename + '.naf')
+    my_files = collect_file_info(inputdir)
+    for k, v in my_files.items():
+    
+        raw = ''
+        word_count = 1
+        offset = 0
+        pid = 0
+        nafobj = KafNafParser(type="NAF")
+        set_metadata(nafobj, k)
+        old_sentence = 0
+        for para, sentences in sorted(v.items()):
+            #add two newlines and an additional offset for new paragraphs
+            if raw != '':
+                raw += '\n\n'
+                offset += 1
+            for sentence in sentences:
+                filename = k + '.p.' + str(para) + '.s.' + str(sentence) + '.xml'
+                doc_sentence = old_sentence + sentence
+                token_info = [str(para), str(doc_sentence), word_count]
+                word_count, raw = convert2naf_file(inputdir + filename, nafobj, token_info, raw)            
+            old_sentence = doc_sentence
+        nafobj.set_raw(raw)
+        nafobj.dump(outputdir + k + '.naf')
+
+    #for f in os.listdir(inputdir):
+    #    parts = f.split('.')
+    #    filename = parts[0]
+    #    paragraph = parts[2]
+    #    sentence = parts[4]
+    #    if filename != current_file:
+    #        nafobj.set_raw(raw)
+    #        if outputdir is None:
+    #            outputdir = inputdir
+    #        nafobj.dump(outputdir + current_file + '.naf')
+    #        nafobj = KafNafParser(type="NAF")
+    #        offset = 0
+    #        raw = ''
+    #        word_count = 1
+    #        current_file = filename
+    #        set_metadata(nafobj, filename)
+    #    token_info = [paragraph, sentence, word_count]
+    #    word_count, raw = convert2naf_file(inputdir + f, nafobj, token_info, raw)
+#nafobj.set_raw(raw)
+#   nafobj.dump(outputdir + filename + '.naf')
 
 def main(argv=None):
 
