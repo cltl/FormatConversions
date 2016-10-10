@@ -72,7 +72,8 @@ def add_pb_obj_to_naf(nafobj, pbdict):
     for k, val in pbdict.items():
         if not k == 'rel':
             for v in val:
-                add_role(mypred, k, v[0])
+                if len(v) > 0:
+                    add_role(mypred, k, v[0])
     nafobj.add_predicate(mypred)
 
 
@@ -184,81 +185,105 @@ def set_metadata(nafobj, filename):
     nafobj.set_header(header)
 
 
+def make_sure_input_file_exists(filename, paragraph, sentence, dir, f):
+
+    cleanedfn = filename + '.p.' + str(paragraph) + '.s.' + str(sentence) + '.xml'
+    
+    if f != cleanedfn and not 'head' in f and f.endswith('xml'):
+        if os.path.isfile(dir + cleanedfn):
+            print('clean-up will not work: ' + cleanedfn + ' exists', file=sys.stderr)
+        else:
+            os.rename(dir + f, dir + cleanedfn)
+
 def collect_file_info(inputdir):
 
     my_files = {}
+    print(inputdir,file=sys.stderr)
     for f in os.listdir(inputdir):
         parts = f.split('.')
-        filename = parts[0]
-        paragraph = int(parts[2])
-        sentence = int(parts[4])
-        if filename in my_files:
-            file_info = my_files.get(filename)
-        else:
-            file_info = {}
-        if paragraph in file_info:
-            file_info[paragraph].insert(sentence-1, sentence)
-        else:
-            file_info[paragraph] = [sentence]
-        my_files[filename] = file_info
+        if len(parts) > 4:
+            filename = parts[0]
+            paragraph = int(parts[2])
+            sentence_desc = parts[4]
+            if '_' in sentence_desc:
+                sentence = float(sentence_desc.replace('_','.'))
+            elif len(parts) == 7:
+                sentence = float(parts[4] + '.' + parts[5])
+            else:
+                sentence = int(parts[4])
+            make_sure_input_file_exists(filename, paragraph, sentence, inputdir, f)
+            if filename in my_files:
+                file_info = my_files.get(filename)
+            else:
+                file_info = {}
+            if parts[1] == 'head':
+                if 'head' in file_info:
+                    head_paragraph = file_info.get('head')
+                else:
+                    head_paragraph = {}
+                if paragraph in head_paragraph:
+                    head_paragraph[paragraph].insert(int(sentence)-1, sentence)
+                else:
+                    head_paragraph[paragraph] = [sentence]
+                file_info['head'] = head_paragraph
+            elif paragraph in file_info:
+                file_info[paragraph].insert(int(sentence)-1, sentence)
+            else:
+                file_info[paragraph] = [sentence]
+            my_files[filename] = file_info
     return my_files
 
 
+def create_and_process_file(inputdir, file_info, raw, prefix, old_sentence, nafobj, word_count, offset):
+
+    for para, sentences in sorted(file_info.items()):
+    #add two newlines and an additional offset for new paragraphs
+        if raw != '':
+            raw += '\n\n'
+            offset += 1
+        for sentence in sorted(sentences):
+            filename = prefix + str(para) + '.s.' + str(sentence) + '.xml'
+            doc_sentence = old_sentence + sentence
+            token_info = [str(para), str(doc_sentence), word_count]
+            word_count, raw = convert2naf_file(inputdir + filename, nafobj, token_info, raw)
+        old_sentence = doc_sentence
+    return old_sentence, raw, word_count, offset
+
 def convert2naf(inputdir, outputdir = None):
 
-    global offset, pid
+    global offset, pid, sid
     
     my_files = collect_file_info(inputdir)
     for k, v in my_files.items():
-    
         raw = ''
         word_count = 1
         offset = 0
         pid = 0
+        sid = 0
         nafobj = KafNafParser(type="NAF")
         set_metadata(nafobj, k)
         old_sentence = 0
-        for para, sentences in sorted(v.items()):
-            #add two newlines and an additional offset for new paragraphs
-            if raw != '':
-                raw += '\n\n'
-                offset += 1
-            for sentence in sentences:
-                filename = k + '.p.' + str(para) + '.s.' + str(sentence) + '.xml'
-                doc_sentence = old_sentence + sentence
-                token_info = [str(para), str(doc_sentence), word_count]
-                word_count, raw = convert2naf_file(inputdir + filename, nafobj, token_info, raw)            
-            old_sentence = doc_sentence
+        #if exists, create head first
+        if 'head' in v:
+            my_head_dict = v.get('head')
+            prefix = k + '.head.'
+            old_sentence, raw, word_count, offset = create_and_process_file(inputdir, my_head_dict, raw, prefix, old_sentence, nafobj, word_count, offset)
+            del v['head']
+        prefix = k + '.p.'
+        old_sentence, raw, word_count, offset = create_and_process_file(inputdir, v, raw, prefix, old_sentence, nafobj, word_count, offset)
+        
+        print(k + ',' + str(pid) + ',' + str(sid))
         nafobj.set_raw(raw)
         nafobj.dump(outputdir + k + '.naf')
 
-    #for f in os.listdir(inputdir):
-    #    parts = f.split('.')
-    #    filename = parts[0]
-    #    paragraph = parts[2]
-    #    sentence = parts[4]
-    #    if filename != current_file:
-    #        nafobj.set_raw(raw)
-    #        if outputdir is None:
-    #            outputdir = inputdir
-    #        nafobj.dump(outputdir + current_file + '.naf')
-    #        nafobj = KafNafParser(type="NAF")
-    #        offset = 0
-    #        raw = ''
-    #        word_count = 1
-    #        current_file = filename
-    #        set_metadata(nafobj, filename)
-    #    token_info = [paragraph, sentence, word_count]
-    #    word_count, raw = convert2naf_file(inputdir + f, nafobj, token_info, raw)
-#nafobj.set_raw(raw)
-#   nafobj.dump(outputdir + filename + '.naf')
+   
 
 def main(argv=None):
 
     if argv is None:
         argv = sys.argv
     if len(argv) < 2:
-        print('Usage: python sonar2naf.py sonarfile (naffile)')
+        print('Usage: python sonar2naf.py sonardir (nafdir)')
     elif len(argv) < 3:
         convert2naf(argv[1])
     else:
