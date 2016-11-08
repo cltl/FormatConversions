@@ -20,7 +20,7 @@ converts all markables NAMEDENTITY into markables with the name of the type:
 
 becomes:
 
-<PERSON m_id="141" >
+<PERSON m_id="141">
 <token_anchor t_id="1452"/>
 <token_anchor t_id="1453"/>
 <token_anchor t_id="1454"/>
