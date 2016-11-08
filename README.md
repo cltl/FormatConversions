@@ -8,6 +8,4 @@ For conversions between NAF and FoLiA, see https://github.com/cltl/NAFFoLiAPy
 Included conversions:
 
  - SONAR 2 NAF: tokens, terms and srl
- - NAF 2 CAT: 
-	* NewsReader tasks: factuality and Dutch srl
-	* tokens: vanillanaf2cat.py
+ - NAF 2 CAT: tokens, for specific tasks factuality and Dutch SRL (see naf2cat/README.md)
