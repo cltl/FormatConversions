@@ -9,3 +9,4 @@ Included conversions:
 
  - SONAR 2 NAF: tokens, terms and srl
  - NAF 2 CAT: tokens, for specific tasks factuality and Dutch SRL (see naf2cat/README.md)
+ - CAT 2 CAT: cat2cat markables: turns specific attributes of a markable into markables (for comparison and quick inspections)
