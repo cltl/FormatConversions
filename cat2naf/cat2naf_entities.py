@@ -120,7 +120,6 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv
 
-
     if len(argv) < 4:
         print('Usage: python cat2naf_entities.py catfile.xml naffile.naf outfile.naf')
     else:
