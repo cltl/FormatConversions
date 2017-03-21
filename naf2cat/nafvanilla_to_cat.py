@@ -1,8 +1,8 @@
+from __future__ import print_function
 from KafNafParserPy import *
 from lxml import etree
 import sys
 import os
-
 
 
 def get_token_id_from_term(nafobj, termId):
@@ -77,7 +77,7 @@ def create_catfiles(nafdir, catdir):
         
         my_out = etree.tounicode(root, pretty_print=True)
         outfile = open(catdir+cfname+'.xml', 'w')
-        print(my_out, file=outfile)
+        print(my_out.encode('utf8'), file=outfile)
 
 
 def main(argv=None):
