@@ -22,7 +22,7 @@ Column  | Type                    | Description
 9       | Word sense              | Word sense of the word in Column 3.
 10      | Speaker/Author          | Speaker or author name where available. Mostly in Broadcast Conversation and Web Log data.
 11      | Named Entities          | Identifies the spans representing various named entities.
-12:N    | Predicate Arguments     | There is one column each of predicate argument structure information for the predicate mentioned in Column 7.
+12:N    | Predicate Arguments     | There is one column each of predicate argument structure information for the predicate mentioned in Column 7. I.E. the arguments for the predicate first mentioned in Column 7 can be found in Column 12, those for the second predicate in Column 7 can be found in Column 13, etc. If the sentence contains no predicates, these columns are left out entirely, i.e. `N = 12`.
 N       | Coreference             | Coreference chain information encoded in a parenthesis structure. The parentheses mark a span of text and the number is the (arbitrary) id of the referred entity.
 
 \[1\] i.e.
