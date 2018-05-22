@@ -1,6 +1,56 @@
 # mmax2conll
-Script to convert data in MMAX format to the CoNLL format.
+Script to convert data in MMAX format to [CoNLL][] format.
 
-First used to convert data from the [COREA][] (Ch.7 p.115 -- 128) dataset to CoNLL.
+See `CoNLL-specification.md` and `MMAX-specification.md` for extensive descriptions of the CoNLL and MMAX formats.
+
+
+## Usage
+
+To convert a whole folder (that contains a `Basedata` and `Markables` folder as direct children), run:
+
+```sh
+mmax2conll.py path/to/some/folder
+```
+
+To only convert one pair of files, run:
+```sh
+mmax2conll.py path/to/some_words.xml path/to/a_coref_level.xml path/to/output.conll
+```
+
+Effectively this does:
+
+ 1. `words2conll.py`: Converts `*_words.xml` to `*_no_coref.conll`, putting `*` as place holder in the coreference column (Column 12).
+ 2. `add_coref_to_conll.py`: Converts `*_coref_level.xml` + `*_no_coref.conll` to `*_.conll`
+
+
+
+## Columns of CoNLL output
+These scripts were first used to convert data from the [COREA][] (Ch.7 p.115 -- 128) dataset to CoNLL and
+COREA does not contain the following information:
+
+ - POS tags
+ - constituency tree
+ - predicates
+ - speaker/author information
+ - named entities
+
+Therefore **these scripts strictly do not output data in CoNLL format**. The following values and place-holders are used.
+
+Column  | Description           | Value                                                 | Conform CoNLL specification?
+---:    | ---                   | ---                                                   | ---
+      1 | Document ID           | file path without extension                           | Yes
+      2 | Part number           | `0`                                                   | Yes
+      3 | Word number           | `<word>.alppos` from MMAX `*_words.xml` files          | Yes
+      4 | Word itself           | content of `<word>` tags from MMAX `*_words.xml` files | Yes
+      5 | POS                   |              `[POS]`                                  | No
+      6 | Parse bit             |              `*`                                      | No
+      7 | Predicate lemma       | `-`                                                   | Yes
+      8 | Predicate Frameset ID | `-`                                                   | Yes
+      9 | Word sense            | `-`                                                   | Yes
+     10 | Speaker/Author        |              `UNKNOWN`                                | ???
+     11 | Named Entities        | `*`                                                   | Yes, conform example in CoNLL 2012
+      - | Predicate Arguments   | Column(s) left out entirely                           | Yes
+     12 | Coreference           | extracted from MMAX `*_coref_level.xml` files               | Yes
 
 [COREA]: https://link.springer.com/book/10.1007%2F978-3-642-30910-6
+[CoNLL]: http://conll.cemantix.org/2012/data.html
