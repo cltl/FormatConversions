@@ -10,7 +10,7 @@ are the same or very similar.
 Every part (see column two) starts with `#begin document ([document ID]); part [part number (zero padded to 3 digits)]` and ends with `#end document`.
 
 Column  | Type                    | Description
---------|-------------------------|----------
+-------:|-------------------------|----------
 1       | Document ID             | This is a variation on the document filename. Mostly it's the path of the file without the extension.
 2       | Part number             | Some files are divided into multiple parts numbered as 000, 001, 002, ... etc.
 3       | Word number             | 0-based word number **of the sentence**
