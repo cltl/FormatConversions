@@ -48,8 +48,8 @@ Column  | Description           | Value                                         
       8 | Predicate Frameset ID | `-`                                                   | Yes
       9 | Word sense            | `-`                                                   | Yes
      10 | Speaker/Author        |              `UNKNOWN`                                | ???
-     11 | Named Entities        | `*`                                                   | Yes, conform example in CoNLL 2012
-      - | Predicate Arguments   | Column(s) left out entirely                           | Yes
+     11 | Named Entities        | `*`                                                   | Yes
+      - | Predicate Arguments   | None: column(s) left out entirely                           | Yes, conform example in CoNLL 2012
      12 | Coreference           | extracted from MMAX `*_coref_level.xml` files               | Yes
 
 [COREA]: https://link.springer.com/book/10.1007%2F978-3-642-30910-6
