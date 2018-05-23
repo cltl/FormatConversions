@@ -6,7 +6,7 @@ import constants as c
 from util import ValidationError
 
 
-def extract_document_ID_from_filename(filename):
+def document_ID_from_filename(filename):
     """
     Extract the document ID (or None) from the filename of a file from the
     COREA corpus.
