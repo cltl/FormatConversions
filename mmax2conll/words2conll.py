@@ -77,12 +77,16 @@ if __name__ == '__main__':
     ]
 
     parser = ArgumentParser()
+    parser.add_argument('-l', '--log-level', default='INFO',
+                        help="Logging level")
     parser.add_argument('-c', '--config', default=c.DEFAULT_CONFIG_FILE,
                         help="YAML configuration file")
     parser.add_argument('input_file',
                         help="MMAX *_words.xml file to use as input")
     parser.add_argument('output_file', help="where to save the CoNLL output")
     args = parser.parse_args()
+
+    logging.basicConfig(level=vars(args).pop('log_level'))
 
     config_file = vars(args).pop('config')
     with open(config_file) as config_fd:
