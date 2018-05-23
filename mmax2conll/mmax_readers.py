@@ -1,8 +1,27 @@
 import re
+from os import path
 import itertools as it
 
 import constants as c
 from util import ValidationError
+
+
+def extract_document_ID_from_filename(filename):
+    """
+    Extract the document ID (or None) from the filename of a file from the
+    COREA corpus.
+
+    !! NB !! This method is hard-coded for the COREA corpus and
+             only works for the DCOI and Med parts of the corpus.
+
+    See Ch. 7 of Essential Speech and Language Technology for Dutch
+    COREA: Coreference Resolution for Extracting Answers for Dutch
+    https://link.springer.com/book/10.1007/978-3-642-30910-6
+    """
+    basename = path.basename(filename)
+    if basename.startswith('s') or basename.startswith('WR-P-P-H-'):
+        return basename[:-len('_words.xml')]
+    return None
 
 
 class MMAXWordReader:
