@@ -1,3 +1,4 @@
+import re
 import itertools as it
 
 import constants as c
@@ -95,10 +96,36 @@ class MMAXWordsDocumentReader:
 
     def extract_document_ID(self, xml):
         """
-        Extract the document ID from XML-data in MMAX format
+        Extract the document ID (or None) from XML-data from the COREA corpus.
+
+        !! NB !! This method is hard-coded for the COREA corpus and
+                 only works for the CGN and DCOI parts of the corpus.
+
+        See Ch. 7 of Essential Speech and Language Technology for Dutch
+        COREA: Coreference Resolution for Extracting Answers for Dutch
+        https://link.springer.com/book/10.1007/978-3-642-30910-6
         """
-        rough_id = next(xml.getroot().iterchildren())[self.document_id_attr]
-        return '/'.join(rough_id.split('/')[:-1]) + self.document_id_postfix
+        rough_id = next(xml.getroot().iterchildren()).attrib.get(
+            self.document_id_attr,
+            ''
+        )
+
+        if rough_id.startswith('comp'):
+            # This is part of the CGN part of COREA
+            # The id looks like this:
+            #   comp-j/nl/fn007136/fn007136__1.xml
+            # and I want it to look like this:
+            #   CGN/comp-j/nl/fn007136
+            return 'CGN/' + '/'.join(rough_id.split('/')[:-1])
+        elif rough_id.startswith('WR-P-P-H-'):
+            # This is part of the DCOI part of COREA
+            # The id looks like this:
+            #   WR-P-P-H-0000000001.p.1.s.1.xml
+            # and I want it to look like this:
+            #   DCOI/WR-P-P-H-0000000001
+            return 'DCOI/' + rough_id.split('.')[0]
+        else:
+            return None
 
     def get_word_elements(self, xml):
         """
