@@ -84,7 +84,7 @@ if __name__ == '__main__':
     parser.add_argument('output_file', help="where to save the CoNLL output")
     args = parser.parse_args()
 
-    config_file = args.pop('config')
+    config_file = vars(args).pop('config')
     with open(config_file) as config_fd:
         config = yaml.load(config_fd)
 
@@ -94,6 +94,6 @@ if __name__ == '__main__':
                 f"The key {arg!r} is not in the specified configuration file"
                 f" {config_file}"
             )
-        args[arg] = config[arg]
+        setattr(args, arg, config[arg])
 
-    main(**args)
+    main(**vars(args))

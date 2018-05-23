@@ -98,17 +98,16 @@ class MMAXWordsDocumentReader:
     """
 
     def __init__(self, word_reader=None,
-                 validate=c.MMAX_READER_VALIDATE_DEFAULT,
+                 validate=c.VALIDATE_XML,
                  document_id_attr=c.MMAX_WORDS_DOCUMENT_ID_ATTRIBUTE,
-                 document_id_postfix=c.MMAX_WORDS_DOCUMENT_ID_POSTFIX,
                  sent_start_word_number=c.MMAX_SENTENCE_STARTING_WORD_NUMBER,
                  expected_word_tag=c.MMAX_WORD_TAG,
                  expected_root_tag=c.MMAX_WORDS_TAG):
         self.word_reader = word_reader \
             if word_reader is not None \
             else MMAXWordReader()
+        self.validate = validate
         self.document_id_attr = document_id_attr
-        self.document_id_postfix = document_id_postfix
         self.sent_start_word_number = sent_start_word_number
         self.expected_word_tag = expected_word_tag
         self.expected_root_tag = expected_root_tag
