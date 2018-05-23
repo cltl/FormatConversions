@@ -39,7 +39,7 @@ Therefore **these scripts strictly do not output data in CoNLL format**. The fol
 Column  | Description           | Value                                                  | Conform CoNLL specification?
 ---:    | ---                   | ---                                                    | ---
       1 | Document ID           | file path without extension                            | Yes
-      2 | Part number           | `0`                                                    | Yes
+      2 | Part number           | `0` or as extracted from `<word>.alpsent`              | Yes
       3 | Word number           | `<word>.alppos` from MMAX `*_words.xml` files          | Yes
       4 | Word itself           | content of `<word>` tags from MMAX `*_words.xml` files | Yes
       5 | POS                   | `[POS]`                                                | No
