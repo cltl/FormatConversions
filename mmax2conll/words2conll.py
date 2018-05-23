@@ -32,7 +32,9 @@ def main(input_file, output_file, reader=MMAXWordsDocumentReader(),
     )
 
     # Save the data to CoNLL
-    ...
+    for sentence in sentences:
+        print(sentence)
+    print(document_id)
 
 
 def read_words_file(input_file, reader=MMAXWordsDocumentReader(),
