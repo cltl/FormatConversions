@@ -1,19 +1,7 @@
-#! /usr/bin/env python3
 import itertools as it
 
 import constants as c
 from util import ValidationError
-
-# read data from XML file
-#   Document ID should be taken from XML file because it could be that not the
-#   whole path is specified
-# split into sentences using sentence index
-# output to CoNLL file in blocks
-
-# from lxml import etree
-# etree.parse(file_path)
-
-# - the document ID is consistent with the file name
 
 
 class MMAXWordReader:
@@ -65,7 +53,8 @@ class MMAXWordsDocumentReader:
     for a description of the MMAX format.
     """
 
-    def __init__(self, validate=True, word_reader=None,
+    def __init__(self, word_reader=None,
+                 validate=c.MMAX_READER_VALIDATE_DEFAULT,
                  document_id_attr=c.MMAX_WORDS_DOCUMENT_ID_ATTRIBUTE,
                  document_id_postfix=c.MMAX_WORDS_DOCUMENT_ID_POSTFIX,
                  sent_start_word_number=c.MMAX_SENTENCE_STARTING_WORD_NUMBER,
