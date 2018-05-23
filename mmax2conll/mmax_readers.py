@@ -18,9 +18,11 @@ def document_ID_from_filename(filename):
     COREA: Coreference Resolution for Extracting Answers for Dutch
     https://link.springer.com/book/10.1007/978-3-642-30910-6
     """
-    basename = path.basename(filename)
-    if basename.startswith('s') or basename.startswith('WR-P-P-H-'):
-        return basename[:-len('_words.xml')]
+    bare_doc_id = path.basename(filename)[:-len('_words.xml')]
+    if bare_doc_id.startswith('s'):
+        return c.COREA_MED_ID + '/' + bare_doc_id
+    elif bare_doc_id.startswith('WR-P-P-H-'):
+        return c.COREA_DCOI_ID + '/' + bare_doc_id
     return None
 
 
