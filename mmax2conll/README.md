@@ -52,5 +52,5 @@ Column  | Description           | Value                                         
       - | Predicate Arguments   | None: column(s) left out entirely                           | Yes, conform example in CoNLL 2012
      12 | Coreference           | extracted from MMAX `*_coref_level.xml` files               | Yes
 
-[COREA]: https://link.springer.com/book/10.1007%2F978-3-642-30910-6
+[COREA]: https://link.springer.com/book/10.1007/978-3-642-30910-6
 [CoNLL]: http://conll.cemantix.org/2012/data.html

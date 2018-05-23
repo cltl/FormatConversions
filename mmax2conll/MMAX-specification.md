@@ -154,4 +154,4 @@ The following markables could be expected (somewhere in a markables file).
 [MMAX]: http://www.speech.cs.cmu.edu/sigdial2003/proceedings/07_LONG_strube_paper.pdf
 [Attributes]: #attributes
 [Relations]: #relations
-[COREABook]: https://link.springer.com/book/10.1007%2F978-3-642-30910-6
+[COREABook]: https://link.springer.com/book/10.1007/978-3-642-30910-6
