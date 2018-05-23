@@ -36,21 +36,21 @@ COREA does not contain the following information:
 
 Therefore **these scripts strictly do not output data in CoNLL format**. The following values and place-holders are used.
 
-Column  | Description           | Value                                                 | Conform CoNLL specification?
----:    | ---                   | ---                                                   | ---
-      1 | Document ID           | file path without extension                           | Yes
-      2 | Part number           | `0`                                                   | Yes
+Column  | Description           | Value                                                  | Conform CoNLL specification?
+---:    | ---                   | ---                                                    | ---
+      1 | Document ID           | file path without extension                            | Yes
+      2 | Part number           | `0`                                                    | Yes
       3 | Word number           | `<word>.alppos` from MMAX `*_words.xml` files          | Yes
       4 | Word itself           | content of `<word>` tags from MMAX `*_words.xml` files | Yes
-      5 | POS                   |              `[POS]`                                  | No
-      6 | Parse bit             |              `*`                                      | No
-      7 | Predicate lemma       | `-`                                                   | Yes
-      8 | Predicate Frameset ID | `-`                                                   | Yes
-      9 | Word sense            | `-`                                                   | Yes
-     10 | Speaker/Author        |              `UNKNOWN`                                | ???
-     11 | Named Entities        | `*`                                                   | Yes
-      - | Predicate Arguments   | None: column(s) left out entirely                           | Yes, conform example in CoNLL 2012
-     12 | Coreference           | extracted from MMAX `*_coref_level.xml` files               | Yes
+      5 | POS                   | `[POS]`                                                | No
+      6 | Parse bit             | `*`                                                    | No
+      7 | Predicate lemma       | `-`                                                    | Yes
+      8 | Predicate Frameset ID | `-`                                                    | Yes
+      9 | Word sense            | `-`                                                    | Yes
+     10 | Speaker/Author        | `UNKNOWN`                                              | ???
+     11 | Named Entities        | `*`                                                    | Yes
+      - | Predicate Arguments   | None: column(s) left out entirely                      | Yes, conform example in CoNLL 2012
+     12 | Coreference           | extracted from MMAX `*_coref_level.xml` files          | Yes
 
 [COREA]: https://link.springer.com/book/10.1007/978-3-642-30910-6
 [CoNLL]: http://conll.cemantix.org/2012/data.html
