@@ -26,45 +26,24 @@ def document_ID_from_filename(filename):
     return None
 
 
-class MMAXWordReader:
+class CoreaMedWordReader:
     """
-    Reads data from an ElementTree Element from a document in MMAX format.
+    Reads data from an ElementTree Element from a document from the Med part of
+    the COREA corpus.
 
-    See `MMAX-specification.md` and
-    http://www.speech.cs.cmu.edu/sigdial2003/proceedings/07_LONG_strube_paper.pdf
-    for a description of the MMAX format.
+    See Ch. 7 of Essential Speech and Language Technology for Dutch
+    COREA: Coreference Resolution for Extracting Answers for Dutch
+    https://link.springer.com/book/10.1007/978-3-642-30910-6
     """
-    PART_NUMBER_REGEX = re.compile(r'WR-P-P-H-\d+\.p\.(\d+)\.s\.\d+\.xml')
 
-    def __init__(self,
-                 word_number_attr=c.MMAX_WORD_NUMBER_ATTRIBUTE,
-                 part_number_attr=c.MMAX_PART_NUMBER_ATTRIBUTE):
+    def __init__(self, word_number_attr=c.COREA_MED_WORD_NUMBER_ATTRIBUTE):
         self.word_number_attr = word_number_attr
-        self.part_number_attr = part_number_attr
 
     def extract_word(self, xml):
         """
         Extract the word from an XML-element.
         """
         return xml.text
-
-    def extract_part_number(self, xml):
-        """
-        Extract the part number **as a string** from an XML-element.
-
-        Return `None` if it cannot be extracted
-
-        !! NB !! This method is hard-coded for the COREA corpus and only
-                 returns a part number for the DCOI part of the corpus.
-
-        See Ch. 7 of Essential Speech and Language Technology for Dutch
-        COREA: Coreference Resolution for Extracting Answers for Dutch
-        https://link.springer.com/book/10.1007/978-3-642-30910-6
-        """
-        match = self.PART_NUMBER_REGEX.match(xml.attrib[self.part_number_attr])
-        if match is not None:
-            match = match.group(1)
-        return match
 
     def extract_word_number(self, xml):
         """
@@ -79,10 +58,58 @@ class MMAXWordReader:
         The dictionary contains `word_number` and `word`.
         """
         return {
-            'part_number': self.extract_part_number(xml),
             'word_number': self.extract_word_number(xml),
             'word': self.extract_word(xml),
         }
+
+
+class MMAXWordReader(CoreaMedWordReader):
+    """
+    Reads data from an ElementTree Element from a document in MMAX format.
+
+    See `MMAX-specification.md` and
+    http://www.speech.cs.cmu.edu/sigdial2003/proceedings/07_LONG_strube_paper.pdf
+    for a description of the MMAX format.
+    """
+    PART_NUMBER_REGEX = re.compile(r'WR-P-P-H-\d+\.p\.(\d+)\.s\.\d+\.xml')
+
+    def __init__(self,
+                 word_number_attr=c.MMAX_WORD_NUMBER_ATTRIBUTE,
+                 part_number_attr=c.MMAX_PART_NUMBER_ATTRIBUTE):
+        super(MMAXWordReader, self).__init__(word_number_attr)
+        self.part_number_attr = part_number_attr
+
+    def extract_part_number(self, xml):
+        """
+        Extract the part number **as a string** from an XML-element.
+
+        Return `None` if it cannot be extracted
+
+        !! NB !! This method is hard-coded for the COREA corpus and only
+                 returns a part number for the DCOI part of the corpus.
+
+        See Ch. 7 of Essential Speech and Language Technology for Dutch
+        COREA: Coreference Resolution for Extracting Answers for Dutch
+        https://link.springer.com/book/10.1007/978-3-642-30910-6
+        """
+        if self.part_number_attr in xml.attrib:
+            part_text = xml.attrib[self.part_number_attr]
+            match = self.PART_NUMBER_REGEX.match(part_text)
+            if match is not None:
+                return match.group(1)
+        return None
+
+    def read(self, xml):
+        """
+        Extract a dictionary with information about a word from an XML-element.
+
+        The dictionary contains `word_number` and `word`.
+        """
+        dic = super(MMAXWordReader, self).read(xml)
+        dic.update(
+            part_number=self.extract_part_number(xml)
+        )
+        return dic
 
 
 class MMAXWordsDocumentReader:

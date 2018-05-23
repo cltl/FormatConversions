@@ -11,8 +11,9 @@ from lxml import etree
 
 import constants as c
 from mmax_readers import (
+    document_ID_from_filename,
     MMAXWordsDocumentReader,
-    document_ID_from_filename
+    CoreaMedWordReader,
 )
 
 logger = logging.getLogger(None if __name__ == '__main__' else __name__)
@@ -21,14 +22,16 @@ logger = logging.getLogger(None if __name__ == '__main__' else __name__)
 def main(input_file, output_file, reader=MMAXWordsDocumentReader(),
          validate_xml=c.VALIDATE_XML,
          allow_missing_document_ID=c.ALLOW_MISSING_DOCUMENT_ID,
-         default_document_id=c.DEFAULT_DOCUMENT_ID):
+         default_document_id=c.DEFAULT_DOCUMENT_ID,
+         auto_use_Med_word_reader=c.AUTO_USE_MED_WORD_READER):
     # Read in the data from MMAX
     document_id, sentences = read_words_file(
         input_file,
         reader,
         validate_xml,
         allow_missing_document_ID,
-        default_document_id
+        default_document_id,
+        auto_use_Med_word_reader
     )
 
     # Save the data to CoNLL
@@ -40,7 +43,8 @@ def main(input_file, output_file, reader=MMAXWordsDocumentReader(),
 def read_words_file(input_file, reader=MMAXWordsDocumentReader(),
                     validate_xml=c.VALIDATE_XML,
                     allow_missing_document_ID=c.ALLOW_MISSING_DOCUMENT_ID,
-                    default_document_id=c.DEFAULT_DOCUMENT_ID):
+                    default_document_id=c.DEFAULT_DOCUMENT_ID,
+                    auto_use_Med_word_reader=c.AUTO_USE_MED_WORD_READER):
     """
     Read in word and sentence data and a document ID from a file from COREA.
 
@@ -52,7 +56,6 @@ def read_words_file(input_file, reader=MMAXWordsDocumentReader(),
     https://link.springer.com/book/10.1007/978-3-642-30910-6
     """
     xml = etree.parse(input_file)
-    sentences = reader.extract_sentences(xml)
 
     document_id = reader.extract_document_ID(xml)
     if document_id is None:
@@ -64,6 +67,14 @@ def read_words_file(input_file, reader=MMAXWordsDocumentReader(),
             document_id = default_document_id
         else:
             raise ValueError(message)
+    logger.debug(f"auto_use_Med_word_reader: {auto_use_Med_word_reader}")
+    logger.debug(f"document_id: {document_id}")
+    if auto_use_Med_word_reader and document_id.startswith(c.COREA_MED_ID):
+        logger.warn("Ignoring reader.word_reader and automatically using the"
+                    " word reader for COREA Med")
+        reader.word_reader = CoreaMedWordReader()
+
+    sentences = reader.extract_sentences(xml)
     return document_id, sentences
 
 
@@ -73,7 +84,8 @@ if __name__ == '__main__':
     ARGS_FROM_CONFIG = [
         'validate_xml',
         'allow_missing_document_ID',
-        'default_document_id'
+        'default_document_id',
+        'auto_use_Med_word_reader'
     ]
 
     parser = ArgumentParser()
