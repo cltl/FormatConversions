@@ -12,14 +12,37 @@ class MMAXWordReader:
     http://www.speech.cs.cmu.edu/sigdial2003/proceedings/07_LONG_strube_paper.pdf
     for a description of the MMAX format.
     """
-    def __init__(self, word_number_attr=c.MMAX_WORD_NUMBER_ATTRIBUTE):
+    PART_NUMBER_REGEX = re.compile(r'WR-P-P-H-\d+\.p\.(\d+)\.s\.\d+\.xml')
+
+    def __init__(self,
+                 word_number_attr=c.MMAX_WORD_NUMBER_ATTRIBUTE,
+                 part_number_attr=c.MMAX_PART_NUMBER_ATTRIBUTE):
         self.word_number_attr = word_number_attr
+        self.part_number_attr = part_number_attr
 
     def extract_word(self, xml):
         """
         Extract the word from an XML-element.
         """
         return xml.text
+
+    def extract_part_number(self, xml):
+        """
+        Extract the part number **as a string** from an XML-element.
+
+        Return `None` if it cannot be extracted
+
+        !! NB !! This method is hard-coded for the COREA corpus and only
+                 returns a part number for the DCOI part of the corpus.
+
+        See Ch. 7 of Essential Speech and Language Technology for Dutch
+        COREA: Coreference Resolution for Extracting Answers for Dutch
+        https://link.springer.com/book/10.1007/978-3-642-30910-6
+        """
+        match = self.PART_NUMBER_REGEX.match(xml.attrib[self.part_number_attr])
+        if match is not None:
+            match = match.group(1)
+        return match
 
     def extract_word_number(self, xml):
         """
@@ -34,8 +57,9 @@ class MMAXWordReader:
         The dictionary contains `word_number` and `word`.
         """
         return {
+            'part_number': self.extract_part_number(xml),
             'word_number': self.extract_word_number(xml),
-            'word': self.extract_word(xml)
+            'word': self.extract_word(xml),
         }
 
 
