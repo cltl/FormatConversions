@@ -134,14 +134,14 @@ class MMAXWordsDocumentReader:
             #   comp-j/nl/fn007136/fn007136__1.xml
             # and I want it to look like this:
             #   CGN/comp-j/nl/fn007136
-            return 'CGN/' + '/'.join(rough_id.split('/')[:-1])
+            return c.COREA_CGN_ID + '/' + '/'.join(rough_id.split('/')[:-1])
         elif rough_id.startswith('WR-P-P-H-'):
             # This is part of the DCOI part of COREA
             # The id looks like this:
             #   WR-P-P-H-0000000001.p.1.s.1.xml
             # and I want it to look like this:
             #   DCOI/WR-P-P-H-0000000001
-            return 'DCOI/' + rough_id.split('.')[0]
+            return c.COREA_DCOI_ID + '/' + rough_id.split('.')[0]
         else:
             return None
 
