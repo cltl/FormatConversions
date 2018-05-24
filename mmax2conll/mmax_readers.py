@@ -303,8 +303,8 @@ class MMAXWordsDocumentReader:
                         if e.args[0].startswith(expected_msg):
                             raise ValidationError(
                                 f"The word number of {word['word']!r} is not a"
-                                f"number but {word['word_number']!r}."
-                                f"This is in sentence #{senti}: {sentence!r}."
+                                f" number but {word['word_number']!r}."
+                                f" This is in sentence #{senti}: {sentence!r}."
                             )
                         else:
                             raise e
@@ -312,8 +312,8 @@ class MMAXWordsDocumentReader:
                         if word_number != index:
                             raise ValidationError(
                                 f"The word number of {word['word']!r} is the"
-                                f"wrong value. Expected {index}, found:"
+                                f" wrong value. Expected {index}, found:"
                                 f" {word_number}."
-                                f"This is in sentence #{senti}: {sentence!r}."
+                                f" This is in sentence #{senti}: {sentence!r}."
                             )
                         index += 1
