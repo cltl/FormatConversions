@@ -118,7 +118,7 @@ class MMAXWordReader(CoreaMedWordReader):
 
 class MMAXWordsDocumentReader:
     """
-    Reads data and (optionally) validates from an XML-tree in MMAX format.
+    Reads and (optionally) validates data from a MMAX words XML-tree.
 
     Things that are verified if `validate=True`:
      - the tag of the root element is as expected
