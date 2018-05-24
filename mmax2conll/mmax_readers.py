@@ -1,9 +1,12 @@
 import re
+import logging
 from os import path
 import itertools as it
 
 import constants as c
 from util import ValidationError
+
+logger = logging.getLogger(None if __name__ == '__main__' else __name__)
 
 
 def document_ID_from_filename(filename):
@@ -271,7 +274,81 @@ class MMAXWordsDocumentReader:
 
     def validate_sentences(self, sentences):
         """
-        Validate the `word_number`s of these sentences
+        Validate `word_number` and `part_number` of these sentences
+        """
+        self.validate_word_number(sentences)
+        self.validate_part_number(sentences)
+
+    def validate_part_number(self, sentences):
+        """
+        Validate part number of these sentences
+
+        Assumes `word_number` is already validated.
+
+        `part_number` must be:
+         - an integer, None or missing
+         - increasing or (missing or None) everywhere
+         - the same within a sentence
+        """
+        prev_part_number = None
+        for senti, sentence in enumerate(sentences):
+            if len(sentence) == 0:
+                logger.warn(f"Sentence #{senti} is empty")
+
+            for word in sentence:
+                part_number = word.get('part_number', None)
+                if part_number is None:
+                    break
+                try:
+                    part_number = int(part_number)
+                except ValueError:
+                    raise ValidationError(
+                        f"The part number of {word['word']!r} is not a"
+                        f" number but {word['part_number']!r}."
+                        f" This is in sentence #{senti}: {sentence!r}."
+                    )
+                if word['word_number'] == '0':
+                    prev_part_number = part_number
+                elif prev_part_number != part_number:
+                    raise ValidationError(
+                        f"The part number of {word['word']!r} is different"
+                        f" from the part number of the first word of the"
+                        f" sentence. Expected {prev_part_number}, found:"
+                        f" {part_number}."
+                        f" This is in sentence #{senti}: {sentence!r}."
+                    )
+
+            if part_number is None:
+                # The first part number was None, which means _all_ part
+                # numbers should be None
+                others_have_number = (
+                    word.get('part_number', None) is not None
+                    for sentence in sentences
+                    for word in sentence
+                )
+                if prev_part_number is not None or any(others_have_number):
+                    raise ValidationError(
+                        f"Sentence #{senti} is missing a part number:"
+                        f" {sentence!r}."
+                    )
+                else:
+                    # Everything is None, so we're Done!
+                    break
+
+            if prev_part_number != part_number:
+                if prev_part_number > part_number:
+                    raise ValidationError(
+                        f"The part number of sentence #{senti} should be"
+                        f" greater than {prev_part_number}."
+                        f" Found: {part_number}"
+                    )
+
+    def validate_word_number(self, sentences):
+        """
+        Validate word number of these sentences
+
+        `word_number` must:
+         - correspond to `range(len(sentence))`
         """
         expected_msg = 'invalid literal for int() with base 10: '
 
