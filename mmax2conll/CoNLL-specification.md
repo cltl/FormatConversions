@@ -7,7 +7,13 @@ the languages (= Arabic, Chinese and English)
 and the file structure (= `data/(files|train)/data/english/annotations/nw/wsj/05/`)
 are the same or very similar.
 
-Every part (see column two) starts with `#begin document ([document ID]); part [part number (zero padded to 3 digits)]` and ends with `#end document`.
+Every part (see column two) starts with `#begin document ([document ID]); part [part number (zero padded to 3 digits)]` and
+ends with `#end document`.
+Every sentence is followed by an empty line.
+The columns are aligned per sentence and
+can differ between sentences,
+because of the predicate arguments.
+Columns are right aligned.
 
 Column  | Type                    | Description
 -------:|-------------------------|----------
