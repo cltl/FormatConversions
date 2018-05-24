@@ -5,15 +5,15 @@ import os
 
 from lxml import etree
 
-import constants as c
-from util import file_exists
+import code.constants as c
+from code.util import file_exists
 
-from mmax_readers import (
+from code.mmax_readers import (
     document_ID_from_filename,
     MMAXWordsDocumentReader,
     CoreaMedWordReader,
 )
-from conll_writers import CoNLLWriter
+from code.conll_writers import CoNLLWriter
 
 logger = logging.getLogger(None if __name__ == '__main__' else __name__)
 

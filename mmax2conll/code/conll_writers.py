@@ -1,6 +1,6 @@
 import logging
 
-import constants as c
+from . import constants as c
 
 logger = logging.getLogger(None if __name__ == '__main__' else __name__)
 

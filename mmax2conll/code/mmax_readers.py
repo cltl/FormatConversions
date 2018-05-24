@@ -3,8 +3,8 @@ import logging
 from os import path
 import itertools as it
 
-import constants as c
-from util import ValidationError
+from . import constants as c
+from .util import ValidationError
 
 logger = logging.getLogger(None if __name__ == '__main__' else __name__)
 
