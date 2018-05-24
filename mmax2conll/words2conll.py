@@ -19,15 +19,14 @@ from mmax_readers import (
 logger = logging.getLogger(None if __name__ == '__main__' else __name__)
 
 
-def main(input_file, output_file, reader=MMAXWordsDocumentReader(),
+def main(input_file, output_file,
          validate_xml=c.VALIDATE_XML,
          allow_missing_document_ID=c.ALLOW_MISSING_DOCUMENT_ID,
          auto_use_Med_word_reader=c.AUTO_USE_MED_WORD_READER):
     # Read in the data from MMAX
     document_id, sentences = read_words_file(
         input_file,
-        reader,
-        validate_xml,
+        MMAXWordsDocumentReader(validate=validate_xml),
         allow_missing_document_ID,
         auto_use_Med_word_reader
     )
@@ -38,8 +37,7 @@ def main(input_file, output_file, reader=MMAXWordsDocumentReader(),
     print(document_id)
 
 
-def read_words_file(filename, reader=MMAXWordsDocumentReader(),
-                    validate_xml=c.VALIDATE_XML,
+def read_words_file(filename, reader,
                     allow_missing_document_ID=c.ALLOW_MISSING_DOCUMENT_ID,
                     auto_use_Med_word_reader=c.AUTO_USE_MED_WORD_READER):
     """
