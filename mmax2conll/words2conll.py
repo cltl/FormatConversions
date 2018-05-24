@@ -130,3 +130,4 @@ if __name__ == '__main__':
         args[arg] = config[arg]
 
     main(**args)
+    logger.info("Done!")
