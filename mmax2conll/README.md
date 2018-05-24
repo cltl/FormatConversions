@@ -19,7 +19,7 @@ mmax2conll.py path/to/some_words.xml path/to/a_coref_level.xml path/to/output.co
 
 Effectively this does:
 
- 1. `words2conll.py`: Converts `*_words.xml` to `*_no_coref.conll`, putting `*` as place holder in the coreference column (Column 12).
+ 1. `words2conll.py`: Converts `*_words.xml` to `*_no_coref.conll`, putting `*` as place-holder in the coreference column (Column 12).
  2. `add_coref_to_conll.py`: Converts `*_coref_level.xml` + `*_no_coref.conll` to `*.conll`
 
 
