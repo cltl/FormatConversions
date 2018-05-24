@@ -40,7 +40,7 @@ def main(input_file, output_file, reader=MMAXWordsDocumentReader(),
     print(document_id)
 
 
-def read_words_file(input_file, reader=MMAXWordsDocumentReader(),
+def read_words_file(filename, reader=MMAXWordsDocumentReader(),
                     validate_xml=c.VALIDATE_XML,
                     allow_missing_document_ID=c.ALLOW_MISSING_DOCUMENT_ID,
                     default_document_id=c.DEFAULT_DOCUMENT_ID,
@@ -55,11 +55,11 @@ def read_words_file(input_file, reader=MMAXWordsDocumentReader(),
     COREA: Coreference Resolution for Extracting Answers for Dutch
     https://link.springer.com/book/10.1007/978-3-642-30910-6
     """
-    xml = etree.parse(input_file)
+    xml = etree.parse(filename)
 
     document_id = reader.extract_document_ID(xml)
     if document_id is None:
-        document_id = document_ID_from_filename(input_file)
+        document_id = document_ID_from_filename(filename)
     if document_id is None:
         message = "No document ID could be found."
         if allow_missing_document_ID:
