@@ -96,11 +96,11 @@ if __name__ == '__main__':
     parser.add_argument('input_file',
                         help="MMAX *_words.xml file to use as input")
     parser.add_argument('output_file', help="where to save the CoNLL output")
-    args = parser.parse_args()
+    args = vars(parser.parse_args())
 
-    logging.basicConfig(level=vars(args).pop('log_level'))
+    logging.basicConfig(level=args.pop('log_level'))
 
-    config_file = vars(args).pop('config')
+    config_file = args.pop('config')
     with open(config_file) as config_fd:
         config = yaml.load(config_fd)
 
@@ -110,6 +110,6 @@ if __name__ == '__main__':
                 f"The key {arg!r} is not in the specified configuration file"
                 f" {config_file}"
             )
-        setattr(args, arg, config[arg])
+        args[arg] = config[arg]
 
-    main(**vars(args))
+    main(**args)
