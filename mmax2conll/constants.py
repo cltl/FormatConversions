@@ -19,3 +19,33 @@ VALIDATE_XML = True
 ALLOW_MISSING_DOCUMENT_ID = False
 # The following value is different from the one in ./default_config.yml
 AUTO_USE_MED_WORD_READER = False
+
+CONLL_DEFAULTS = {
+    'document_id': 'UNKNOWN',
+    'part_number': '0',
+    'word_number': '[WORD_NUMBER]',
+    'word': '[WORD]',
+    'POS': '[POS]',
+    'parse_bit': '*',
+    'pred_lemma': '-',
+    'pred_frameset_ID': '-',
+    'word_sense': '-',
+    'speaker': 'UNKNOWN',
+    'named_entities': '*',
+    'coref': '*',
+}
+
+CONLL_ON_MISSING = {
+    'document_id': 'throw',
+    'part_number': 'nothing',
+    'word_number': 'throw',
+    'word': 'throw',
+    'POS': 'nothing',
+    'parse_bit': 'nothing',
+    'pred_lemma': 'nothing',
+    'pred_frameset_ID': 'nothing',
+    'word_sense': 'nothing',
+    'speaker': 'nothing',
+    'named_entities': 'nothing',
+    'coref': 'nothing',
+}

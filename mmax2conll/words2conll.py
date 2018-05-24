@@ -15,6 +15,7 @@ from mmax_readers import (
     MMAXWordsDocumentReader,
     CoreaMedWordReader,
 )
+from conll_writers import CoNLLWriter
 
 logger = logging.getLogger(None if __name__ == '__main__' else __name__)
 
@@ -22,7 +23,10 @@ logger = logging.getLogger(None if __name__ == '__main__' else __name__)
 def main(input_file, output_file,
          validate_xml=c.VALIDATE_XML,
          allow_missing_document_ID=c.ALLOW_MISSING_DOCUMENT_ID,
-         auto_use_Med_word_reader=c.AUTO_USE_MED_WORD_READER):
+         auto_use_Med_word_reader=c.AUTO_USE_MED_WORD_READER,
+         defaults=c.CONLL_DEFAULTS,
+         min_column_spacing=c.MIN_COLUMN_SPACING,
+         on_missing=c.CONLL_ON_MISSING):
     # Read in the data from MMAX
     document_id, sentences = read_words_file(
         input_file,
@@ -32,9 +36,16 @@ def main(input_file, output_file,
     )
 
     # Save the data to CoNLL
-    for sentence in sentences:
-        print(sentence)
-    print(document_id)
+    write_conll(
+        output_file,
+        CoNLLWriter(
+            defaults=defaults,
+            min_column_spacing=min_column_spacing,
+            on_missing=on_missing
+        ),
+        document_id,
+        sentences
+    )
 
 
 def read_words_file(filename, reader,
@@ -72,13 +83,26 @@ def read_words_file(filename, reader,
     return document_id, sentences
 
 
+def write_conll(filename, writer, document_id, sentences):
+    """
+    Write sentence data to a file in CoNLL format.
+
+    !! NB !! Does not write coreference data
+    """
+    with open(filename, 'w') as fd:
+        writer.write(fd, document_id, sentences)
+
+
 if __name__ == '__main__':
     from argparse import ArgumentParser
     from pyaml import yaml
     ARGS_FROM_CONFIG = [
         'validate_xml',
         'allow_missing_document_ID',
-        'auto_use_Med_word_reader'
+        'auto_use_Med_word_reader',
+        'min_column_spacing',
+        'defaults',
+        'on_missing',
     ]
 
     parser = ArgumentParser()
