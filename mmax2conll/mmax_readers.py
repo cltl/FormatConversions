@@ -42,7 +42,8 @@ class CoreaMedWordReader:
     def __init__(self, word_number_attr=c.COREA_MED_WORD_NUMBER_ATTRIBUTE):
         self.word_number_attr = word_number_attr
 
-    def extract_word(self, xml):
+    @staticmethod
+    def extract_word(xml):
         """
         Extract the word from an XML-element.
         """
@@ -272,14 +273,16 @@ class MMAXWordsDocumentReader:
 
         return sentences
 
-    def validate_sentences(self, sentences):
+    @staticmethod
+    def validate_sentences(sentences):
         """
         Validate `word_number` and `part_number` of these sentences
         """
-        self.validate_word_number(sentences)
-        self.validate_part_number(sentences)
+        MMAXWordsDocumentReader.validate_word_number(sentences)
+        MMAXWordsDocumentReader.validate_part_number(sentences)
 
-    def validate_part_number(self, sentences):
+    @staticmethod
+    def validate_part_number(sentences):
         """
         Validate part number of these sentences
 
@@ -343,7 +346,8 @@ class MMAXWordsDocumentReader:
                         f" Found: {part_number}"
                     )
 
-    def validate_word_number(self, sentences):
+    @staticmethod
+    def validate_word_number(sentences):
         """
         Validate word number of these sentences
 
