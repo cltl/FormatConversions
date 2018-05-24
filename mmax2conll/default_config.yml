@@ -2,6 +2,7 @@ min_column_spacing: 3
 validate_xml: true
 allow_missing_document_ID: false
 auto_use_Med_word_reader: true
+allow_overwriting: false
 
 defaults:
     document_id: UNKNOWN

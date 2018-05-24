@@ -1,15 +1,13 @@
 #! /usr/bin/env python3
 
-# output to CoNLL file in blocks
-
-# - the input files exist and the output files don't,
-#   or overwriting is enabled in the config
-
 import logging
+import os
 
 from lxml import etree
 
 import constants as c
+from util import file_exists
+
 from mmax_readers import (
     document_ID_from_filename,
     MMAXWordsDocumentReader,
@@ -105,22 +103,40 @@ if __name__ == '__main__':
         'on_missing',
     ]
 
+    # Read command line arguments
     parser = ArgumentParser()
     parser.add_argument('-l', '--log-level', default='INFO',
                         help="Logging level")
     parser.add_argument('-c', '--config', default=c.DEFAULT_CONFIG_FILE,
                         help="YAML configuration file")
-    parser.add_argument('input_file',
+    parser.add_argument('input_file', type=file_exists,
                         help="MMAX *_words.xml file to use as input")
     parser.add_argument('output_file', help="where to save the CoNLL output")
     args = vars(parser.parse_args())
 
+    # Set the logging level
     logging.basicConfig(level=args.pop('log_level'))
 
+    # Read the configuration file
     config_file = args.pop('config')
     with open(config_file) as config_fd:
         config = yaml.load(config_fd)
 
+    # Verify the output file is legal
+    output_file = args['output_file']
+    if os.path.exists(output_file):
+        if not config['allow_overwriting']:
+            raise ValueError(
+                "The configuration specifies overwriting is not allowed, but"
+                f" the output file already exists: {output_file}"
+            )
+    else:
+        # Check if we can create it
+        open(output_file, 'w').close()
+        # Remove it
+        os.remove(output_file)
+
+    # Extract required arguments from configuration
     for arg in ARGS_FROM_CONFIG:
         if arg not in config:
             raise ValueError(
@@ -129,5 +145,6 @@ if __name__ == '__main__':
             )
         args[arg] = config[arg]
 
+    # Run the program
     main(**args)
     logger.info("Done!")
