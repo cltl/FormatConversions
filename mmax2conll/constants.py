@@ -17,6 +17,5 @@ DEFAULT_CONFIG_FILE = './default_config.yml'
 MIN_COLUMN_SPACING = 3
 VALIDATE_XML = True
 ALLOW_MISSING_DOCUMENT_ID = False
-DEFAULT_DOCUMENT_ID = 'UNKNOWN'
 # The following value is different from the one in ./default_config.yml
 AUTO_USE_MED_WORD_READER = False

@@ -22,7 +22,6 @@ logger = logging.getLogger(None if __name__ == '__main__' else __name__)
 def main(input_file, output_file, reader=MMAXWordsDocumentReader(),
          validate_xml=c.VALIDATE_XML,
          allow_missing_document_ID=c.ALLOW_MISSING_DOCUMENT_ID,
-         default_document_id=c.DEFAULT_DOCUMENT_ID,
          auto_use_Med_word_reader=c.AUTO_USE_MED_WORD_READER):
     # Read in the data from MMAX
     document_id, sentences = read_words_file(
@@ -30,7 +29,6 @@ def main(input_file, output_file, reader=MMAXWordsDocumentReader(),
         reader,
         validate_xml,
         allow_missing_document_ID,
-        default_document_id,
         auto_use_Med_word_reader
     )
 
@@ -43,7 +41,6 @@ def main(input_file, output_file, reader=MMAXWordsDocumentReader(),
 def read_words_file(filename, reader=MMAXWordsDocumentReader(),
                     validate_xml=c.VALIDATE_XML,
                     allow_missing_document_ID=c.ALLOW_MISSING_DOCUMENT_ID,
-                    default_document_id=c.DEFAULT_DOCUMENT_ID,
                     auto_use_Med_word_reader=c.AUTO_USE_MED_WORD_READER):
     """
     Read in word and sentence data and a document ID from a file from COREA.
@@ -64,7 +61,6 @@ def read_words_file(filename, reader=MMAXWordsDocumentReader(),
         message = "No document ID could be found."
         if allow_missing_document_ID:
             logger.warn(message)
-            document_id = default_document_id
         else:
             raise ValueError(message)
     logger.debug(f"auto_use_Med_word_reader: {auto_use_Med_word_reader}")
@@ -84,7 +80,6 @@ if __name__ == '__main__':
     ARGS_FROM_CONFIG = [
         'validate_xml',
         'allow_missing_document_ID',
-        'default_document_id',
         'auto_use_Med_word_reader'
     ]
 
