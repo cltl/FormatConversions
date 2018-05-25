@@ -18,7 +18,7 @@ MIN_COLUMN_SPACING = 3
 VALIDATE_XML = True
 ALLOW_MISSING_DOCUMENT_ID = False
 # The following value is different from the one in ./default_config.yml
-AUTO_USE_MED_WORD_READER = False
+AUTO_USE_MED_ITEM_READER = False
 
 CONLL_DEFAULTS = {
     'document_id': 'UNKNOWN',

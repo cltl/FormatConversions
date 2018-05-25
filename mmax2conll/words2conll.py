@@ -21,7 +21,7 @@ logger = logging.getLogger(None if __name__ == '__main__' else __name__)
 def main(input_file, output_file,
          validate_xml=c.VALIDATE_XML,
          allow_missing_document_ID=c.ALLOW_MISSING_DOCUMENT_ID,
-         auto_use_Med_word_reader=c.AUTO_USE_MED_WORD_READER,
+         auto_use_Med_item_reader=c.AUTO_USE_MED_ITEM_READER,
          defaults=c.CONLL_DEFAULTS,
          min_column_spacing=c.MIN_COLUMN_SPACING,
          on_missing=c.CONLL_ON_MISSING):
@@ -30,7 +30,7 @@ def main(input_file, output_file,
         input_file,
         MMAXWordsDocumentReader(validate=validate_xml),
         allow_missing_document_ID,
-        auto_use_Med_word_reader
+        auto_use_Med_item_reader
     )
 
     # Save the data to CoNLL
@@ -48,7 +48,7 @@ def main(input_file, output_file,
 
 def read_words_file(filename, reader,
                     allow_missing_document_ID=c.ALLOW_MISSING_DOCUMENT_ID,
-                    auto_use_Med_word_reader=c.AUTO_USE_MED_WORD_READER):
+                    auto_use_Med_item_reader=c.AUTO_USE_MED_ITEM_READER):
     """
     Read in word and sentence data and a document ID from a file from COREA.
 
@@ -70,12 +70,12 @@ def read_words_file(filename, reader,
             logger.warn(message)
         else:
             raise ValueError(message)
-    logger.debug(f"auto_use_Med_word_reader: {auto_use_Med_word_reader}")
+    logger.debug(f"auto_use_Med_item_reader: {auto_use_Med_item_reader}")
     logger.debug(f"document_id: {document_id}")
-    if auto_use_Med_word_reader and document_id.startswith(c.COREA_MED_ID):
-        logger.warn("Ignoring reader.word_reader and automatically using the"
-                    " word reader for COREA Med")
-        reader.word_reader = CoreaMedWordReader()
+    if auto_use_Med_item_reader and document_id.startswith(c.COREA_MED_ID):
+        logger.warn("Ignoring reader.item_reader and automatically using the"
+                    " item reader for COREA Med")
+        reader.item_reader = CoreaMedWordReader()
 
     sentences = reader.extract_sentences(xml)
     return document_id, sentences
@@ -97,7 +97,7 @@ if __name__ == '__main__':
     ARGS_FROM_CONFIG = [
         'validate_xml',
         'allow_missing_document_ID',
-        'auto_use_Med_word_reader',
+        'auto_use_Med_item_reader',
         'min_column_spacing',
         'defaults',
         'on_missing',

@@ -116,7 +116,56 @@ class MMAXWordReader(CoreaMedWordReader):
         return dic
 
 
-class MMAXWordsDocumentReader:
+class XMLItemReader:
+    """
+    Reads and (optionally) validates data from an XML-tree.
+
+    Things that are verified if `validate=True`:
+     - the tag of the root element is as expected
+     - the tag of all the word elements is as expected
+    """
+
+    def __init__(self, item_reader, validate, expected_child_tag,
+                 expected_root_tag):
+        self.item_reader = item_reader
+        self.validate = validate
+        self.expected_child_tag = expected_child_tag
+        self.expected_root_tag = expected_root_tag
+
+    def get_child_elements(self, xml):
+        """
+        Get the XML-elements of the direct children of the root and validate:
+         - the tag of the root element
+         - the tag of the child elements
+        """
+        root = xml.getroot()
+        if self.validate and not root.tag == self.expected_root_tag:
+            raise ValidationError(
+                f"The root element did not have the expected tag"
+                f" {self.expected_root_tag!r}. Found: {root.tag!r}"
+            )
+
+        children = root.getchildren()
+        if self.validate:
+            for child in children:
+                if child.tag != self.expected_child_tag:
+                    raise ValidationError(
+                        f"One of the children did not have the expected tag"
+                        f" {self.expected_child_tag!r}."
+                        f" Found: {child.tag!r}"
+                    )
+        return children
+
+    def extract_items(self, xml):
+        """
+        Extract all information for every item.
+
+        Returns an iterator of things returned by `self.item_reader.read`
+        """
+        return map(self.item_reader.read, self.get_child_elements(xml))
+
+
+class MMAXWordsDocumentReader(XMLItemReader):
     """
     Reads and (optionally) validates data from a MMAX words XML-tree.
 
@@ -130,20 +179,24 @@ class MMAXWordsDocumentReader:
     for a description of the MMAX format.
     """
 
-    def __init__(self, word_reader=None,
+    def __init__(self, item_reader=None,
                  validate=c.VALIDATE_XML,
                  document_id_attr=c.MMAX_WORDS_DOCUMENT_ID_ATTRIBUTE,
                  sent_start_word_number=c.MMAX_SENTENCE_STARTING_WORD_NUMBER,
-                 expected_word_tag=c.MMAX_WORD_TAG,
+                 expected_child_tag=c.MMAX_WORD_TAG,
                  expected_root_tag=c.MMAX_WORDS_TAG):
-        self.word_reader = word_reader \
-            if word_reader is not None \
+        # Default item_reader
+        item_reader = item_reader \
+            if item_reader is not None \
             else MMAXWordReader()
-        self.validate = validate
+        super(MMAXWordsDocumentReader, self).__init__(
+            item_reader=item_reader,
+            validate=validate,
+            expected_child_tag=expected_child_tag,
+            expected_root_tag=expected_root_tag,
+        )
         self.document_id_attr = document_id_attr
         self.sent_start_word_number = sent_start_word_number
-        self.expected_word_tag = expected_word_tag
-        self.expected_root_tag = expected_root_tag
 
     def extract_document_ID(self, xml):
         """
@@ -178,48 +231,14 @@ class MMAXWordsDocumentReader:
         else:
             return None
 
-    def get_word_elements(self, xml):
-        """
-        Get the XML-elements of the words and validate:
-         - the tag of the root element
-         - the tag of the word elements
-        """
-        root = xml.getroot()
-        if self.validate and not root.tag == self.expected_root_tag:
-            raise ValidationError(
-                f"The root element did not have the expected tag"
-                f" {self.expected_root_tag!r}. Found: {root.tag!r}"
-            )
-
-        children = root.getchildren()
-        if self.validate:
-            for child in children:
-                if child.tag != self.expected_word_tag:
-                    raise ValidationError(
-                        f"One of the children did not have the expected tag"
-                        f" {self.expected_word_tag!r}. Found: {child.tag!r}"
-                    )
-        return children
-
-    def extract_words(self, xml):
-        """
-        Extract all information for every word.
-
-        Returns a list of things returned by `self.word_reader.read`
-        """
-        return [
-            self.word_reader.read(word_element)
-            for word_element in self.get_word_elements(xml)
-        ]
-
     def extract_sentences(self, xml):
         """
         Extract all sentences and validate them.
 
         Returns a list of sentences, where a sentence is a list of things
-        returned by `self.word_reader.read`.
+        returned by `self.item_reader.read`.
         """
-        words = iter(self.extract_words(xml))
+        words = self.extract_items(xml)
         sentences = []
         sentence = None
 
