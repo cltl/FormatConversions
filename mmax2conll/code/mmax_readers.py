@@ -69,7 +69,7 @@ class CoreaMedWordReader:
 
 class MMAXWordReader(CoreaMedWordReader):
     """
-    Reads data from an ElementTree Element from a document in MMAX format.
+    Reads data from an ElementTree Element from a MMAX words document.
 
     See `MMAX-specification.md` and
     http://www.speech.cs.cmu.edu/sigdial2003/proceedings/07_LONG_strube_paper.pdf
@@ -107,7 +107,7 @@ class MMAXWordReader(CoreaMedWordReader):
         """
         Extract a dictionary with information about a word from an XML-element.
 
-        The dictionary contains `word_number` and `word`.
+        The dictionary contains `word_number`, `word` and 'part_number'.
         """
         dic = super(MMAXWordReader, self).read(xml)
         dic.update(
