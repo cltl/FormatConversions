@@ -16,7 +16,6 @@ MMAX_SENTENCE_STARTING_WORD_NUMBER = '0'    # This **must** be a string
 DEFAULT_CONFIG_FILE = './default_config.yml'
 MIN_COLUMN_SPACING = 3
 VALIDATE_XML = True
-ALLOW_MISSING_DOCUMENT_ID = False
 # The following value is different from the one in ./default_config.yml
 AUTO_USE_MED_ITEM_READER = False
 

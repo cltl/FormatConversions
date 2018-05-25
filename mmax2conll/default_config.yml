@@ -1,6 +1,5 @@
 min_column_spacing: 3
 validate_xml: true
-allow_missing_document_ID: false
 auto_use_Med_item_reader: true
 allow_overwriting: false
 

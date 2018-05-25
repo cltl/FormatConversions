@@ -20,34 +20,33 @@ logger = logging.getLogger(None if __name__ == '__main__' else __name__)
 
 def main(input_file, output_file,
          validate_xml=c.VALIDATE_XML,
-         allow_missing_document_ID=c.ALLOW_MISSING_DOCUMENT_ID,
          auto_use_Med_item_reader=c.AUTO_USE_MED_ITEM_READER,
          defaults=c.CONLL_DEFAULTS,
          min_column_spacing=c.MIN_COLUMN_SPACING,
          on_missing=c.CONLL_ON_MISSING):
     # Read in the data from MMAX
     document_id, sentences = read_words_file(
-        input_file,
-        MMAXWordsDocumentReader(validate=validate_xml),
-        allow_missing_document_ID,
-        auto_use_Med_item_reader
+        filename=input_file,
+        reader=MMAXWordsDocumentReader(validate=validate_xml),
+        on_missing_document_ID=on_missing['document_id'],
+        auto_use_Med_item_reader=auto_use_Med_item_reader
     )
 
     # Save the data to CoNLL
     write_conll(
-        output_file,
-        CoNLLWriter(
+        filename=output_file,
+        writer=CoNLLWriter(
             defaults=defaults,
             min_column_spacing=min_column_spacing,
             on_missing=on_missing
         ),
-        document_id,
-        sentences
+        document_id=document_id,
+        sentences=sentences
     )
 
 
 def read_words_file(filename, reader,
-                    allow_missing_document_ID=c.ALLOW_MISSING_DOCUMENT_ID,
+                    on_missing_document_ID=c.CONLL_ON_MISSING['document_id'],
                     auto_use_Med_item_reader=c.AUTO_USE_MED_ITEM_READER):
     """
     Read in word and sentence data and a document ID from a file from COREA.
@@ -64,12 +63,21 @@ def read_words_file(filename, reader,
     document_id = reader.extract_document_ID(xml)
     if document_id is None:
         document_id = document_ID_from_filename(filename)
-    if document_id is None:
-        message = "No document ID could be found."
-        if allow_missing_document_ID:
+
+    message = "No document ID could be found."
+    if on_missing_document_ID == 'warn':
+        if document_id is None:
             logger.warn(message)
-        else:
-            raise ValueError(message)
+    elif on_missing_document_ID == 'throw':
+        if document_id is None:
+            logger.warn(message)
+    elif on_missing_document_ID != 'nothing':
+        raise ValueError(
+                "`on_missing` should be either 'nothing', 'warn' or 'throw',"
+                " but `on_missing['document_id']` is"
+                f" {on_missing_document_ID!r}"
+            )
+
     logger.debug(f"auto_use_Med_item_reader: {auto_use_Med_item_reader}")
     logger.debug(f"document_id: {document_id}")
     if auto_use_Med_item_reader and document_id.startswith(c.COREA_MED_ID):
@@ -96,7 +104,6 @@ if __name__ == '__main__':
     from pyaml import yaml
     ARGS_FROM_CONFIG = [
         'validate_xml',
-        'allow_missing_document_ID',
         'auto_use_Med_item_reader',
         'min_column_spacing',
         'defaults',
