@@ -118,7 +118,8 @@ if __name__ == '__main__':
                         help="YAML configuration file")
     parser.add_argument('input_file', type=file_exists,
                         help="MMAX *_words.xml file to use as input")
-    parser.add_argument('output_file', help="where to save the CoNLL output")
+    parser.add_argument('output_file',
+                        help="where to save the halfCoNLL output")
     args = vars(parser.parse_args())
 
     # Set the logging level
