@@ -42,7 +42,7 @@ CONLL_DEFAULTS = {
     'word_sense': '-',
     'speaker': 'UNKNOWN',
     'named_entities': '*',
-    'coref': '*',
+    'coref': '-',
 }
 
 CONLL_ON_MISSING = {

@@ -15,7 +15,7 @@ defaults:
     word_sense: '-'
     speaker: UNKNOWN
     named_entities: '*'
-    coref: '*'
+    coref: '-'
 
 on_missing:
     document_id: throw
