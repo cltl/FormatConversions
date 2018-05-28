@@ -92,8 +92,6 @@ def read_words_file(filename, reader,
 def write_conll(filename, writer, document_id, sentences):
     """
     Write sentence data to a file in CoNLL format.
-
-    !! NB !! Does not write coreference data
     """
     with open(filename, 'w') as fd:
         writer.write(fd, document_id, sentences)

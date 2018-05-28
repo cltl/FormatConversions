@@ -10,7 +10,6 @@ class CoNLLWriter:
     Write data in CoNLL format.
 
     !! NB !! No support for predicate arguments (Columns 12:N)
-    !! NB !! No support (yet) for coreference data (Column N)
 
     # CoNLL Format
     [This page][CoNLL-2012] contains the CoNLL file format description.
