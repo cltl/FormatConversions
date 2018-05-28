@@ -116,6 +116,152 @@ class MMAXWordReader(CoreaMedWordReader):
         return dic
 
 
+class MMAXMarkableReader:
+    """
+    Reads data from an ElementTree Element from a MMAX markables document.
+
+    See `MMAX-specification.md` and
+    http://www.speech.cs.cmu.edu/sigdial2003/proceedings/07_LONG_strube_paper.pdf
+    for a description of the MMAX format.
+    """
+    def __init__(self,
+                 id_attr=c.MMAX_ID_ATTRIBUTE,
+                 span_attr=c.MMAX_SPAN_ATTRIBUTE,
+                 head_attr=c.MMAX_HEAD_ATTRIBUTE,
+                 ref_attr=c.MMAX_REF_ATTRIBUTE,
+                 level_attr=c.MMAX_LEVEL_ATTRIBUTE,
+                 type_attr=c.MMAX_TYPE_ATTRIBUTE,
+                 time_attr=c.MMAX_TIME_ATTRIBUTE,
+                 mod_attr=c.MMAX_MOD_ATTRIBUTE):
+        self.id_attr = id_attr
+        self.span_attr = span_attr
+        self.head_attr = head_attr
+        self.ref_attr = ref_attr
+        self.level_attr = level_attr
+        self.type_attr = type_attr
+        self.time_attr = time_attr
+        self.mod_attr = mod_attr
+
+    def extract_id(self, xml):
+        """
+        Extract the markable id from an XML-element.
+        """
+        return xml.attrib[self.id_attr]
+
+    def extract_span(self, xml):
+        """
+        Extract the span from an XML-element.
+        """
+        span_text = xml.attrib[self.span_attr]
+        return self.span_from_text(span_text)
+
+    @staticmethod
+    def span_from_text(text):
+        """
+        Expand and split a possibly abbreviated span specification:
+            span="word_1..word_5,word_7"
+        """
+        parts = []
+        for part in text.split(','):
+            split = part.split('..')
+
+            if len(split) > 1:
+                if len(split) != 2:
+                    raise ValueError(
+                        "Illegal span specification: only one '..' is allowed:"
+                        f" between every pair of ',': {text}")
+                first, last = map(lambda s: s.split('_'), split)
+                try:
+                    first_int = int(first[-1])
+                    last_int = int(last[-1])
+                except ValueError:
+                    raise ValueError(
+                        "Illegal span specification: every word ID in an"
+                        " abbreviated span should end with an integer,"
+                        f" optionally separated from text by an '_': {text}"
+                    )
+                first[-1] = last[-1] = ''
+                if first != last:
+                    raise ValueError(
+                        "Illegal span specification: the word IDs in an"
+                        " abbreviated span should be exactly the same,"
+                        f" except for the trailing integer: {text}"
+                    )
+                # This results in a trailing '_', as required
+                str_part = '_'.join(first)
+                new_parts = (
+                    str_part + str(i)
+                    for i in range(first_int, last_int + 1)
+                )
+            else:
+                new_parts = split
+            parts.extend(new_parts)
+        return parts
+
+    def extract_head(self, xml):
+        """
+        Extract the head from an XML-element.
+        """
+        return xml.attrib[self.head_attr]
+
+    def extract_ref(self, xml):
+        """
+        Extract the referred markable id from an XML-element.
+
+        Return None if the attribute does not exist.
+        """
+        return xml.attrib.get(self.ref_attr, None)
+
+    def extract_level(self, xml):
+        """
+        Extract the reference level from an XML-element.
+        """
+        return xml.attrib[self.level_attr]
+
+    def extract_type(self, xml):
+        """
+        Extract the reference type from an XML-element.
+        """
+        return xml.attrib[self.type_attr]
+
+    def extract_time(self, xml):
+        """
+        Extract the time from an XML-element.
+        """
+        return xml.attrib[self.time_attr]
+
+    def extract_mod(self, xml):
+        """
+        Extract the 'mod' attribute from an XML-element.
+        """
+        return xml.attrib[self.mod_attr]
+
+    def read(self, xml):
+        """
+        Extract a dictionary with information about a markable from an
+        XML-element.
+
+        The dictionary contains 'id', 'span' and 'head', and
+        if `self.extract_mod(xml) is not None` the dictionary also contains
+        'ref', 'level', 'type', 'time' and 'mod'
+        """
+        dic = {
+            'id': self.extract_id(xml),
+            'span': self.extract_span(xml),
+            'head': self.extract_head(xml)
+        }
+        ref = self.extract_ref(xml)
+        if ref is not None:
+            dic.update(
+                ref=ref,
+                level=self.extract_level(xml),
+                type=self.extract_type(xml),
+                time=self.extract_time(xml),
+                mod=self.extract_mod(xml)
+            )
+        return dic
+
+
 class XMLItemReader:
     """
     Reads and (optionally) validates data from an XML-tree.
@@ -417,3 +563,32 @@ class MMAXWordsDocumentReader(XMLItemReader):
                                 f" This is in sentence #{senti}: {sentence!r}."
                             )
                         index += 1
+
+
+class MMAXMarkablesDocumentReader(XMLItemReader):
+    """
+    Reads and (optionally) validates data from a MMAX markables XML-tree.
+
+    Things that are verified if `validate=True`:
+     - the tag of the root element is as expected
+     - the tag of all the word elements is as expected
+
+    See `MMAX-specification.md` and
+    http://www.speech.cs.cmu.edu/sigdial2003/proceedings/07_LONG_strube_paper.pdf
+    for a description of the MMAX format.
+    """
+
+    def __init__(self, item_reader=None,
+                 validate=c.VALIDATE_XML,
+                 expected_child_tag=c.MMAX_MARKABLE_TAG,
+                 expected_root_tag=c.MMAX_MARKABLES_TAG):
+                # Default item_reader
+        item_reader = item_reader \
+            if item_reader is not None \
+            else MMAXMarkableReader()
+        super(MMAXMarkablesDocumentReader, self).__init__(
+            item_reader=item_reader,
+            validate=validate,
+            expected_child_tag=expected_child_tag,
+            expected_root_tag=expected_root_tag,
+        )
