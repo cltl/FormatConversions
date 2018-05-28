@@ -53,7 +53,7 @@ class CoreaMedWordReader:
         """
         Extract the word number **as a string** from an XML-element.
         """
-        return xml.attrib[self.word_number_attr]
+        return xml.attrib.get(self.word_number_attr, None)
 
     def read(self, xml):
         """
@@ -146,13 +146,13 @@ class MMAXMarkableReader:
         """
         Extract the markable id from an XML-element.
         """
-        return xml.attrib[self.id_attr]
+        return xml.attrib.get(self.id_attr, None)
 
     def extract_span(self, xml):
         """
         Extract the span from an XML-element.
         """
-        span_text = xml.attrib[self.span_attr]
+        span_text = xml.attrib.get(self.span_attr, None)
         return self.span_from_text(span_text)
 
     @staticmethod
@@ -202,7 +202,7 @@ class MMAXMarkableReader:
         """
         Extract the head from an XML-element.
         """
-        return xml.attrib[self.head_attr]
+        return xml.attrib.get(self.head_attr, None)
 
     def extract_ref(self, xml):
         """
@@ -216,25 +216,25 @@ class MMAXMarkableReader:
         """
         Extract the reference level from an XML-element.
         """
-        return xml.attrib[self.level_attr]
+        return xml.attrib.get(self.level_attr, None)
 
     def extract_type(self, xml):
         """
         Extract the reference type from an XML-element.
         """
-        return xml.attrib[self.type_attr]
+        return xml.attrib.get(self.type_attr, None)
 
     def extract_time(self, xml):
         """
         Extract the time from an XML-element.
         """
-        return xml.attrib[self.time_attr]
+        return xml.attrib.get(self.time_attr, None)
 
     def extract_mod(self, xml):
         """
         Extract the 'mod' attribute from an XML-element.
         """
-        return xml.attrib[self.mod_attr]
+        return xml.attrib.get(self.mod_attr, None)
 
     def read(self, xml):
         """
