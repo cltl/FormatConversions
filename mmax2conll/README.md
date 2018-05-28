@@ -61,6 +61,7 @@ Column  | Description           | Value                                         
 # To Do
 
  - [ ] Validate 'on_missing' config key
+ - [ ] Add `word_id` to the intermediate file
 
 [COREA]: https://link.springer.com/book/10.1007/978-3-642-30910-6
 [CoNLL]: http://conll.cemantix.org/2012/data.html
