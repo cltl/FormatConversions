@@ -48,7 +48,7 @@ def read_markables_file(filename, reader):
     """
     xml = etree.parse(filename)
 
-    items = reader.extract_items(xml)
+    items = reader.extract_coref_sets(xml)
     for item in items:
         print(item)
     return None

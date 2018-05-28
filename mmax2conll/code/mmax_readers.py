@@ -612,3 +612,30 @@ class MMAXMarkablesDocumentReader(XMLItemReader):
             expected_child_tag=expected_child_tag,
             expected_root_tag=expected_root_tag,
         )
+
+    def extract_coref_sets(self, xml):
+        """
+        Extract the sets of markables that refer to the same entity.
+
+        !! NB !! Returns a list because dicts are not hashable
+        """
+        markables = {m['id']: m for m in self.extract_items(xml)}
+        forward_refs = {}
+
+        for markable in markables.values():
+            ref = markable.get('ref', None)
+            if ref is not None:
+                forward_refs.setdefault(ref, []).append(markable['id'])
+
+        sets = []
+        for root in markables.values():
+            if root.get('ref', None) is None:
+                refset = [root]
+                stack = [root['id']]
+                while stack:
+                    ID = stack.pop()
+                    if ID in forward_refs:
+                        stack.extend(forward_refs[ID])
+                        refset.append(markables[ID])
+                sets.append(refset)
+        return sets
