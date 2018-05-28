@@ -285,20 +285,40 @@ class XMLItemReader:
          - the tag of the child elements
         """
         root = xml.getroot()
-        if self.validate and not root.tag == self.expected_root_tag:
-            raise ValidationError(
-                f"The root element did not have the expected tag"
-                f" {self.expected_root_tag!r}. Found: {root.tag!r}"
-            )
+
+        # Create `rm_ns` function to remove the name space
+        if self.validate and None in root.nsmap:
+            ns = root.nsmap[None]
+            logger.debug(f"Name space: {ns!r}")
+            nslen = len(ns)
+
+            def rm_ns(tag):
+                if tag[0] == '{' and tag[nslen+1] == '}' and \
+                   tag[1:nslen+1] == ns:
+                    return tag[nslen+2:]
+                else:
+                    return tag
+        else:
+            def rm_ns(tag):
+                return tag
+
+        if self.validate:
+            if rm_ns(root.tag) != self.expected_root_tag:
+                raise ValidationError(
+                    f"The root element did not have the expected tag"
+                    f" {self.expected_root_tag!r}. Found: {root.tag!r} and"
+                    f" using: {rm_ns(root.tag)!r}"
+                )
 
         children = root.getchildren()
         if self.validate:
             for child in children:
-                if child.tag != self.expected_child_tag:
+                if rm_ns(child.tag) != self.expected_child_tag:
                     raise ValidationError(
                         f"One of the children did not have the expected tag"
                         f" {self.expected_child_tag!r}."
-                        f" Found: {child.tag!r}"
+                        f" Found: {child.tag!r} and"
+                        f" using: {rm_ns(child.tag)!r}"
                     )
         return children
 
