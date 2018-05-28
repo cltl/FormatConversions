@@ -39,7 +39,9 @@ class CoreaMedWordReader:
     https://link.springer.com/book/10.1007/978-3-642-30910-6
     """
 
-    def __init__(self, word_number_attr=c.COREA_MED_WORD_NUMBER_ATTRIBUTE):
+    def __init__(self, id_attr=c.MMAX_WORD_ID_ATTRIBUTE,
+                 word_number_attr=c.COREA_MED_WORD_NUMBER_ATTRIBUTE):
+        self.id_attr = id_attr
         self.word_number_attr = word_number_attr
 
     @staticmethod
@@ -55,6 +57,12 @@ class CoreaMedWordReader:
         """
         return xml.attrib.get(self.word_number_attr, None)
 
+    def extract_id(self, xml):
+        """
+        Extract the word ID **as a string** from an XML-element.
+        """
+        return xml.attrib.get(self.id_attr, None)
+
     def read(self, xml):
         """
         Extract a dictionary with information about a word from an XML-element.
@@ -64,6 +72,7 @@ class CoreaMedWordReader:
         return {
             'word_number': self.extract_word_number(xml),
             'word': self.extract_word(xml),
+            'id': self.extract_id(xml)
         }
 
 
@@ -78,9 +87,10 @@ class MMAXWordReader(CoreaMedWordReader):
     PART_NUMBER_REGEX = re.compile(r'WR-P-P-H-\d+\.p\.(\d+)\.s\.\d+\.xml')
 
     def __init__(self,
+                 id_attr=c.MMAX_WORD_ID_ATTRIBUTE,
                  word_number_attr=c.MMAX_WORD_NUMBER_ATTRIBUTE,
                  part_number_attr=c.MMAX_PART_NUMBER_ATTRIBUTE):
-        super(MMAXWordReader, self).__init__(word_number_attr)
+        super(MMAXWordReader, self).__init__(id_attr, word_number_attr)
         self.part_number_attr = part_number_attr
 
     def extract_part_number(self, xml):
@@ -125,7 +135,7 @@ class MMAXMarkableReader:
     for a description of the MMAX format.
     """
     def __init__(self,
-                 id_attr=c.MMAX_ID_ATTRIBUTE,
+                 id_attr=c.MMAX_MARKABLE_ID_ATTRIBUTE,
                  span_attr=c.MMAX_SPAN_ATTRIBUTE,
                  head_attr=c.MMAX_HEAD_ATTRIBUTE,
                  ref_attr=c.MMAX_REF_ATTRIBUTE,
