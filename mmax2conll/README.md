@@ -54,12 +54,33 @@ Column  | Description           | Value                                         
      10 | Speaker/Author        | `UNKNOWN`                                                                     | ???
      11 | Named Entities        | `*`                                                                           | Yes
       - | Predicate Arguments   | None: column(s) left out entirely                                             | Yes, conform example in CoNLL 2012
-     12 | Coreference           | extracted from MMAX `*_coref_level.xml` files                                 | Yes
+     12 | Coreference           | extracted from MMAX `*_coref_level.xml` files (ISSUE! \[2\])                  | Yes
 
 \[1\]:
     The part numbers of DCOI start at 1, where the part numbers in a CoNLL file start at 0.
     To keep the origin of the data clear this 1-based part number is not changed,
     but instead an empty part 0 is added to those files.
+
+\[2\]:
+    The reference spans are not closed in the correct order, if they end at the same word. The following is an example of output from `mmax2conll.py`:
+    ```
+              (10
+                -
+          (52|(55
+              52)
+                -
+    10)|55)|(133)
+    ```
+    While pedantically correct would be:
+    ```
+              (10
+                -
+          (55|(52
+              52)
+                -
+    (133)|55)|10)
+    ```
+
 
 # To Do
 
