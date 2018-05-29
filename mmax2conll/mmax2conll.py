@@ -111,16 +111,15 @@ def write_conll(filename, writer, document_id, sentences):
         writer.write(fd, document_id, sentences)
 
 
-if __name__ == '__main__':
+def get_args(args_from_config=[
+                 'validate_xml',
+                 'auto_use_Med_item_reader',
+                 'min_column_spacing',
+                 'defaults',
+                 'on_missing',
+             ]):
     from argparse import ArgumentParser
     from pyaml import yaml
-    ARGS_FROM_CONFIG = [
-        'validate_xml',
-        'auto_use_Med_item_reader',
-        'min_column_spacing',
-        'defaults',
-        'on_missing',
-    ]
 
     # Read command line arguments
     parser = ArgumentParser()
@@ -159,7 +158,7 @@ if __name__ == '__main__':
         os.remove(output_file)
 
     # Extract required arguments from configuration
-    for arg in ARGS_FROM_CONFIG:
+    for arg in args_from_config:
         if arg not in config:
             raise ValueError(
                 f"The key {arg!r} is not in the specified configuration file"
@@ -171,6 +170,9 @@ if __name__ == '__main__':
         c.MMAX_TYPE_FILTERS[config['markables_type_filter']](i) and \
         c.MMAX_LEVEL_FILTERS[config['markables_level_filter']](i)
 
-    # Run the program
-    main(**args)
+    return args
+
+
+if __name__ == '__main__':
+    main(**get_args())
     logger.info("Done!")
