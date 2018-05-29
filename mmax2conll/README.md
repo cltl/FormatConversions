@@ -77,5 +77,18 @@ Column  | Description           | Value                                         
 
  - [ ] Validate 'on_missing' config key
 
+# References
+Multi-Level Annotation in MMAX (2003)<br>
+... (To Do)<br>
+http://www.speech.cs.cmu.edu/sigdial2003/proceedings/07_LONG_strube_paper.pdf
+
+
+COREA: Coreference Resolution for Extracting Answers for Dutch<br>
+Iris Hendrickx, Gosse Bouma, Walter Daelemans, and Véronique Hoste.<br>
+Essential Speech and Language Technology for Dutch, Ch.7, p.115 -- 128<br>
+Editors: Peter Spyns, Jan Odijk<br>
+https://link.springer.com/book/10.1007/978-3-642-30910-6<br>
+
+
 [COREA]: https://link.springer.com/book/10.1007/978-3-642-30910-6
 [CoNLL]: http://conll.cemantix.org/2012/data.html
