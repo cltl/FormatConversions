@@ -1,3 +1,5 @@
+import itertools as it
+
 from .util import ValidationError
 
 
@@ -25,14 +27,20 @@ class CorefConverter:
 
         # Randomly create a reference ID for every reference refset
         for refID, refset in enumerate(sets):
-            for reference in refset:
-                span = reference['span']
+            # Make sure the spans are unique
+            for span in set(map(lambda ref: tuple(ref['span']), refset)):
                 cls.validate_MMAX_span(span)
                 if len(span) == 1:
-                    word_id_map[span[0]] = (refID, 'singleton')
+                    word_id_map.setdefault(span[0], []).append(
+                        (refID, 'singleton')
+                    )
                 else:
-                    word_id_map[span[0]] = (refID, 'start')
-                    word_id_map[span[-1]] = (refID, 'end')
+                    word_id_map.setdefault(span[0], []).append(
+                        (refID, 'start')
+                    )
+                    word_id_map.setdefault(span[-1], []).append(
+                        (refID, 'end')
+                    )
 
         return word_id_map
 
@@ -68,20 +76,24 @@ class CorefConverter:
         Assumes every word has an ID stored in 'id'.
         """
         id_map = cls.word_id_map_from_MMAX_sets(coref_sets)
+
+        def ref_to_str(refID, pos):
+            if pos == 'singleton':
+                return f'({refID})'
+            elif pos == 'start':
+                return f'({refID}'
+            elif pos == 'end':
+                return f'{refID})'
+            else:
+                raise ValueError(
+                    f"The position of the reference of {word} must be"
+                    " either `start`, `end` or `singleton`. Found:"
+                    f" {pos}"
+                )
+
         for sentence in sentences:
             for word in sentence:
                 if word['id'] in id_map:
-                    refID, pos = id_map[word['id']]
-                    if pos == 'singleton':
-                        ref_str = f'({refID})'
-                    elif pos == 'start':
-                        ref_str = f'({refID}'
-                    elif pos == 'end':
-                        ref_str = f'{refID})'
-                    else:
-                        raise ValueError(
-                            f"The position of the reference of {word} must be"
-                            " either `start`, `end` or `singleton`. Found:"
-                            f" {pos}"
-                        )
-                    word['coref'] = ref_str
+                    word['coref'] = '|'.join(
+                        it.starmap(ref_to_str, id_map[word['id']])
+                    )
