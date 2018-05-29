@@ -25,7 +25,8 @@ def main(words_file, coref_file, output_file,
          auto_use_Med_item_reader=c.AUTO_USE_MED_ITEM_READER,
          defaults=c.CONLL_DEFAULTS,
          min_column_spacing=c.MIN_COLUMN_SPACING,
-         on_missing=c.CONLL_ON_MISSING):
+         on_missing=c.CONLL_ON_MISSING,
+         markables_filter=c.MMAX_MARKABLES_FILTER):
     # Read in the data from MMAX *_words.xml file
     document_id, sentences = read_words_file(
         filename=words_file,
@@ -36,7 +37,8 @@ def main(words_file, coref_file, output_file,
 
     # Read in coreference data
     coref_sets = MMAXMarkablesDocumentReader(
-        validate=validate_xml
+        validate=validate_xml,
+        item_filter=markables_filter,
     ).extract_coref_sets(
         etree.parse(coref_file)
     )
@@ -164,6 +166,10 @@ if __name__ == '__main__':
                 f" {config_file}"
             )
         args[arg] = config[arg]
+
+    args['markables_filter'] = lambda i: \
+        c.MMAX_TYPE_FILTERS[config['markables_type_filter']](i) and \
+        c.MMAX_LEVEL_FILTERS[config['markables_level_filter']](i)
 
     # Run the program
     main(**args)

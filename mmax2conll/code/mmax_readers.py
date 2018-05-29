@@ -282,11 +282,12 @@ class XMLItemReader:
     """
 
     def __init__(self, item_reader, validate, expected_child_tag,
-                 expected_root_tag):
+                 expected_root_tag, item_filter=lambda i: True):
         self.item_reader = item_reader
         self.validate = validate
         self.expected_child_tag = expected_child_tag
         self.expected_root_tag = expected_root_tag
+        self.item_filter = item_filter
 
     def get_child_elements(self, xml):
         """
@@ -332,13 +333,22 @@ class XMLItemReader:
                     )
         return children
 
-    def extract_items(self, xml):
+    def extract_all_items(self, xml):
         """
         Extract all information for every item.
 
         Returns an iterator of things returned by `self.item_reader.read`
         """
         return map(self.item_reader.read, self.get_child_elements(xml))
+
+    def extract_items(self, xml):
+        """
+        Extract all information for every item, filtering items using
+        `self.item_filter`.
+
+        Returns an iterator of things returned by `self.item_reader.read`
+        """
+        return filter(self.item_filter, self.extract_all_items(xml))
 
 
 class MMAXWordsDocumentReader(XMLItemReader):
@@ -360,7 +370,8 @@ class MMAXWordsDocumentReader(XMLItemReader):
                  document_id_attr=c.MMAX_WORDS_DOCUMENT_ID_ATTRIBUTE,
                  sent_start_word_number=c.MMAX_SENTENCE_STARTING_WORD_NUMBER,
                  expected_child_tag=c.MMAX_WORD_TAG,
-                 expected_root_tag=c.MMAX_WORDS_TAG):
+                 expected_root_tag=c.MMAX_WORDS_TAG,
+                 item_filter=c.MMAX_WORDS_FILTER):
         # Default item_reader
         item_reader = item_reader \
             if item_reader is not None \
@@ -370,6 +381,7 @@ class MMAXWordsDocumentReader(XMLItemReader):
             validate=validate,
             expected_child_tag=expected_child_tag,
             expected_root_tag=expected_root_tag,
+            item_filter=item_filter,
         )
         self.document_id_attr = document_id_attr
         self.sent_start_word_number = sent_start_word_number
@@ -611,7 +623,8 @@ class MMAXMarkablesDocumentReader(XMLItemReader):
     def __init__(self, item_reader=None,
                  validate=c.VALIDATE_XML,
                  expected_child_tag=c.MMAX_MARKABLE_TAG,
-                 expected_root_tag=c.MMAX_MARKABLES_TAG):
+                 expected_root_tag=c.MMAX_MARKABLES_TAG,
+                 item_filter=c.MMAX_MARKABLES_FILTER):
                 # Default item_reader
         item_reader = item_reader \
             if item_reader is not None \
@@ -621,6 +634,7 @@ class MMAXMarkablesDocumentReader(XMLItemReader):
             validate=validate,
             expected_child_tag=expected_child_tag,
             expected_root_tag=expected_root_tag,
+            item_filter=item_filter,
         )
 
     def extract_coref_sets(self, xml):
