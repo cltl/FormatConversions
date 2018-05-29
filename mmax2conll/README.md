@@ -17,15 +17,6 @@ To only convert one pair of files, run:
 mmax2conll.py path/to/some_words.xml path/to/a_coref_level.xml path/to/output.conll
 ```
 
-Effectively this does:
-
- 1. `words2halfconll.py`:
-    Converts `*_words.xml` to `*.halfconll`,
-    putting `*` as place-holder in the coreference column (Column 12).
- 2. `halfconll2conll.py`:
-    Converts `*_coref_level.xml` + `*.halfconll` to `*.conll`
-
-
 
 ## Columns of CoNLL output
 These scripts were first used to convert data from the [COREA][] (Ch.7 p.115 -- 128) dataset to CoNLL and
