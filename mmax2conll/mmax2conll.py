@@ -132,7 +132,7 @@ def get_args(args_from_config=[
     parser.add_argument('coref_file', type=file_exists,
                         help="MMAX *_coref_level.xml file to use as input")
     parser.add_argument('output_file',
-                        help="where to save the halfCoNLL output")
+                        help="where to save the CoNLL output")
     args = vars(parser.parse_args())
 
     # Set the logging level
