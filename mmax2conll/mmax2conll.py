@@ -111,6 +111,25 @@ def write_conll(filename, writer, document_id, sentences):
         writer.write(fd, document_id, sentences)
 
 
+def can_output_to(output, config, batch):
+    if os.path.exists(output):
+        if not config['allow_overwriting']:
+            thing = "folder" if batch else "file"
+            raise ValueError(
+                "The configuration specifies overwriting is not allowed, but"
+                f" the output {thing} already exists: {output}"
+            )
+    else:
+        # (Check if we can) create it
+        if batch:
+            os.makedirs(output)
+        else:
+            open(output, 'w').close()
+            # Remove it, because if something goes wrong empty files are more
+            # annoying than empty directories
+            os.remove(output)
+
+
 def get_args(args_from_config=[
                  'validate_xml',
                  'auto_use_Med_item_reader',
@@ -118,44 +137,62 @@ def get_args(args_from_config=[
                  'defaults',
                  'on_missing',
              ]):
-    from argparse import ArgumentParser
+    from argparse import ArgumentParser, RawDescriptionHelpFormatter
     from pyaml import yaml
 
     # Read command line arguments
-    parser = ArgumentParser()
+    parser = ArgumentParser(
+        description="""
+Script to convert coreference data in MMAX format to CoNLL format.
+
+See `CoNLL-specification.md` and `MMAX-specification.md` for extensive
+descriptions of the CoNLL and MMAX formats.
+
+To convert a whole directory recursively, run:
+
+    mmax2conll.py <output folder> -d <input folder> [-d <input folder> ...]
+
+
+To only convert one pair of files, run:
+
+    mmax2conll.py <output.conll> <*_words.xml> <*_coref_level.xml>
+
+
+When passing folders for batch processing using -d, the passed folders are
+searched for a folder containing both a `Basedata` and `Markables` folder. The
+output is saved in using the same path relative to the output folder as the
+original folder has relative to the passed folder it was found in.
+
+!! NB !! This means that the data of two folders is merged if they happen
+         to have the same path relative to passed folders. No files will be
+         overwritten if overwriting isn't allowed in the configuration. If
+         is allowed according to the configuration, a warning will be issued.
+
+""",
+        formatter_class=RawDescriptionHelpFormatter
+    )
     parser.add_argument('-l', '--log-level', default='INFO',
                         help="Logging level")
     parser.add_argument('-c', '--config', default=c.DEFAULT_CONFIG_FILE,
                         help="YAML configuration file")
-    parser.add_argument('words_file', type=file_exists,
+    parser.add_argument('-d', '--directory', action='append',
+                        help="Directory to batch convert files from")
+    parser.add_argument('output',
+                        help="Where to save the CoNLL output")
+    parser.add_argument('words_file', type=file_exists, nargs='?',
                         help="MMAX *_words.xml file to use as input")
-    parser.add_argument('coref_file', type=file_exists,
+    parser.add_argument('coref_file', type=file_exists, nargs='?',
                         help="MMAX *_coref_level.xml file to use as input")
-    parser.add_argument('output_file',
-                        help="where to save the CoNLL output")
     args = vars(parser.parse_args())
 
     # Set the logging level
     logging.basicConfig(level=args.pop('log_level'))
+    logger.debug(f"Args: {args}")
 
     # Read the configuration file
     config_file = args.pop('config')
     with open(config_file) as config_fd:
         config = yaml.load(config_fd)
-
-    # Verify the output file is legal
-    output_file = args['output_file']
-    if os.path.exists(output_file):
-        if not config['allow_overwriting']:
-            raise ValueError(
-                "The configuration specifies overwriting is not allowed, but"
-                f" the output file already exists: {output_file}"
-            )
-    else:
-        # Check if we can create it
-        open(output_file, 'w').close()
-        # Remove it
-        os.remove(output_file)
 
     # Extract required arguments from configuration
     for arg in args_from_config:
@@ -170,9 +207,40 @@ def get_args(args_from_config=[
         c.MMAX_TYPE_FILTERS[config['markables_type_filter']](i) and \
         c.MMAX_LEVEL_FILTERS[config['markables_level_filter']](i)
 
-    return args
+    batch = bool(args['directory'])
+    output = args.pop('output')
+
+    # Verify that the command line arguments are legal
+    # AND remove the ones not needed
+    if batch:
+        args['output_dir'] = output
+        if args.pop('words_file') is not None or \
+           args.pop('coref_file') is not None:
+            parser.error(
+                "Please either specify a number of directories or the"
+                " necessary files to use as input, but not both."
+            )
+    else:
+        del args['directory']
+        args['output_file'] = output
+        if args['words_file'] is None or args['coref_file'] is None:
+            parser.error(
+                "Please specify both a *_words.xml file and a"
+                " *_coref_level.xml file. You can also choose to specify a"
+                " number directories to use as input instead."
+            )
+
+    # Verify the output location
+    can_output_to(output, config, batch)
+
+    return batch, args
 
 
 if __name__ == '__main__':
-    main(**get_args())
+    batch, args = get_args()
+    if batch:
+        for directory in args.pop('directory'):
+            ...
+    else:
+        main(**args)
     logger.info("Done!")

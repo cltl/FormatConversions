@@ -1,5 +1,5 @@
 # mmax2conll
-Script to convert data in MMAX format to [CoNLL][] format.
+Script to convert coreference data in MMAX format to [CoNLL][] format.
 
 See `CoNLL-specification.md` and `MMAX-specification.md` for extensive descriptions of the CoNLL and MMAX formats.
 
@@ -9,12 +9,12 @@ See `CoNLL-specification.md` and `MMAX-specification.md` for extensive descripti
 To convert a whole folder (that contains a `Basedata` and `Markables` folder as direct children), run:
 
 ```sh
-mmax2conll.py path/to/some/folder
+mmax2conll.py path/to/output_dir -d path/to/some/folder [-d path/to/another/folder ...]
 ```
 
 To only convert one pair of files, run:
 ```sh
-mmax2conll.py path/to/some_words.xml path/to/a_coref_level.xml path/to/output.conll
+mmax2conll.py path/to/output.conll path/to/some_words.xml path/to/a_coref_level.xml
 ```
 
 
