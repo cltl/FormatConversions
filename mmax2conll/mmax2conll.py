@@ -178,6 +178,7 @@ original folder has relative to the passed folder it was found in.
     parser.add_argument('-c', '--config', default=c.DEFAULT_CONFIG_FILE,
                         help="YAML configuration file")
     parser.add_argument('-d', '--directory', action='append',
+                        dest='directories',
                         help="Directory to batch convert files from")
     parser.add_argument('output',
                         help="Where to save the CoNLL output")
@@ -191,7 +192,7 @@ original folder has relative to the passed folder it was found in.
     logging.basicConfig(level=args.pop('log_level'))
     logger.debug(f"Args: {args}")
 
-    batch = bool(args['directory'])
+    batch = bool(args['directories'])
     output = args.pop('output')
 
     # Verify that the command line arguments are legal
@@ -205,7 +206,7 @@ original folder has relative to the passed folder it was found in.
                 " necessary files to use as input, but not both."
             )
     else:
-        del args['directory']
+        del args['directories']
         args['output_file'] = output
         if args['words_file'] is None or args['markables_file'] is None:
             parser.error(
