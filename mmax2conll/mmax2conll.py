@@ -75,7 +75,7 @@ def super_dir_main(directories, output_dir,
                     f" {cur_output_dir}"
                 )
             else:
-                os.makedirs(cur_output_dir, True)
+                os.makedirs(cur_output_dir, exist_ok=True)
                 logger.info(
                     f"Saving data converted from {data_dir} in"
                     f" {cur_output_dir}"
