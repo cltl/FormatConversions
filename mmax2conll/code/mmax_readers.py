@@ -84,7 +84,9 @@ class MMAXWordReader(CoreaMedWordReader):
     http://www.speech.cs.cmu.edu/sigdial2003/proceedings/07_LONG_strube_paper.pdf
     for a description of the MMAX format.
     """
-    PART_NUMBER_REGEX = re.compile(r'WR-P-P-H-\d+\.p\.(\d+)\.s\.\d+\.xml')
+    PART_NUMBER_REGEX = re.compile(
+        r'WR-P-P-H-\d+\.p\.(\d+)\.s\.\d+(.\d+)?\.xml'
+    )
 
     def __init__(self,
                  id_attr=c.MMAX_WORD_ID_ATTRIBUTE,
