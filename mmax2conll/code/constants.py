@@ -4,8 +4,14 @@ MIN_COLUMN_SPACING = 3
 VALIDATE_XML = True
 # The following value is different from the one in ./default_config.yml
 AUTO_USE_MED_ITEM_READER = False
+ALLOW_OVERWRITING = False
 MARKABLES_TYPE_FILTER = 'ident_or_bridge'
 MARKABLES_LEVEL_FILTER = 'reference'
+CONLL_EXTENSION = '.conll'
+WORDS_DIR = 'Basedata'
+WORDS_FILES_EXTENSION = '_words.xml'
+MARKABLES_DIR = 'Markables'
+MARKABLES_FILES_EXTENSION = '_coref_level.xml'
 
 CONLL_DEFAULTS = {
     'document_id': 'UNKNOWN',
@@ -43,7 +49,6 @@ COREA_DCOI_ID = 'DCOI'
 COREA_MED_ID = 'Med'
 
 # Words files details
-MMAX_WORDS_FILES_EXTENSION = '_words.xml'
 MMAX_WORD_TAG = 'word'
 MMAX_WORDS_TAG = 'words'
 MMAX_WORD_NUMBER_ATTRIBUTE = 'alppos'
@@ -58,7 +63,6 @@ def MMAX_WORDS_FILTER(item): return True
 
 
 # Markables files details
-MMAX_MARKABLES_FILES_EXTENSION = '_coref_level.xml'
 MMAX_MARKABLE_TAG = 'markable'
 MMAX_MARKABLES_TAG = 'markables'
 MMAX_MARKABLE_ID_ATTRIBUTE = 'id'

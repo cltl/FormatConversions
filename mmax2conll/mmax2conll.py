@@ -20,6 +20,131 @@ from code.conll_writers import CoNLLWriter
 logger = logging.getLogger(None if __name__ == '__main__' else __name__)
 
 
+def find_data_dirs(directory,
+                   words_dir=c.WORDS_DIR,
+                   markables_dir=c.MARKABLES_DIR):
+    """
+    Recursively search `directory` for directories containing a `words_dir`
+    and `markables_dir` directory as direct children.
+    """
+    for subdir, subsubdirs, _ in os.walk(directory):
+        has_words = words_dir in subsubdirs
+        has_markables = markables_dir in subsubdirs
+        if has_words and has_markables:
+            yield subdir
+        elif has_markables:
+            logger.warn(
+                f"{subdir} has a markables directory ({markables_dir}), but no"
+                f" words directory ({words_dir})."
+            )
+        elif has_words:
+            logger.warn(
+                f"{subdir} has a words directory ({words_dir}), but no"
+                f" markables directory ({markables_dir})."
+            )
+
+
+def super_dir_main(directories, output_dir,
+                   words_dir=c.WORDS_DIR,
+                   markables_dir=c.MARKABLES_DIR,
+                   allow_overwriting=c.ALLOW_OVERWRITING,
+                   **kwargs):
+    for directory in directories:
+        data_dirs = find_data_dirs(
+            directory,
+            words_dir,
+            markables_dir
+        )
+        for data_dir in data_dirs:
+            cur_output_dir = os.path.join(
+                output_dir,
+                data_dir[len(directory):]
+            )
+            if not allow_overwriting and os.path.exists(cur_output_dir):
+                logger.warn(
+                    f"Merging output converted from {data_dir} into"
+                    f" {cur_output_dir}"
+                )
+            else:
+                os.makedirs(cur_output_dir, True)
+                logger.info(
+                    f"Saving data converted from {data_dir} in"
+                    f" {cur_output_dir}"
+                )
+
+            dir_main(
+                input_dir=data_dir,
+                output_dir=cur_output_dir,
+                words_dir=words_dir,
+                markables_dir=markables_dir,
+                allow_overwriting=allow_overwriting,
+                **kwargs
+            )
+
+
+def dir_main(input_dir, output_dir,
+             words_dir=c.WORDS_DIR,
+             markables_dir=c.MARKABLES_DIR,
+             allow_overwriting=c.ALLOW_OVERWRITING,
+             conll_extension=c.CONLL_EXTENSION,
+             words_files_extension=c.WORDS_FILES_EXTENSION,
+             markables_files_extension=c.MARKABLES_FILES_EXTENSION,
+             **kwargs):
+    """
+    Batch convert all files in a directory containing a `words_dir` and
+    `markables_dir` directory as direct children.
+    """
+    words_dir = os.path.join(input_dir, words_dir)
+    markables_dir = os.path.join(input_dir, markables_dir)
+
+    words_files = {
+        filename[:-len(words_files_extension)]
+        for filename in os.listdir(words_dir)
+        if filename.endswith(words_files_extension)
+    }
+
+    markables_files = {
+        filename[:-len(markables_files_extension)]
+        for filename in os.listdir(markables_dir)
+        if filename.endswith(markables_files_extension)
+    }
+
+    both = words_files & markables_files
+
+    if words_files - both:
+        logger.warn(
+            "The following files seem to be words files, but do not have a"
+            " corresponding markables file:\n" + '\n'.join(
+                words_files - both
+            )
+        )
+
+    if markables_files - both:
+        logger.warn(
+            "The following files seem to be markables files, but do not have a"
+            " corresponding words file:\n" + '\n'.join(
+                markables_files - both
+            )
+        )
+
+    for name in both:
+        words_file = os.path.join(words_dir, name) + words_files_extension
+        markables_file = os.path.join(markables_dir, name) + \
+            markables_files_extension
+        output_file = os.path.join(output_dir, name) + conll_extension
+        if os.path.exists(output_file):
+            if allow_overwriting:
+                logger.warn(f"Overwriting {output_file}")
+            else:
+                raise IOError(f"Will not overwrite: {output_file}")
+        try:
+            single_main(words_file, markables_file, output_file, **kwargs)
+        except Exception as e:
+            raise type(e)(
+                f"While processing {name} from {input_dir}: " + e.args[0]
+            )
+
+
 def single_main(words_file, markables_file, output_file,
                 validate_xml=c.VALIDATE_XML,
                 auto_use_Med_item_reader=c.AUTO_USE_MED_ITEM_READER,
@@ -137,7 +262,11 @@ def get_args(args_from_config=[
                 'conll_defaults',
                 'on_missing',
              ], batch_args_from_config=[
+                'allow_overwriting',
+                'conll_extension',
+                'words_dir',
                 'words_files_extension',
+                'markables_dir',
                 'markables_files_extension',
              ]):
     from argparse import ArgumentParser, RawDescriptionHelpFormatter
@@ -269,9 +398,7 @@ def read_config(filename):
 if __name__ == '__main__':
     batch, args = get_args()
     if batch:
-        for directory in args.pop('directory'):
-            # Recursively search directory
-            ...
+        super_dir_main(**args)
     else:
         single_main(**args)
     logger.info("Done!")
