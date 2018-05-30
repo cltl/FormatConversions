@@ -203,7 +203,7 @@ def read_words_file(filename, reader,
     if document_id is None:
         document_id = document_ID_from_filename(filename)
 
-    message = "No document ID could be found."
+    message = f"No document ID could be found for {filename}."
     if on_missing_document_ID == 'warn':
         if document_id is None:
             logger.warn(message)
