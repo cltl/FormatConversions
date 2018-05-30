@@ -174,13 +174,21 @@ def single_main(words_file, markables_file, output_file,
                 warn_on_auto_use_Med_item_reader=c.WARN_ON_AUTO_USE_MED_ITEM_READER,  # noqa
                 conll_defaults=c.CONLL_DEFAULTS,
                 min_column_spacing=c.MIN_COLUMN_SPACING,
+                sentence_split_method=c.SENTENCE_SPLIT_METHOD,
+                sentence_ending_tokens=c.SENTENCE_ENDING_TOKENS,
+                add_word_number=c.ADD_WORD_NUMBER,
                 on_missing=c.CONLL_ON_MISSING,
                 markables_filter=c.MMAX_MARKABLES_FILTER):
     # Read in the data from MMAX *_words.xml file
     document_id, sentences = read_words_file(
         filename=words_file,
         extension=words_files_extension,
-        reader=MMAXWordsDocumentReader(validate=validate_xml),
+        reader=MMAXWordsDocumentReader(
+            validate=validate_xml,
+            sentence_split_method=sentence_split_method,
+            sentence_ending_tokens=sentence_ending_tokens,
+            add_word_number=add_word_number,
+        ),
         on_missing_document_ID=on_missing['document_id'],
         auto_use_Med_item_reader=auto_use_Med_item_reader,
         warn_on_auto_use_Med_item_reader=warn_on_auto_use_Med_item_reader
@@ -292,6 +300,9 @@ def get_args(args_from_config=[
                 'auto_use_Med_item_reader',
                 'warn_on_auto_use_Med_item_reader',
                 'min_column_spacing',
+                'sentence_split_method',
+                'sentence_ending_tokens',
+                'add_word_number',
                 'conll_defaults',
                 'on_missing',
              ], batch_args_from_config=[

@@ -15,6 +15,10 @@ MARKABLES_DIR = 'Markables'
 MARKABLES_FILES_EXTENSION = '_coref_level.xml'
 LOG_ON_ERROR = False
 DIRS_TO_IGNORE = {'Configuration'}
+# SENTENCE_SPLIT_METHOD = 'word_number'
+SENTENCE_SPLIT_METHOD = 'token'
+SENTENCE_ENDING_TOKENS = {'.', '?', '!'}
+ADD_WORD_NUMBER = False
 
 CONLL_DEFAULTS = {
     'document_id': 'UNKNOWN',

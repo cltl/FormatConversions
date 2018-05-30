@@ -369,6 +369,9 @@ class MMAXWordsDocumentReader(XMLItemReader):
 
     def __init__(self, item_reader=None,
                  validate=c.VALIDATE_XML,
+                 sentence_split_method=c.SENTENCE_SPLIT_METHOD,
+                 sentence_ending_tokens=c.SENTENCE_ENDING_TOKENS,
+                 add_word_number=c.ADD_WORD_NUMBER,
                  document_id_attr=c.MMAX_WORDS_DOCUMENT_ID_ATTRIBUTE,
                  sent_start_word_number=c.MMAX_SENTENCE_STARTING_WORD_NUMBER,
                  expected_child_tag=c.MMAX_WORD_TAG,
@@ -385,6 +388,9 @@ class MMAXWordsDocumentReader(XMLItemReader):
             expected_root_tag=expected_root_tag,
             item_filter=item_filter,
         )
+        self.sentence_split_method = sentence_split_method
+        self.sentence_ending_tokens = sentence_ending_tokens
+        self.add_word_number = add_word_number
         self.document_id_attr = document_id_attr
         self.sent_start_word_number = sent_start_word_number
 
@@ -427,8 +433,39 @@ class MMAXWordsDocumentReader(XMLItemReader):
 
         Returns a list of sentences, where a sentence is a list of things
         returned by `self.item_reader.read`.
+
+        Sentence boundaries can be detected using the following methods:
+            - 'word_number'     uses self.sentences_using_word_number
+            - 'token'          uses self.sentences_using_token
         """
         words = self.extract_items(xml)
+        if self.sentence_split_method == 'word_number':
+            sentences = self.sentences_using_word_number(words)
+        elif self.sentence_split_method == 'token':
+            sentences = self.sentences_using_token(words)
+        else:
+            raise ValueError(
+                "`split_method` must be either 'word_number' or 'token'"
+            )
+
+        if self.add_word_number:
+            self.do_add_word_number(sentences)
+
+        if self.validate:
+            self.validate_sentences(sentences)
+
+        return sentences
+
+    def sentences_using_word_number(self, words):
+        """
+        Split an iterator of words into a list of sentences using the word
+        number to detect the start of a new sentence.
+
+        Whenever the word_number of a word is lower than the word number of the
+        previous word, a new sentence is started. If self.validate and the word
+        number of the first word of a sentence != 0, a ValidationError is
+        raised.
+        """
         sentences = []
         sentence = None
 

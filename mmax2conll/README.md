@@ -75,6 +75,7 @@ Column  | Description           | Value                                         
 
 # Issues
 
+ - [ ] Sentence boundary detection using 'token' does not work.
  - [ ] 'on_missing' config key is not validated before use
 
 # References

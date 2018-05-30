@@ -10,6 +10,13 @@ words_dir: Basedata
 words_files_extension: _words.xml
 markables_dir: Markables
 markables_files_extension: _coref_level.xml
+# sentence_split_method: word_number
+sentence_split_method: token
+sentence_ending_tokens:
+    - '.'
+    - '!'
+    - '?'
+add_word_number: true
 log_on_error: false
 dirs_to_ignore:
     - Configuration
