@@ -271,10 +271,11 @@ def can_output_to(output, config, batch):
         # (Check if we can) create it
         if batch:
             os.makedirs(output)
+            # This will keep some directories, but not the leaf one
+            # that's annoying but at least we don't get a warning
+            os.rmdir(output)
         else:
             open(output, 'w').close()
-            # Remove it, because if something goes wrong empty files are more
-            # annoying than empty directories
             os.remove(output)
 
 
