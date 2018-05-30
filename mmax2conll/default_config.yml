@@ -7,7 +7,7 @@ markables_level_filter: reference
 markables_files_extension: _coref_level.xml
 words_files_extension: _words.xml
 
-defaults:
+conll_defaults:
     document_id: UNKNOWN
     part_number: 0
     word_number: '[WORD_NUMBER]'

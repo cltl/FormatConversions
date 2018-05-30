@@ -23,7 +23,7 @@ logger = logging.getLogger(None if __name__ == '__main__' else __name__)
 def single_main(words_file, markables_file, output_file,
                 validate_xml=c.VALIDATE_XML,
                 auto_use_Med_item_reader=c.AUTO_USE_MED_ITEM_READER,
-                defaults=c.CONLL_DEFAULTS,
+                conll_defaults=c.CONLL_DEFAULTS,
                 min_column_spacing=c.MIN_COLUMN_SPACING,
                 on_missing=c.CONLL_ON_MISSING,
                 markables_filter=c.MMAX_MARKABLES_FILTER):
@@ -50,7 +50,7 @@ def single_main(words_file, markables_file, output_file,
     write_conll(
         filename=output_file,
         writer=CoNLLWriter(
-            defaults=defaults,
+            defaults=conll_defaults,
             min_column_spacing=min_column_spacing,
             on_missing=on_missing
         ),
@@ -134,7 +134,7 @@ def get_args(args_from_config=[
                 'validate_xml',
                 'auto_use_Med_item_reader',
                 'min_column_spacing',
-                'defaults',
+                'conll_defaults',
                 'on_missing',
              ], batch_args_from_config=[
                 'words_files_extension',
