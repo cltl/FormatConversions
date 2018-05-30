@@ -22,12 +22,19 @@ logger = logging.getLogger(None if __name__ == '__main__' else __name__)
 
 def find_data_dirs(directory,
                    words_dir=c.WORDS_DIR,
-                   markables_dir=c.MARKABLES_DIR):
+                   markables_dir=c.MARKABLES_DIR,
+                   dirs_to_ignore=c.DIRS_TO_IGNORE):
     """
     Recursively search `directory` for directories containing a `words_dir`
     and `markables_dir` directory as direct children.
+
+    Does not return directories whose base name is in `dirs_to_ignore`,
+    but does search them.
     """
+    dirs_to_ignore = set(dirs_to_ignore)
     for subdir, subsubdirs, _ in os.walk(directory):
+        if os.path.basename(subdir) in dirs_to_ignore:
+            continue
         has_words = words_dir in subsubdirs
         has_markables = markables_dir in subsubdirs
         if has_words and has_markables:
@@ -47,13 +54,15 @@ def find_data_dirs(directory,
 def super_dir_main(directories, output_dir,
                    words_dir=c.WORDS_DIR,
                    markables_dir=c.MARKABLES_DIR,
+                   dirs_to_ignore=c.DIRS_TO_IGNORE,
                    allow_overwriting=c.ALLOW_OVERWRITING,
                    **kwargs):
     for directory in directories:
         data_dirs = find_data_dirs(
-            directory,
-            words_dir,
-            markables_dir
+            directory=directory,
+            words_dir=words_dir,
+            markables_dir=markables_dir,
+            dirs_to_ignore=dirs_to_ignore
         )
         for data_dir in data_dirs:
             cur_output_dir = os.path.join(
@@ -284,6 +293,7 @@ def get_args(args_from_config=[
                 'markables_dir',
                 'markables_files_extension',
                 'log_on_error',
+                'dirs_to_ignore'
              ]):
     from argparse import ArgumentParser, RawDescriptionHelpFormatter
 

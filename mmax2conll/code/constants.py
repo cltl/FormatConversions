@@ -14,6 +14,7 @@ WORDS_FILES_EXTENSION = '_words.xml'
 MARKABLES_DIR = 'Markables'
 MARKABLES_FILES_EXTENSION = '_coref_level.xml'
 LOG_ON_ERROR = False
+DIRS_TO_IGNORE = {'Configuration'}
 
 CONLL_DEFAULTS = {
     'document_id': 'UNKNOWN',

@@ -11,6 +11,8 @@ words_files_extension: _words.xml
 markables_dir: Markables
 markables_files_extension: _coref_level.xml
 log_on_error: false
+dirs_to_ignore:
+    - Configuration
 
 conll_defaults:
     document_id: UNKNOWN
