@@ -126,10 +126,10 @@ class CoNLLWriter:
                 current_part = self.defaults['part_number']
             try:
                 current_part = int(current_part)
-            except ValueError:
+            except ValueError as e:
                 raise ValueError(
                     f"The part number should be a number in : {sentence}"
-                )
+                ) from e
 
             if prev_part != current_part:
                 if prev_part > current_part:

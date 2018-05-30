@@ -186,12 +186,12 @@ class MMAXMarkableReader:
                 try:
                     first_int = int(first[-1])
                     last_int = int(last[-1])
-                except ValueError:
+                except ValueError as e:
                     raise ValueError(
                         "Illegal span specification: every word ID in an"
                         " abbreviated span should end with an integer,"
                         f" optionally separated from text by an '_': {text}"
-                    )
+                    ) from e
                 first[-1] = last[-1] = ''
                 if first != last:
                     raise ValueError(
@@ -458,7 +458,7 @@ class MMAXWordsDocumentReader(XMLItemReader):
                                 f" have 'word_number' =="
                                 f" {self.sent_start_word_number!r}. Found:"
                                 f" {word['word_number']!r}"
-                            )
+                            ) from e
                         # else ignore this problem and fix it by starting a new
                         # sentence. The program flow will end up in the piece
                         # of code below that creates a new sentence.
@@ -513,12 +513,12 @@ class MMAXWordsDocumentReader(XMLItemReader):
                     break
                 try:
                     part_number = int(part_number)
-                except ValueError:
+                except ValueError as e:
                     raise ValidationError(
                         f"The part number of {word['word']!r} is not a"
                         f" number but {word['part_number']!r}."
                         f" This is in sentence #{senti}: {sentence!r}."
-                    )
+                    ) from e
                 if word['word_number'] == '0':
                     prev_part_number = part_number
                 elif prev_part_number != part_number:
@@ -595,7 +595,7 @@ class MMAXWordsDocumentReader(XMLItemReader):
                                 f"The word number of {word['word']!r} is not a"
                                 f" number but {word['word_number']!r}."
                                 f" This is in sentence #{senti}: {sentence!r}."
-                            )
+                            ) from e
                         else:
                             raise e
                     else:
