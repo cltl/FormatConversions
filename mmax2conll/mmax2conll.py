@@ -20,7 +20,7 @@ from code.conll_writers import CoNLLWriter
 logger = logging.getLogger(None if __name__ == '__main__' else __name__)
 
 
-def single_main(words_file, coref_file, output_file,
+def single_main(words_file, markables_file, output_file,
                 validate_xml=c.VALIDATE_XML,
                 auto_use_Med_item_reader=c.AUTO_USE_MED_ITEM_READER,
                 defaults=c.CONLL_DEFAULTS,
@@ -40,7 +40,7 @@ def single_main(words_file, coref_file, output_file,
         validate=validate_xml,
         item_filter=markables_filter,
     ).extract_coref_sets(
-        etree.parse(coref_file)
+        etree.parse(markables_file)
     )
 
     # Merge coref data into sentences (in place)
@@ -183,7 +183,7 @@ original folder has relative to the passed folder it was found in.
                         help="Where to save the CoNLL output")
     parser.add_argument('words_file', type=file_exists, nargs='?',
                         help="MMAX *_words.xml file to use as input")
-    parser.add_argument('coref_file', type=file_exists, nargs='?',
+    parser.add_argument('markables_file', type=file_exists, nargs='?',
                         help="MMAX *_coref_level.xml file to use as input")
     args = vars(parser.parse_args())
 
@@ -199,7 +199,7 @@ original folder has relative to the passed folder it was found in.
     if batch:
         args['output_dir'] = output
         if args.pop('words_file') is not None or \
-           args.pop('coref_file') is not None:
+           args.pop('markables_file') is not None:
             parser.error(
                 "Please either specify a number of directories or the"
                 " necessary files to use as input, but not both."
@@ -207,13 +207,14 @@ original folder has relative to the passed folder it was found in.
     else:
         del args['directory']
         args['output_file'] = output
-        if args['words_file'] is None or args['coref_file'] is None:
+        if args['words_file'] is None or args['markables_file'] is None:
             parser.error(
                 "Please specify both a *_words.xml file and a"
                 " *_coref_level.xml file. You can also choose to specify a"
                 " number directories to use as input instead."
             )
 
+    # Read configuration
     config_file = args.pop('config')
     config = read_config(config_file)
 
