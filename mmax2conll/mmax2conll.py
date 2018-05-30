@@ -16,7 +16,6 @@ from code.mmax_readers import (
 )
 from code.conll_converters import CorefConverter
 from code.conll_writers import CoNLLWriter
-from code.util import ValidationError
 
 logger = logging.getLogger(None if __name__ == '__main__' else __name__)
 
@@ -90,7 +89,7 @@ def dir_main(input_dir, output_dir,
              conll_extension=c.CONLL_EXTENSION,
              words_files_extension=c.WORDS_FILES_EXTENSION,
              markables_files_extension=c.MARKABLES_FILES_EXTENSION,
-             raise_on_validation_error=c.RAISE_ON_VALIDATION_ERROR,
+             log_on_error=c.LOG_ON_ERROR,
              **kwargs):
     """
     Batch convert all files in a directory containing a `words_dir` and
@@ -141,20 +140,16 @@ def dir_main(input_dir, output_dir,
                 raise IOError(f"Will not overwrite: {output_file}")
         try:
             single_main(words_file, markables_file, output_file, **kwargs)
-        except ValidationError as e:
-            if raise_on_validation_error:
+        except Exception as e:
+            if log_on_error:
+                logger.error(
+                    f"{name} from {input_dir} is skipped: " + e.args[0]
+                )
+            else:
                 e.args = (
                     f"While processing {name} from {input_dir}: " + e.args[0],
                 ) + e.args[1:]
                 raise e
-            else:
-                logger.warn(
-                    f"{name} from {input_dir} is skipped: " + e.args[0]
-                )
-        except Exception as e:
-            message = f"While processing {name} from {input_dir}: " + e.args[0]
-            e.args = (message, ) + e.args[1:]
-            raise e
 
 
 def single_main(words_file, markables_file, output_file,
@@ -288,7 +283,7 @@ def get_args(args_from_config=[
                 'words_files_extension',
                 'markables_dir',
                 'markables_files_extension',
-                'raise_on_validation_error',
+                'log_on_error',
              ]):
     from argparse import ArgumentParser, RawDescriptionHelpFormatter
 

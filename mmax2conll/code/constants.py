@@ -13,7 +13,7 @@ WORDS_DIR = 'Basedata'
 WORDS_FILES_EXTENSION = '_words.xml'
 MARKABLES_DIR = 'Markables'
 MARKABLES_FILES_EXTENSION = '_coref_level.xml'
-RAISE_ON_VALIDATION_ERROR = True
+LOG_ON_ERROR = False
 
 CONLL_DEFAULTS = {
     'document_id': 'UNKNOWN',
