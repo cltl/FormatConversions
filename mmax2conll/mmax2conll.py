@@ -20,13 +20,13 @@ from code.conll_writers import CoNLLWriter
 logger = logging.getLogger(None if __name__ == '__main__' else __name__)
 
 
-def main(words_file, coref_file, output_file,
-         validate_xml=c.VALIDATE_XML,
-         auto_use_Med_item_reader=c.AUTO_USE_MED_ITEM_READER,
-         defaults=c.CONLL_DEFAULTS,
-         min_column_spacing=c.MIN_COLUMN_SPACING,
-         on_missing=c.CONLL_ON_MISSING,
-         markables_filter=c.MMAX_MARKABLES_FILTER):
+def single_main(words_file, coref_file, output_file,
+                validate_xml=c.VALIDATE_XML,
+                auto_use_Med_item_reader=c.AUTO_USE_MED_ITEM_READER,
+                defaults=c.CONLL_DEFAULTS,
+                min_column_spacing=c.MIN_COLUMN_SPACING,
+                on_missing=c.CONLL_ON_MISSING,
+                markables_filter=c.MMAX_MARKABLES_FILTER):
     # Read in the data from MMAX *_words.xml file
     document_id, sentences = read_words_file(
         filename=words_file,
@@ -271,5 +271,5 @@ if __name__ == '__main__':
             # Recursively search directory
             ...
     else:
-        main(**args)
+        single_main(**args)
     logger.info("Done!")
