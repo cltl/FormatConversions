@@ -160,6 +160,7 @@ def dir_main(input_dir, output_dir,
 def single_main(words_file, markables_file, output_file,
                 validate_xml=c.VALIDATE_XML,
                 auto_use_Med_item_reader=c.AUTO_USE_MED_ITEM_READER,
+                warn_on_auto_use_Med_item_reader=c.WARN_ON_AUTO_USE_MED_ITEM_READER,  # noqa
                 conll_defaults=c.CONLL_DEFAULTS,
                 min_column_spacing=c.MIN_COLUMN_SPACING,
                 on_missing=c.CONLL_ON_MISSING,
@@ -169,7 +170,8 @@ def single_main(words_file, markables_file, output_file,
         filename=words_file,
         reader=MMAXWordsDocumentReader(validate=validate_xml),
         on_missing_document_ID=on_missing['document_id'],
-        auto_use_Med_item_reader=auto_use_Med_item_reader
+        auto_use_Med_item_reader=auto_use_Med_item_reader,
+        warn_on_auto_use_Med_item_reader=warn_on_auto_use_Med_item_reader
     )
 
     # Read in coreference data
@@ -198,7 +200,9 @@ def single_main(words_file, markables_file, output_file,
 
 def read_words_file(filename, reader,
                     on_missing_document_ID=c.CONLL_ON_MISSING['document_id'],
-                    auto_use_Med_item_reader=c.AUTO_USE_MED_ITEM_READER):
+                    auto_use_Med_item_reader=c.AUTO_USE_MED_ITEM_READER,
+                    warn_on_auto_use_Med_item_reader=c.WARN_ON_AUTO_USE_MED_ITEM_READER,  # noqa
+                    ):
     """
     Read in word and sentence data and a document ID from a file from COREA.
 
@@ -232,8 +236,11 @@ def read_words_file(filename, reader,
     logger.debug(f"auto_use_Med_item_reader: {auto_use_Med_item_reader}")
     logger.debug(f"document_id: {document_id}")
     if auto_use_Med_item_reader and document_id.startswith(c.COREA_MED_ID):
-        logger.warn("Ignoring reader.item_reader and automatically using the"
-                    " item reader for COREA Med")
+        if warn_on_auto_use_Med_item_reader:
+            logger.warn(
+                "Ignoring reader.item_reader and automatically using the item"
+                " reader for COREA Med"
+            )
         reader.item_reader = CoreaMedWordReader()
 
     sentences = reader.extract_sentences(xml)
@@ -270,6 +277,7 @@ def can_output_to(output, config, batch):
 def get_args(args_from_config=[
                 'validate_xml',
                 'auto_use_Med_item_reader',
+                'warn_on_auto_use_Med_item_reader',
                 'min_column_spacing',
                 'conll_defaults',
                 'on_missing',

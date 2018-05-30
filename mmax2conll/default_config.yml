@@ -1,6 +1,7 @@
 min_column_spacing: 3
 validate_xml: true
 auto_use_Med_item_reader: true
+warn_on_auto_use_Med_item_reader: true
 allow_overwriting: false
 markables_type_filter: ident_or_bridge
 markables_level_filter: reference

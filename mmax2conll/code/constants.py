@@ -4,6 +4,7 @@ MIN_COLUMN_SPACING = 3
 VALIDATE_XML = True
 # The following value is different from the one in ./default_config.yml
 AUTO_USE_MED_ITEM_READER = False
+WARN_ON_AUTO_USE_MED_ITEM_READER = True
 ALLOW_OVERWRITING = False
 MARKABLES_TYPE_FILTER = 'ident_or_bridge'
 MARKABLES_LEVEL_FILTER = 'reference'
