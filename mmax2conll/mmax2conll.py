@@ -125,7 +125,7 @@ def dir_main(input_dir, output_dir,
         logger.warn(
             "The following files seem to be words files, but do not have a"
             " corresponding markables file:\n" + '\n'.join(
-                words_files - both
+                sorted(words_files - both)
             )
         )
 
@@ -133,7 +133,7 @@ def dir_main(input_dir, output_dir,
         logger.warn(
             "The following files seem to be markables files, but do not have a"
             " corresponding words file:\n" + '\n'.join(
-                markables_files - both
+                sorted(markables_files - both)
             )
         )
 
