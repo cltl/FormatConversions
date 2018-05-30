@@ -73,9 +73,9 @@ Column  | Description           | Value                                         
     ```
 
 
-# To Do
+# Issues
 
- - [ ] Validate 'on_missing' config key
+ - [ ] 'on_missing' config key is not validated before use
 
 # References
 Multi-Level Annotation in MMAX (2003)<br>
