@@ -43,6 +43,7 @@ COREA_DCOI_ID = 'DCOI'
 COREA_MED_ID = 'Med'
 
 # Words files details
+MMAX_WORDS_FILES_EXTENSION = '_words.xml'
 MMAX_WORD_TAG = 'word'
 MMAX_WORDS_TAG = 'words'
 MMAX_WORD_NUMBER_ATTRIBUTE = 'alppos'
@@ -57,6 +58,7 @@ def MMAX_WORDS_FILTER(item): return True
 
 
 # Markables files details
+MMAX_MARKABLES_FILES_EXTENSION = '_coref_level.xml'
 MMAX_MARKABLE_TAG = 'markable'
 MMAX_MARKABLES_TAG = 'markables'
 MMAX_MARKABLE_ID_ATTRIBUTE = 'id'

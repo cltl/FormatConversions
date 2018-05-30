@@ -131,14 +131,16 @@ def can_output_to(output, config, batch):
 
 
 def get_args(args_from_config=[
-                 'validate_xml',
-                 'auto_use_Med_item_reader',
-                 'min_column_spacing',
-                 'defaults',
-                 'on_missing',
+                'validate_xml',
+                'auto_use_Med_item_reader',
+                'min_column_spacing',
+                'defaults',
+                'on_missing',
+             ], batch_args_from_config=[
+                'words_files_extension',
+                'markables_files_extension',
              ]):
     from argparse import ArgumentParser, RawDescriptionHelpFormatter
-    from pyaml import yaml
 
     # Read command line arguments
     parser = ArgumentParser(
@@ -189,24 +191,6 @@ original folder has relative to the passed folder it was found in.
     logging.basicConfig(level=args.pop('log_level'))
     logger.debug(f"Args: {args}")
 
-    # Read the configuration file
-    config_file = args.pop('config')
-    with open(config_file) as config_fd:
-        config = yaml.load(config_fd)
-
-    # Extract required arguments from configuration
-    for arg in args_from_config:
-        if arg not in config:
-            raise ValueError(
-                f"The key {arg!r} is not in the specified configuration file"
-                f" {config_file}"
-            )
-        args[arg] = config[arg]
-
-    args['markables_filter'] = lambda i: \
-        c.MMAX_TYPE_FILTERS[config['markables_type_filter']](i) and \
-        c.MMAX_LEVEL_FILTERS[config['markables_level_filter']](i)
-
     batch = bool(args['directory'])
     output = args.pop('output')
 
@@ -230,16 +214,61 @@ original folder has relative to the passed folder it was found in.
                 " number directories to use as input instead."
             )
 
+    config_file = args.pop('config')
+    config = read_config(config_file)
+
+    # Read common keys
+    args.update(keys_from_config(config, args_from_config, config_file))
+    args['markables_filter'] = lambda i: \
+        c.MMAX_TYPE_FILTERS[config['markables_type_filter']](i) and \
+        c.MMAX_LEVEL_FILTERS[config['markables_level_filter']](i)
+
+    # Read batch keys
+    if batch:
+        args.update(
+            keys_from_config(config, batch_args_from_config, config_file)
+        )
+
     # Verify the output location
     can_output_to(output, config, batch)
 
     return batch, args
 
 
+def keys_from_config(config, keys, filename):
+    """
+    Select some `keys` with their values from a dictionary
+
+    `filename` is only used for the error message if a key is missing
+    """
+    args = {}
+    # Extract required arguments from configuration
+    for arg in keys:
+        if arg not in config:
+            raise ValueError(
+                f"The key {arg!r} is not in the specified configuration file"
+                f" {filename}"
+            )
+        args[arg] = config[arg]
+
+    return args
+
+
+def read_config(filename):
+    from pyaml import yaml
+
+    # Read the configuration file
+    with open(filename) as config_fd:
+        config = yaml.load(config_fd)
+
+    return config
+
+
 if __name__ == '__main__':
     batch, args = get_args()
     if batch:
         for directory in args.pop('directory'):
+            # Recursively search directory
             ...
     else:
         main(**args)

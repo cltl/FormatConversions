@@ -4,6 +4,8 @@ auto_use_Med_item_reader: true
 allow_overwriting: false
 markables_type_filter: ident_or_bridge
 markables_level_filter: reference
+mmax_words_files_extension: _words.xml
+mmax_markables_files_extension: _coref_level.xml
 
 defaults:
     document_id: UNKNOWN
