@@ -9,23 +9,23 @@ from .util import ValidationError
 logger = logging.getLogger(None if __name__ == '__main__' else __name__)
 
 
-def document_ID_from_filename(filename):
+def document_ID_from_filename(filename, extension):
     """
-    Extract the document ID (or None) from the filename of a file from the
-    COREA corpus.
+    Extract the document ID (or None) from the base name of a file.
 
-    !! NB !! This method is hard-coded for the COREA corpus and
-             only works for the DCOI and Med parts of the corpus.
+    !! NB !! Special case for Med adds `Med/` to the base name
 
     See Ch. 7 of Essential Speech and Language Technology for Dutch
     COREA: Coreference Resolution for Extracting Answers for Dutch
     https://link.springer.com/book/10.1007/978-3-642-30910-6
     """
-    bare_doc_id = path.basename(filename)[:-len('_words.xml')]
-    if bare_doc_id.startswith('s'):
-        return c.COREA_MED_ID + '/' + bare_doc_id
-    elif bare_doc_id.startswith('WR-P-P-H-'):
-        return c.COREA_DCOI_ID + '/' + bare_doc_id
+    basename = path.basename(filename)
+    if basename.endswith(extension):
+        bare_doc_id = basename[:-len(extension)]
+        if re.match(r'^s\d+$', bare_doc_id):
+            return c.COREA_MED_ID + '/' + bare_doc_id
+        else:
+            return bare_doc_id
     return None
 
 

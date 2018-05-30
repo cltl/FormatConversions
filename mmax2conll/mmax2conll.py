@@ -148,7 +148,13 @@ def dir_main(input_dir, output_dir,
             else:
                 raise IOError(f"Will not overwrite: {output_file}")
         try:
-            single_main(words_file, markables_file, output_file, **kwargs)
+            single_main(
+                words_file,
+                markables_file,
+                output_file,
+                words_files_extension=words_files_extension,
+                **kwargs
+            )
         except Exception as e:
             if log_on_error:
                 logger.error(
@@ -162,6 +168,7 @@ def dir_main(input_dir, output_dir,
 
 
 def single_main(words_file, markables_file, output_file,
+                words_files_extension=c.WORDS_FILES_EXTENSION,
                 validate_xml=c.VALIDATE_XML,
                 auto_use_Med_item_reader=c.AUTO_USE_MED_ITEM_READER,
                 warn_on_auto_use_Med_item_reader=c.WARN_ON_AUTO_USE_MED_ITEM_READER,  # noqa
@@ -172,6 +179,7 @@ def single_main(words_file, markables_file, output_file,
     # Read in the data from MMAX *_words.xml file
     document_id, sentences = read_words_file(
         filename=words_file,
+        extension=words_files_extension,
         reader=MMAXWordsDocumentReader(validate=validate_xml),
         on_missing_document_ID=on_missing['document_id'],
         auto_use_Med_item_reader=auto_use_Med_item_reader,
@@ -202,7 +210,7 @@ def single_main(words_file, markables_file, output_file,
     )
 
 
-def read_words_file(filename, reader,
+def read_words_file(filename, extension, reader,
                     on_missing_document_ID=c.CONLL_ON_MISSING['document_id'],
                     auto_use_Med_item_reader=c.AUTO_USE_MED_ITEM_READER,
                     warn_on_auto_use_Med_item_reader=c.WARN_ON_AUTO_USE_MED_ITEM_READER,  # noqa
@@ -221,7 +229,7 @@ def read_words_file(filename, reader,
 
     document_id = reader.extract_document_ID(xml)
     if document_id is None:
-        document_id = document_ID_from_filename(filename)
+        document_id = document_ID_from_filename(filename, extension)
 
     message = f"No document ID could be found for {filename}."
     if on_missing_document_ID == 'warn':
