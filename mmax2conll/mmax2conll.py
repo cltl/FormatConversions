@@ -195,7 +195,7 @@ def single_main(words_file, coref_file, output_file,
     )
 
     # Merge coref data into sentences (in place)
-    CorefConverter.add_data_from_coref_sets(sentences, coref_sets)
+    CorefConverter().add_data_from_coref_sets(sentences, coref_sets)
 
     # Save the data to CoNLL
     write_conll(

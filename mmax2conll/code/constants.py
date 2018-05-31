@@ -51,6 +51,15 @@ COREA_CGN_ID = 'CGN'
 COREA_DCOI_ID = 'DCOI'
 COREA_MED_ID = 'Med'
 
+
+# MMAX details
+def MMAX_POSITION_FROM_ID(ID):
+    """
+    Extract the position from a MMAX ID
+    """
+    return int(str(ID).split('_')[-1])
+
+
 # Words files details
 MMAX_WORD_TAG = 'word'
 MMAX_WORDS_TAG = 'words'

@@ -1,6 +1,7 @@
 import itertools as it
 
-from .util import ValidationError
+from . import constants as c
+from .util import ValidationError, is_consecutive
 
 
 class CorefConverter:
@@ -9,8 +10,10 @@ class CorefConverter:
     `.conll_writers.CoNLLWriter`
     """
 
-    @classmethod
-    def word_id_map_from_MMAX_sets(cls, sets):
+    def __init__(self, position_from_ID=c.MMAX_POSITION_FROM_ID):
+        self.position_from_ID = position_from_ID
+
+    def word_id_map_from_MMAX_sets(self, sets):
         """
         Extract a `{word_id: (reference ID, position)}` map from a reference
         chain, where `position` is either `start`, `end` or `singleton`.
@@ -29,7 +32,7 @@ class CorefConverter:
         for refID, refset in enumerate(sets):
             # Make sure the spans are unique
             for span in set(map(lambda ref: tuple(ref['span']), refset)):
-                cls.validate_MMAX_span(span)
+                self.validate_span(span)
                 if len(span) == 1:
                     word_id_map.setdefault(span[0], []).append(
                         (refID, 'singleton')
@@ -44,30 +47,14 @@ class CorefConverter:
 
         return word_id_map
 
-    @staticmethod
-    def validate_MMAX_span(span):
-        """
-        Validate the words in a span are consecutive.
-
-        Assumes:
-         - the span is a list of word IDs
-         - `str(ID).split('_')[-1]` is the position of a word
-        """
-        positions = [int(str(ID).split('_')[-1]) for ID in span]
-        if any(
-            expected != pos
-            for expected, pos in zip(
-                range(positions[0], positions[0] + len(positions)),
-                positions
-            )
-           ):
+    def validate_span(self, span):
+        if not is_consecutive(map(self.position_from_ID, span)):
             raise ValidationError(
                 "Coreference spans in CoNLL must be consecutive. Found:"
                 f" {span}"
             )
 
-    @classmethod
-    def add_data_from_coref_sets(cls, sentences, coref_sets):
+    def add_data_from_coref_sets(self, sentences, coref_sets):
         """
         Add coreference information from reference sets to sentence data.
 
@@ -75,7 +62,7 @@ class CorefConverter:
 
         Assumes every word has an ID stored in 'id'.
         """
-        id_map = cls.word_id_map_from_MMAX_sets(coref_sets)
+        id_map = self.word_id_map_from_MMAX_sets(coref_sets)
 
         def ref_to_str(refID, pos):
             if pos == 'singleton':
