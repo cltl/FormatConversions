@@ -482,13 +482,13 @@ class MMAXWordsDocumentReader(XMLItemReader):
 
         return sentences
 
-    @staticmethod
-    def validate_sentences(sentences):
+    @classmethod
+    def validate_sentences(cls, sentences):
         """
         Validate `word_number` and `part_number` of these sentences
         """
-        MMAXWordsDocumentReader.validate_word_number(sentences)
-        MMAXWordsDocumentReader.validate_part_number(sentences)
+        cls.validate_word_number(sentences)
+        cls.validate_part_number(sentences)
 
     @staticmethod
     def validate_part_number(sentences):
