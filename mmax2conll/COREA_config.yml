@@ -1,7 +1,7 @@
 min_column_spacing: 3
 validate_xml: true
-auto_use_Med_item_reader: false
-warn_on_auto_use_Med_item_reader: true
+auto_use_Med_item_reader: true
+warn_on_auto_use_Med_item_reader: false
 allow_overwriting: false
 markables_type_filter: ident_or_bridge
 markables_level_filter: reference
@@ -31,7 +31,7 @@ conll_defaults:
 on_missing:
     document_id: throw
     part_number: nothing
-    word_number: throw
+    word_number: nothing
     word: throw
     POS: nothing
     parse_bit: nothing
