@@ -35,6 +35,20 @@ def document_ID_from_filename(filename, extension):
     return None
 
 
+def add_sentence_layer_to_words(words, sentence_items):
+    """
+    Splits a collection of words into a sequence of sentences using information
+    from a sequence of sentence items.
+
+    Returns a list of lists of words
+    """
+    words = {word['id']: word for word in words}
+    return [
+        [words.get(ID) for ID in sentence_item['span']]
+        for sentence_item in sentence_items
+    ]
+
+
 class XMLItemReader:
     """
     Reads and (optionally) validates data from an XML-tree.
