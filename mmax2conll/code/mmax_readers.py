@@ -491,6 +491,59 @@ class MMAXWordsDocumentReader(XMLItemReader):
         cls.validate_part_number(sentences)
 
     @staticmethod
+    def validate_word_number(sentences):
+        """
+        Validate word number of these sentences
+
+        `word_number` must:
+         - correspond to `range(len(sentence))`
+        """
+        expected_msg = 'invalid literal for int() with base 10: '
+
+        for senti, sentence in enumerate(sentences):
+            # First quickly check
+            word_numbers = map(
+                int,
+                map(
+                    dict.get,
+                    sentence,
+                    it.repeat('word_number')
+                )
+            )
+            try:
+                problem = any(i != wn for i, wn in enumerate(word_numbers))
+            except ValueError as e:
+                if e.args[0].startswith(expected_msg):
+                    problem = True
+                else:
+                    raise e
+
+            # Find out what's wrong.
+            if problem:
+                index = 0
+                for word in sentence:
+                    try:
+                        word_number = int(word['word_number'])
+                    except ValueError as e:
+                        if e.args[0].startswith(expected_msg):
+                            raise ValidationError(
+                                f"The word number of {word['word']!r} is not a"
+                                f" number but {word['word_number']!r}."
+                                f" This is in sentence #{senti}: {sentence!r}."
+                            ) from e
+                        else:
+                            raise e
+                    else:
+                        if word_number != index:
+                            raise ValidationError(
+                                f"The word number of {word['word']!r} is the"
+                                f" wrong value. Expected {index}, found:"
+                                f" {word_number}."
+                                f" This is in sentence #{senti}: {sentence!r}."
+                            )
+                        index += 1
+
+    @staticmethod
     def validate_part_number(sentences):
         """
         Validate part number of these sentences
@@ -554,59 +607,6 @@ class MMAXWordsDocumentReader(XMLItemReader):
                         f" greater than {prev_part_number}."
                         f" Found: {part_number}"
                     )
-
-    @staticmethod
-    def validate_word_number(sentences):
-        """
-        Validate word number of these sentences
-
-        `word_number` must:
-         - correspond to `range(len(sentence))`
-        """
-        expected_msg = 'invalid literal for int() with base 10: '
-
-        for senti, sentence in enumerate(sentences):
-            # First quickly check
-            word_numbers = map(
-                int,
-                map(
-                    dict.get,
-                    sentence,
-                    it.repeat('word_number')
-                )
-            )
-            try:
-                problem = any(i != wn for i, wn in enumerate(word_numbers))
-            except ValueError as e:
-                if e.args[0].startswith(expected_msg):
-                    problem = True
-                else:
-                    raise e
-
-            # Find out what's wrong.
-            if problem:
-                index = 0
-                for word in sentence:
-                    try:
-                        word_number = int(word['word_number'])
-                    except ValueError as e:
-                        if e.args[0].startswith(expected_msg):
-                            raise ValidationError(
-                                f"The word number of {word['word']!r} is not a"
-                                f" number but {word['word_number']!r}."
-                                f" This is in sentence #{senti}: {sentence!r}."
-                            ) from e
-                        else:
-                            raise e
-                    else:
-                        if word_number != index:
-                            raise ValidationError(
-                                f"The word number of {word['word']!r} is the"
-                                f" wrong value. Expected {index}, found:"
-                                f" {word_number}."
-                                f" This is in sentence #{senti}: {sentence!r}."
-                            )
-                        index += 1
 
 
 class MMAXCorefDocumentReader(XMLItemReader):
