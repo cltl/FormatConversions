@@ -425,6 +425,42 @@ class XMLItemReader:
         return filter(self.item_filter, self.extract_all_items(xml))
 
 
+class SoNaRWordsDocumentReader(XMLItemReader):
+    """
+    Reads and (optionally) validates data from a MMAX words XML-tree from the
+    SoNaR-1 corpus.
+
+    Things that are verified if `validate=True`:
+     - the tag of the root element is as expected
+     - the tag of all the word elements is as expected
+
+    See
+    https://ivdnt.org/downloads/taalmaterialen/tstc-sonar-corpus
+    for (a description of) the SoNaR Corpus
+
+    See `MMAX-specification.md` and
+    http://www.speech.cs.cmu.edu/sigdial2003/proceedings/07_LONG_strube_paper.pdf
+    for a description of the MMAX format.
+    """
+
+    def __init__(self, item_reader=None,
+                 validate=c.VALIDATE_XML,
+                 expected_child_tag=c.MMAX_WORD_TAG,
+                 expected_root_tag=c.MMAX_WORDS_TAG,
+                 item_filter=c.MMAX_WORDS_FILTER):
+        # Default item_reader
+        item_reader = item_reader \
+            if item_reader is not None \
+            else SoNaRWordReader()
+        super(SoNaRWordsDocumentReader, self).__init__(
+            item_reader=item_reader,
+            validate=validate,
+            expected_child_tag=expected_child_tag,
+            expected_root_tag=expected_root_tag,
+            item_filter=item_filter,
+        )
+
+
 class COREAWordsDocumentReader(XMLItemReader):
     """
     Reads and (optionally) validates data from a MMAX words XML-tree from the
