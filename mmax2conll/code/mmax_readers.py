@@ -4,7 +4,7 @@ from os import path
 import itertools as it
 
 from . import constants as c
-from .util import ValidationError
+from .util import ValidationError, is_consecutive
 
 logger = logging.getLogger(None if __name__ == '__main__' else __name__)
 
@@ -459,6 +459,70 @@ class SoNaRWordsDocumentReader(XMLItemReader):
             expected_root_tag=expected_root_tag,
             item_filter=item_filter,
         )
+
+
+class SoNaRSentencesDocumentReader(XMLItemReader):
+    """
+    Reads and (optionally) validates data from a MMAX sentence XML-tree from
+    the SoNaR-1 corpus.
+
+    Things that are verified if `validate=True`:
+     - the tag of the root element is as expected
+     - the tag of all the sentence elements is as expected
+     - the span of a all sentences are consecutive within a sentence
+     - the spans of a all sentences are consecutive between sentences
+
+    See
+    https://ivdnt.org/downloads/taalmaterialen/tstc-sonar-corpus
+    for (a description of) the SoNaR Corpus
+
+    See `MMAX-specification.md` and
+    http://www.speech.cs.cmu.edu/sigdial2003/proceedings/07_LONG_strube_paper.pdf
+    for a description of the MMAX format.
+    """
+
+    def __init__(self, item_reader=None,
+                 validate=c.VALIDATE_XML,
+                 position_from_ID=c.MMAX_POSITION_FROM_ID,
+                 expected_child_tag=c.MMAX_MARKABLE_TAG,
+                 expected_root_tag=c.MMAX_MARKABLES_TAG,
+                 item_filter=c.MMAX_SENTENCES_FILTER):
+        # Default item_reader
+        item_reader = item_reader \
+            if item_reader is not None \
+            else MMAXMarkableReader()
+        super(SoNaRSentencesDocumentReader, self).__init__(
+            item_reader=item_reader,
+            validate=validate,
+            expected_child_tag=expected_child_tag,
+            expected_root_tag=expected_root_tag,
+            item_filter=item_filter,
+        )
+        self.position_from_ID = position_from_ID
+
+    def extract_items(self, xml):
+        items = super(SoNaRSentencesDocumentReader, self).extract_items(xml)
+        if self.validate:
+            self.validate_sentence_spans(items)
+        return items
+
+    def validate_sentence_spans(self, sentence_items):
+        last_pos = None
+        for item in sentence_items:
+            positions = list(map(self.position_from_ID, item['span']))
+            if not is_consecutive(positions):
+                raise ValidationError(
+                    "The span of this sentence should be consecutive:"
+                    f" {item!r}"
+                )
+            if last_pos != positions[0] - 1 and last_pos is not None:
+                raise ValidationError(
+                    f"The first position of this sentence ({positions[0]}) is"
+                    " not directly after the last position of the previous"
+                    f" sentence ({last_pos}): {item}"
+                )
+            else:
+                last_pos = positions[-1]
 
 
 class COREAWordsDocumentReader(XMLItemReader):

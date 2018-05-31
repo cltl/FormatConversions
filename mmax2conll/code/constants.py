@@ -81,6 +81,11 @@ MMAX_MARKABLE_ID_ATTRIBUTE = 'id'
 MMAX_SPAN_ATTRIBUTE = 'span'
 MMAX_LEVEL_ATTRIBUTE = 'mmax_level'
 
+
+# Sentences files details
+def MMAX_SENTENCES_FILTER(item): return True
+
+
 # Coreference files details
 COREF_LEVEL_ATTRIBUTE = 'level'
 COREF_TYPE_ATTRIBUTE = 'type'
