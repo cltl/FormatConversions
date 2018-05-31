@@ -172,7 +172,8 @@ class SoNaRSentencesDocumentReader(XMLItemReader):
 
     def __init__(self, item_reader=None,
                  validate=c.VALIDATE_XML,
-                 position_from_ID=c.MMAX_POSITION_FROM_ID,
+                 pos_from_word_ID=c.MMAX_POSITION_FROM_ID,
+                 pos_from_sentence_ID=c.MMAX_POSITION_FROM_ID,
                  expected_child_tag=c.MMAX_MARKABLE_TAG,
                  expected_root_tag=c.MMAX_MARKABLES_TAG,
                  item_filter=c.MMAX_SENTENCES_FILTER):
@@ -187,10 +188,16 @@ class SoNaRSentencesDocumentReader(XMLItemReader):
             expected_root_tag=expected_root_tag,
             item_filter=item_filter,
         )
-        self.position_from_ID = position_from_ID
+        self.pos_from_word_ID = pos_from_word_ID
+        self.pos_from_sentence_ID = pos_from_sentence_ID
 
     def extract_items(self, xml):
+        """
+        Extract and optionally validate a sequence of sentence items sorted by
+        position, which is taken from the ID.
+        """
         items = super(SoNaRSentencesDocumentReader, self).extract_items(xml)
+        items = sorted(items, key=lambda s: self.pos_from_sentence_ID(s['id']))
         if self.validate:
             self.validate_sentence_spans(items)
         return items
@@ -198,7 +205,7 @@ class SoNaRSentencesDocumentReader(XMLItemReader):
     def validate_sentence_spans(self, sentence_items):
         last_pos = None
         for item in sentence_items:
-            positions = list(map(self.position_from_ID, item['span']))
+            positions = list(map(self.pos_from_word_ID, item['span']))
             if not is_consecutive(positions):
                 raise ValidationError(
                     "The span of this sentence should be consecutive:"
