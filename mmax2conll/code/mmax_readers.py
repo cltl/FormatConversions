@@ -29,7 +29,7 @@ def document_ID_from_filename(filename, extension):
     return None
 
 
-class CoreaMedWordReader:
+class COREAMedWordReader:
     """
     Reads data from an ElementTree Element from a document from the Med part of
     the COREA corpus.
@@ -76,7 +76,7 @@ class CoreaMedWordReader:
         }
 
 
-class MMAXWordReader(CoreaMedWordReader):
+class MMAXWordReader(COREAMedWordReader):
     """
     Reads data from an ElementTree Element from a MMAX words document.
 

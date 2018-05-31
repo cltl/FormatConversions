@@ -12,7 +12,7 @@ from code.mmax_readers import (
     document_ID_from_filename,
     MMAXWordsDocumentReader,
     MMAXCorefDocumentReader,
-    CoreaMedWordReader,
+    COREAMedWordReader,
 )
 from code.conll_converters import CorefConverter
 from code.conll_writers import CoNLLWriter
@@ -253,7 +253,7 @@ def read_words_file(filename, extension, reader,
                 "Ignoring reader.item_reader and automatically using the item"
                 " reader for COREA Med"
             )
-        reader.item_reader = CoreaMedWordReader()
+        reader.item_reader = COREAMedWordReader()
 
     sentences = reader.extract_sentences(xml)
     return document_id, sentences
