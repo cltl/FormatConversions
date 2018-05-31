@@ -11,7 +11,7 @@ from code.util import file_exists
 from code.mmax_readers import (
     document_ID_from_filename,
     MMAXWordsDocumentReader,
-    MMAXMarkablesDocumentReader,
+    MMAXCorefDocumentReader,
     CoreaMedWordReader,
 )
 from code.conll_converters import CorefConverter
@@ -21,11 +21,11 @@ logger = logging.getLogger(None if __name__ == '__main__' else __name__)
 
 
 def find_data_dirs(directory,
-                   words_dir=c.WORDS_DIR,
+                   basedata_dir=c.WORDS_DIR,
                    markables_dir=c.MARKABLES_DIR,
                    dirs_to_ignore=c.DIRS_TO_IGNORE):
     """
-    Recursively search `directory` for directories containing a `words_dir`
+    Recursively search `directory` for directories containing a `basedata_dir`
     and `markables_dir` directory as direct children.
 
     Does not return directories whose base name is in `dirs_to_ignore`,
@@ -35,24 +35,24 @@ def find_data_dirs(directory,
     for subdir, subsubdirs, _ in os.walk(directory):
         if os.path.basename(subdir) in dirs_to_ignore:
             continue
-        has_words = words_dir in subsubdirs
+        has_words = basedata_dir in subsubdirs
         has_markables = markables_dir in subsubdirs
         if has_words and has_markables:
             yield subdir
         elif has_markables:
             logger.warn(
                 f"{subdir} has a markables directory ({markables_dir}), but no"
-                f" words directory ({words_dir})."
+                f" words directory ({basedata_dir})."
             )
         elif has_words:
             logger.warn(
-                f"{subdir} has a words directory ({words_dir}), but no"
+                f"{subdir} has a words directory ({basedata_dir}), but no"
                 f" markables directory ({markables_dir})."
             )
 
 
 def super_dir_main(directories, output_dir,
-                   words_dir=c.WORDS_DIR,
+                   basedata_dir=c.WORDS_DIR,
                    markables_dir=c.MARKABLES_DIR,
                    dirs_to_ignore=c.DIRS_TO_IGNORE,
                    allow_overwriting=c.ALLOW_OVERWRITING,
@@ -60,7 +60,7 @@ def super_dir_main(directories, output_dir,
     for directory in directories:
         data_dirs = find_data_dirs(
             directory=directory,
-            words_dir=words_dir,
+            basedata_dir=basedata_dir,
             markables_dir=markables_dir,
             dirs_to_ignore=dirs_to_ignore
         )
@@ -84,7 +84,7 @@ def super_dir_main(directories, output_dir,
             dir_main(
                 input_dir=data_dir,
                 output_dir=cur_output_dir,
-                words_dir=words_dir,
+                basedata_dir=basedata_dir,
                 markables_dir=markables_dir,
                 allow_overwriting=allow_overwriting,
                 **kwargs
@@ -92,55 +92,55 @@ def super_dir_main(directories, output_dir,
 
 
 def dir_main(input_dir, output_dir,
-             words_dir=c.WORDS_DIR,
+             basedata_dir=c.WORDS_DIR,
              markables_dir=c.MARKABLES_DIR,
              allow_overwriting=c.ALLOW_OVERWRITING,
              conll_extension=c.CONLL_EXTENSION,
              words_files_extension=c.WORDS_FILES_EXTENSION,
-             markables_files_extension=c.MARKABLES_FILES_EXTENSION,
+             coref_files_extension=c.COREF_FILES_EXTENSION,
              log_on_error=c.LOG_ON_ERROR,
              **kwargs):
     """
-    Batch convert all files in a directory containing a `words_dir` and
+    Batch convert all files in a directory containing a `basedata_dir` and
     `markables_dir` directory as direct children.
     """
-    words_dir = os.path.join(input_dir, words_dir)
+    basedata_dir = os.path.join(input_dir, basedata_dir)
     markables_dir = os.path.join(input_dir, markables_dir)
 
     words_files = {
         filename[:-len(words_files_extension)]
-        for filename in os.listdir(words_dir)
+        for filename in os.listdir(basedata_dir)
         if filename.endswith(words_files_extension)
     }
 
-    markables_files = {
-        filename[:-len(markables_files_extension)]
+    coref_files = {
+        filename[:-len(coref_files_extension)]
         for filename in os.listdir(markables_dir)
-        if filename.endswith(markables_files_extension)
+        if filename.endswith(coref_files_extension)
     }
 
-    both = words_files & markables_files
+    both = words_files & coref_files
 
     if words_files - both:
         logger.warn(
             "The following files seem to be words files, but do not have a"
-            " corresponding markables file:\n" + '\n'.join(
+            " corresponding coreference file:\n\t" + '\n\t'.join(
                 sorted(words_files - both)
             )
         )
 
-    if markables_files - both:
+    if coref_files - both:
         logger.warn(
-            "The following files seem to be markables files, but do not have a"
-            " corresponding words file:\n" + '\n'.join(
-                sorted(markables_files - both)
+            "The following files seem to be coreference files, but do not have"
+            "a corresponding words file:\n\t" + '\n\t'.join(
+                sorted(coref_files - both)
             )
         )
 
     for name in both:
-        words_file = os.path.join(words_dir, name) + words_files_extension
-        markables_file = os.path.join(markables_dir, name) + \
-            markables_files_extension
+        words_file = os.path.join(basedata_dir, name) + words_files_extension
+        coref_file = os.path.join(markables_dir, name) + \
+            coref_files_extension
         output_file = os.path.join(output_dir, name) + conll_extension
         if os.path.exists(output_file):
             if allow_overwriting:
@@ -150,7 +150,7 @@ def dir_main(input_dir, output_dir,
         try:
             single_main(
                 words_file,
-                markables_file,
+                coref_file,
                 output_file,
                 words_files_extension=words_files_extension,
                 **kwargs
@@ -167,7 +167,7 @@ def dir_main(input_dir, output_dir,
                 raise e
 
 
-def single_main(words_file, markables_file, output_file,
+def single_main(words_file, coref_file, output_file,
                 words_files_extension=c.WORDS_FILES_EXTENSION,
                 validate_xml=c.VALIDATE_XML,
                 auto_use_Med_item_reader=c.AUTO_USE_MED_ITEM_READER,
@@ -175,7 +175,7 @@ def single_main(words_file, markables_file, output_file,
                 conll_defaults=c.CONLL_DEFAULTS,
                 min_column_spacing=c.MIN_COLUMN_SPACING,
                 on_missing=c.CONLL_ON_MISSING,
-                markables_filter=c.MMAX_MARKABLES_FILTER):
+                coref_filter=c.MMAX_COREF_FILTER):
     # Read in the data from MMAX *_words.xml file
     document_id, sentences = read_words_file(
         filename=words_file,
@@ -187,11 +187,11 @@ def single_main(words_file, markables_file, output_file,
     )
 
     # Read in coreference data
-    coref_sets = MMAXMarkablesDocumentReader(
+    coref_sets = MMAXCorefDocumentReader(
         validate=validate_xml,
-        item_filter=markables_filter,
+        item_filter=coref_filter,
     ).extract_coref_sets(
-        etree.parse(markables_file)
+        etree.parse(coref_file)
     )
 
     # Merge coref data into sentences (in place)
@@ -297,10 +297,10 @@ def get_args(args_from_config=[
              ], batch_args_from_config=[
                 'allow_overwriting',
                 'conll_extension',
-                'words_dir',
+                'basedata_dir',
                 'words_files_extension',
                 'markables_dir',
-                'markables_files_extension',
+                'coref_files_extension',
                 'log_on_error',
                 'dirs_to_ignore'
              ]):
@@ -348,7 +348,7 @@ original folder has relative to the passed folder it was found in.
                         help="Where to save the CoNLL output")
     parser.add_argument('words_file', type=file_exists, nargs='?',
                         help="MMAX *_words.xml file to use as input")
-    parser.add_argument('markables_file', type=file_exists, nargs='?',
+    parser.add_argument('coref_file', type=file_exists, nargs='?',
                         help="MMAX *_coref_level.xml file to use as input")
     args = vars(parser.parse_args())
 
@@ -364,7 +364,7 @@ original folder has relative to the passed folder it was found in.
     if batch:
         args['output_dir'] = output
         if args.pop('words_file') is not None or \
-           args.pop('markables_file') is not None:
+           args.pop('coref_file') is not None:
             parser.error(
                 "Please either specify a number of directories or the"
                 " necessary files to use as input, but not both."
@@ -372,7 +372,7 @@ original folder has relative to the passed folder it was found in.
     else:
         del args['directories']
         args['output_file'] = output
-        if args['words_file'] is None or args['markables_file'] is None:
+        if args['words_file'] is None or args['coref_file'] is None:
             parser.error(
                 "Please specify both a *_words.xml file and a"
                 " *_coref_level.xml file. You can also choose to specify a"
@@ -385,9 +385,9 @@ original folder has relative to the passed folder it was found in.
 
     # Read common keys
     args.update(keys_from_config(config, args_from_config, config_file))
-    args['markables_filter'] = lambda i: \
-        c.MMAX_TYPE_FILTERS[config['markables_type_filter']](i) and \
-        c.MMAX_LEVEL_FILTERS[config['markables_level_filter']](i)
+    args['coref_filter'] = lambda i: \
+        c.MMAX_TYPE_FILTERS[config['coref_type_filter']](i) and \
+        c.MMAX_LEVEL_FILTERS[config['coref_level_filter']](i)
 
     # Read batch keys
     if batch:

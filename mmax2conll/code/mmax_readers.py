@@ -609,7 +609,7 @@ class MMAXWordsDocumentReader(XMLItemReader):
                         index += 1
 
 
-class MMAXMarkablesDocumentReader(XMLItemReader):
+class MMAXCorefDocumentReader(XMLItemReader):
     """
     Reads and (optionally) validates data from a MMAX markables XML-tree.
 
@@ -626,12 +626,12 @@ class MMAXMarkablesDocumentReader(XMLItemReader):
                  validate=c.VALIDATE_XML,
                  expected_child_tag=c.MMAX_MARKABLE_TAG,
                  expected_root_tag=c.MMAX_MARKABLES_TAG,
-                 item_filter=c.MMAX_MARKABLES_FILTER):
+                 item_filter=c.MMAX_COREF_FILTER):
                 # Default item_reader
         item_reader = item_reader \
             if item_reader is not None \
             else MMAXMarkableReader()
-        super(MMAXMarkablesDocumentReader, self).__init__(
+        super(MMAXCorefDocumentReader, self).__init__(
             item_reader=item_reader,
             validate=validate,
             expected_child_tag=expected_child_tag,

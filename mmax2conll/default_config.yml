@@ -3,13 +3,13 @@ validate_xml: true
 auto_use_Med_item_reader: false
 warn_on_auto_use_Med_item_reader: true
 allow_overwriting: false
-markables_type_filter: ident_or_bridge
-markables_level_filter: reference
+coref_type_filter: ident_or_bridge
+coref_level_filter: reference
 conll_extension: .conll
-words_dir: Basedata
+basedata_dir: Basedata
 words_files_extension: _words.xml
 markables_dir: Markables
-markables_files_extension: _coref_level.xml
+coref_files_extension: _coref_level.xml
 log_on_error: false
 dirs_to_ignore:
     - Configuration
