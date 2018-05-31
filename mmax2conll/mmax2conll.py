@@ -8,12 +8,12 @@ from lxml import etree
 import code.constants as c
 from code.util import file_exists
 
-from code.mmax_readers import (
+from code.mmax_document_readers import (
     document_ID_from_filename,
     COREAWordsDocumentReader,
     MMAXCorefDocumentReader,
-    COREAMedWordReader,
 )
+from code.mmax_item_readers import COREAMedWordReader
 from code.conll_converters import CorefConverter
 from code.conll_writers import CoNLLWriter
 
