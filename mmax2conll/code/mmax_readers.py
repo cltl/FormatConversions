@@ -29,20 +29,22 @@ def document_ID_from_filename(filename, extension):
     return None
 
 
-class COREAMedWordReader:
+class SoNaRWordReader:
     """
-    Reads data from an ElementTree Element from a document from the Med part of
-    the COREA corpus.
+    Reads data from an ElementTree Element from a document from the SoNaR-1
+    corpus.
 
-    See Ch. 7 of Essential Speech and Language Technology for Dutch
-    COREA: Coreference Resolution for Extracting Answers for Dutch
-    https://link.springer.com/book/10.1007/978-3-642-30910-6
+    See
+    https://ivdnt.org/downloads/taalmaterialen/tstc-sonar-corpus
+    for (a description of) the SoNaR Corpus
+
+    See `MMAX-specification.md` and
+    http://www.speech.cs.cmu.edu/sigdial2003/proceedings/07_LONG_strube_paper.pdf
+    for a description of the MMAX format.
     """
 
-    def __init__(self, id_attr=c.MMAX_WORD_ID_ATTRIBUTE,
-                 word_number_attr=c.COREA_MED_WORD_NUMBER_ATTRIBUTE):
+    def __init__(self, id_attr=c.MMAX_WORD_ID_ATTRIBUTE):
         self.id_attr = id_attr
-        self.word_number_attr = word_number_attr
 
     @staticmethod
     def extract_word(xml):
@@ -50,12 +52,6 @@ class COREAMedWordReader:
         Extract the word from an XML-element.
         """
         return xml.text
-
-    def extract_word_number(self, xml):
-        """
-        Extract the word number **as a string** from an XML-element.
-        """
-        return xml.attrib.get(self.word_number_attr, None)
 
     def extract_id(self, xml):
         """
@@ -67,18 +63,60 @@ class COREAMedWordReader:
         """
         Extract a dictionary with information about a word from an XML-element.
 
-        The dictionary contains `word_number` and `word`.
+        The dictionary contains `word` and `id`.
         """
         return {
-            'word_number': self.extract_word_number(xml),
             'word': self.extract_word(xml),
             'id': self.extract_id(xml)
         }
 
 
-class MMAXWordReader(COREAMedWordReader):
+class COREAMedWordReader(SoNaRWordReader):
     """
-    Reads data from an ElementTree Element from a MMAX words document.
+    Reads data from an ElementTree Element from a document from the Med part of
+    the COREA corpus.
+
+    See Ch. 7 of Essential Speech and Language Technology for Dutch
+    COREA: Coreference Resolution for Extracting Answers for Dutch
+    https://link.springer.com/book/10.1007/978-3-642-30910-6
+
+    See `MMAX-specification.md` and
+    http://www.speech.cs.cmu.edu/sigdial2003/proceedings/07_LONG_strube_paper.pdf
+    for a description of the MMAX format.
+    """
+
+    def __init__(self, id_attr=c.MMAX_WORD_ID_ATTRIBUTE,
+                 word_number_attr=c.COREA_MED_WORD_NUMBER_ATTRIBUTE):
+        self.id_attr = id_attr
+        self.word_number_attr = word_number_attr
+
+    def extract_word_number(self, xml):
+        """
+        Extract the word number **as a string** from an XML-element.
+        """
+        return xml.attrib.get(self.word_number_attr, None)
+
+    def read(self, xml):
+        """
+        Extract a dictionary with information about a word from an XML-element.
+
+        The dictionary contains `word`, `id` and `word_number`.
+        """
+        dic = super(COREAMedWordReader, self).read(xml)
+        dic.update(
+            word_number=self.extract_word_number(xml)
+        )
+        return dic
+
+
+class COREAWordReader(COREAMedWordReader):
+    """
+    Reads data from an ElementTree Element from a MMAX words document from the
+    COREA Corpus.
+
+    See Ch. 7 of Essential Speech and Language Technology for Dutch
+    COREA: Coreference Resolution for Extracting Answers for Dutch
+    https://link.springer.com/book/10.1007/978-3-642-30910-6
 
     See `MMAX-specification.md` and
     http://www.speech.cs.cmu.edu/sigdial2003/proceedings/07_LONG_strube_paper.pdf
@@ -92,7 +130,7 @@ class MMAXWordReader(COREAMedWordReader):
                  id_attr=c.MMAX_WORD_ID_ATTRIBUTE,
                  word_number_attr=c.MMAX_WORD_NUMBER_ATTRIBUTE,
                  part_number_attr=c.MMAX_PART_NUMBER_ATTRIBUTE):
-        super(MMAXWordReader, self).__init__(id_attr, word_number_attr)
+        super(COREAWordReader, self).__init__(id_attr, word_number_attr)
         self.part_number_attr = part_number_attr
 
     def extract_part_number(self, xml):
@@ -119,9 +157,9 @@ class MMAXWordReader(COREAMedWordReader):
         """
         Extract a dictionary with information about a word from an XML-element.
 
-        The dictionary contains `word_number`, `word` and 'part_number'.
+        The dictionary contains `word`, `id`, `word_number` and 'part_number'.
         """
-        dic = super(MMAXWordReader, self).read(xml)
+        dic = super(COREAWordReader, self).read(xml)
         dic.update(
             part_number=self.extract_part_number(xml)
         )
@@ -411,7 +449,7 @@ class MMAXWordsDocumentReader(XMLItemReader):
         # Default item_reader
         item_reader = item_reader \
             if item_reader is not None \
-            else MMAXWordReader()
+            else COREAWordReader()
         super(MMAXWordsDocumentReader, self).__init__(
             item_reader=item_reader,
             validate=validate,
