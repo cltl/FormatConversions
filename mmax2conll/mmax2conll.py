@@ -325,14 +325,15 @@ To only convert one pair of files, run:
 
 
 When passing folders for batch processing using -d, the passed folders are
-searched for a folder containing both a `Basedata` and `Markables` folder. The
-output is saved in using the same path relative to the output folder as the
-original folder has relative to the passed folder it was found in.
+searched for a data folder containing both a `Basedata` and `Markables` folder.
+The output is saved using the same path relative to the output folder as the
+original folder has relative to the passed folder the data folder was found in.
 
 !! NB !! This means that the data of two folders is merged if they happen
          to have the same path relative to passed folders. No files will be
          overwritten if overwriting isn't allowed in the configuration. If
-         is allowed according to the configuration, a warning will be issued.
+         overwriting is allowed according to the configuration, a warning will
+         be issued.
 
 """,
         formatter_class=RawDescriptionHelpFormatter
@@ -376,7 +377,7 @@ original folder has relative to the passed folder it was found in.
             parser.error(
                 "Please specify both a *_words.xml file and a"
                 " *_coref_level.xml file. You can also choose to specify a"
-                " number directories to use as input instead."
+                " number of directories to use as input instead."
             )
 
     # Read configuration
