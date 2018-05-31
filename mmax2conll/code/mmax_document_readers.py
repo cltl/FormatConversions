@@ -49,6 +49,15 @@ def add_sentence_layer_to_words(words, sentence_items):
     ]
 
 
+def add_word_numbers(sentences):
+    """
+    Add word numbers in place
+    """
+    for sentence in sentences:
+        for number, word in enumerate(sentence):
+            word['word_number'] = number
+
+
 class XMLItemReader:
     """
     Reads and (optionally) validates data from an XML-tree.
