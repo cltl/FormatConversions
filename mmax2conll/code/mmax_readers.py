@@ -425,14 +425,20 @@ class XMLItemReader:
         return filter(self.item_filter, self.extract_all_items(xml))
 
 
-class MMAXWordsDocumentReader(XMLItemReader):
+class COREAWordsDocumentReader(XMLItemReader):
     """
-    Reads and (optionally) validates data from a MMAX words XML-tree.
+    Reads and (optionally) validates data from a MMAX words XML-tree from the
+    COREA corpus.
 
     Things that are verified if `validate=True`:
      - the tag of the root element is as expected
      - the tag of all the word elements is as expected
      - the word numbers are consistent
+     - the part numbers are consistent
+
+    See Ch. 7 of Essential Speech and Language Technology for Dutch
+    COREA: Coreference Resolution for Extracting Answers for Dutch
+    https://link.springer.com/book/10.1007/978-3-642-30910-6
 
     See `MMAX-specification.md` and
     http://www.speech.cs.cmu.edu/sigdial2003/proceedings/07_LONG_strube_paper.pdf
@@ -450,7 +456,7 @@ class MMAXWordsDocumentReader(XMLItemReader):
         item_reader = item_reader \
             if item_reader is not None \
             else COREAWordReader()
-        super(MMAXWordsDocumentReader, self).__init__(
+        super(COREAWordsDocumentReader, self).__init__(
             item_reader=item_reader,
             validate=validate,
             expected_child_tag=expected_child_tag,

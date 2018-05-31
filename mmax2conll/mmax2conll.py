@@ -10,7 +10,7 @@ from code.util import file_exists
 
 from code.mmax_readers import (
     document_ID_from_filename,
-    MMAXWordsDocumentReader,
+    COREAWordsDocumentReader,
     MMAXCorefDocumentReader,
     COREAMedWordReader,
 )
@@ -180,7 +180,7 @@ def single_main(words_file, coref_file, output_file,
     document_id, sentences = read_words_file(
         filename=words_file,
         extension=words_files_extension,
-        reader=MMAXWordsDocumentReader(validate=validate_xml),
+        reader=COREAWordsDocumentReader(validate=validate_xml),
         on_missing_document_ID=on_missing['document_id'],
         auto_use_Med_item_reader=auto_use_Med_item_reader,
         warn_on_auto_use_Med_item_reader=warn_on_auto_use_Med_item_reader
