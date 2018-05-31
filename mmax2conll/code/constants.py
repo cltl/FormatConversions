@@ -70,12 +70,15 @@ MMAX_MARKABLE_TAG = 'markable'
 MMAX_MARKABLES_TAG = 'markables'
 MMAX_MARKABLE_ID_ATTRIBUTE = 'id'
 MMAX_SPAN_ATTRIBUTE = 'span'
-MMAX_LEVEL_ATTRIBUTE = 'level'
-MMAX_TYPE_ATTRIBUTE = 'type'
-MMAX_HEAD_ATTRIBUTE = 'head'
-MMAX_REF_ATTRIBUTE = 'ref'
-MMAX_TIME_ATTRIBUTE = 'time'
-MMAX_MOD_ATTRIBUTE = 'mod'
+MMAX_LEVEL_ATTRIBUTE = 'mmax_level'
+
+# Coreference files details
+COREF_LEVEL_ATTRIBUTE = 'level'
+COREF_TYPE_ATTRIBUTE = 'type'
+COREF_HEAD_ATTRIBUTE = 'head'
+COREF_REF_ATTRIBUTE = 'ref'
+COREF_TIME_ATTRIBUTE = 'time'
+COREF_MOD_ATTRIBUTE = 'mod'
 
 # The coreference data from the COREA dataset can be of different types:
 

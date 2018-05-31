@@ -139,20 +139,10 @@ class MMAXMarkableReader:
     def __init__(self,
                  id_attr=c.MMAX_MARKABLE_ID_ATTRIBUTE,
                  span_attr=c.MMAX_SPAN_ATTRIBUTE,
-                 head_attr=c.MMAX_HEAD_ATTRIBUTE,
-                 ref_attr=c.MMAX_REF_ATTRIBUTE,
-                 level_attr=c.MMAX_LEVEL_ATTRIBUTE,
-                 type_attr=c.MMAX_TYPE_ATTRIBUTE,
-                 time_attr=c.MMAX_TIME_ATTRIBUTE,
-                 mod_attr=c.MMAX_MOD_ATTRIBUTE):
+                 mmax_level_attr=c.MMAX_LEVEL_ATTRIBUTE):
         self.id_attr = id_attr
         self.span_attr = span_attr
-        self.head_attr = head_attr
-        self.ref_attr = ref_attr
-        self.level_attr = level_attr
-        self.type_attr = type_attr
-        self.time_attr = time_attr
-        self.mod_attr = mod_attr
+        self.mmax_level_attr = mmax_level_attr
 
     def extract_id(self, xml):
         """
@@ -210,6 +200,51 @@ class MMAXMarkableReader:
             parts.extend(new_parts)
         return parts
 
+    def extract_mmax_level(self, xml):
+        """
+        Extract the annotation level from an XML-element.
+        """
+        return xml.attrib.get(self.mmax_level_attr, None)
+
+    def read(self, xml):
+        """
+        Extract a dictionary with information about a markable from an
+        XML-element.
+
+        The dictionary contains 'id', 'span' and 'mmax_level'.
+        """
+        return {
+            'id': self.extract_id(xml),
+            'span': self.extract_span(xml),
+            'mmax_level': self.extract_mmax_level(xml),
+        }
+
+
+class MMAXCorefReader(MMAXMarkableReader):
+    """
+    Reads data from an ElementTree Element from a MMAX markables coreference
+    document.
+
+    See `MMAX-specification.md` and
+    http://www.speech.cs.cmu.edu/sigdial2003/proceedings/07_LONG_strube_paper.pdf
+    for a description of the MMAX format.
+    """
+    def __init__(self,
+                 head_attr=c.COREF_HEAD_ATTRIBUTE,
+                 ref_attr=c.COREF_REF_ATTRIBUTE,
+                 type_attr=c.COREF_TYPE_ATTRIBUTE,
+                 level_attr=c.COREF_LEVEL_ATTRIBUTE,
+                 time_attr=c.COREF_TIME_ATTRIBUTE,
+                 mod_attr=c.COREF_MOD_ATTRIBUTE,
+                 **kwargs):
+        super(MMAXCorefReader, self).__init__(**kwargs)
+        self.head_attr = head_attr
+        self.ref_attr = ref_attr
+        self.level_attr = level_attr
+        self.type_attr = type_attr
+        self.time_attr = time_attr
+        self.mod_attr = mod_attr
+
     def extract_head(self, xml):
         """
         Extract the head from an XML-element.
@@ -250,18 +285,17 @@ class MMAXMarkableReader:
 
     def read(self, xml):
         """
-        Extract a dictionary with information about a markable from an
+        Extract a dictionary with information about a coreference from an
         XML-element.
 
-        The dictionary contains 'id', 'span' and 'head', and
-        if `self.extract_mod(xml) is not None` the dictionary also contains
-        'ref', 'level', 'type', 'time' and 'mod'
+        The dictionary contains everything returned by MMAXMarkableReader.read
+        and 'head'. If `self.extract_mod(xml) is not None` the dictionary also
+        contains 'ref', 'level', 'type', 'time' and 'mod'.
         """
-        dic = {
-            'id': self.extract_id(xml),
-            'span': self.extract_span(xml),
-            'head': self.extract_head(xml)
-        }
+        dic = super(MMAXCorefReader, self).read(xml)
+        dic.update(
+            head=self.extract_head(xml)
+        )
         ref = self.extract_ref(xml)
         if ref is not None:
             dic.update(
@@ -630,7 +664,7 @@ class MMAXCorefDocumentReader(XMLItemReader):
                 # Default item_reader
         item_reader = item_reader \
             if item_reader is not None \
-            else MMAXMarkableReader()
+            else MMAXCorefReader()
         super(MMAXCorefDocumentReader, self).__init__(
             item_reader=item_reader,
             validate=validate,
