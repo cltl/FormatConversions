@@ -576,10 +576,12 @@ class MMAXCorefDocumentReader(XMLItemReader):
             )
         }
 
+        # Create a ID -> [markables referring to ID]
         forward_refs = {}
 
         for markable in markables.values():
             ref = markable.get('ref', None)
+            # If ref is None, this markable does not refer to anything
             if ref is not None:
                 if self.validate:
                     if ref not in all_markables:
@@ -591,14 +593,14 @@ class MMAXCorefDocumentReader(XMLItemReader):
 
         sets = []
         for root in markables.values():
-            if root.get('ref', None) is None:
-                refset = [root]
+            if root.get('ref', None) is None or root['ref'] not in markables:
+                refset = []
                 stack = [root['id']]
                 while stack:
                     ID = stack.pop()
+                    refset.append(markables[ID])
                     if ID in forward_refs:
                         stack.extend(forward_refs[ID])
-                        refset.append(markables[ID])
                 sets.append(refset)
         if markables and not any(sets):
             raise ValueError("You lost all your markables!")
