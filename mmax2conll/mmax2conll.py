@@ -10,7 +10,11 @@ from code.util import file_exists
 
 from code.mmax_document_readers import (
     document_ID_from_filename,
+    add_sentence_layer_to_words,
+    add_word_numbers,
     COREAWordsDocumentReader,
+    SoNaRWordsDocumentReader,
+    SoNaRSentencesDocumentReader,
     MMAXCorefDocumentReader,
 )
 from code.mmax_item_readers import COREAMedWordReader
@@ -149,9 +153,9 @@ def dir_main(input_dir, output_dir,
                 raise IOError(f"Will not overwrite: {output_file}")
         try:
             single_main(
+                output_file,
                 words_file,
                 coref_file,
-                output_file,
                 words_files_extension=words_files_extension,
                 **kwargs
             )
@@ -167,24 +171,36 @@ def dir_main(input_dir, output_dir,
                 raise e
 
 
-def single_main(words_file, coref_file, output_file,
-                words_files_extension=c.WORDS_FILES_EXTENSION,
-                validate_xml=c.VALIDATE_XML,
-                auto_use_Med_item_reader=c.AUTO_USE_MED_ITEM_READER,
-                warn_on_auto_use_Med_item_reader=c.WARN_ON_AUTO_USE_MED_ITEM_READER,  # noqa
-                conll_defaults=c.CONLL_DEFAULTS,
-                min_column_spacing=c.MIN_COLUMN_SPACING,
-                on_missing=c.CONLL_ON_MISSING,
-                coref_filter=c.MMAX_COREF_FILTER):
-    # Read in the data from MMAX *_words.xml file
-    document_id, sentences = read_words_file(
-        filename=words_file,
-        extension=words_files_extension,
-        reader=COREAWordsDocumentReader(validate=validate_xml),
-        on_missing_document_ID=on_missing['document_id'],
-        auto_use_Med_item_reader=auto_use_Med_item_reader,
-        warn_on_auto_use_Med_item_reader=warn_on_auto_use_Med_item_reader
-    )
+def single_main(
+        output_file,
+        words_file,
+        coref_file,
+        sentences_file=None,
+        words_files_extension=c.WORDS_FILES_EXTENSION,
+        validate_xml=c.VALIDATE_XML,
+        auto_use_Med_item_reader=c.AUTO_USE_MED_ITEM_READER,
+        warn_on_auto_use_Med_item_reader=c.WARN_ON_AUTO_USE_MED_ITEM_READER,
+        conll_defaults=c.CONLL_DEFAULTS,
+        min_column_spacing=c.MIN_COLUMN_SPACING,
+        on_missing=c.CONLL_ON_MISSING,
+        coref_filter=c.MMAX_COREF_FILTER):
+    # Read sentences
+    if sentences_file is None:
+        document_id, sentences = read_COREA(
+            filename=words_file,
+            extension=words_files_extension,
+            validate_xml=validate_xml,
+            on_missing_document_ID=on_missing['document_id'],
+            warn_on_auto_use_Med_item_reader=warn_on_auto_use_Med_item_reader
+        )
+    else:
+        document_id, sentences = read_SoNaR(
+            words_file=words_file,
+            sentences_file=sentences_file,
+            validate_xml=validate_xml,
+            words_files_extension=words_files_extension,
+            on_missing_document_ID=on_missing['document_id']
+        )
 
     # Read in coreference data
     coref_sets = MMAXCorefDocumentReader(
@@ -210,13 +226,44 @@ def single_main(words_file, coref_file, output_file,
     )
 
 
-def read_words_file(filename, extension, reader,
-                    on_missing_document_ID=c.CONLL_ON_MISSING['document_id'],
-                    auto_use_Med_item_reader=c.AUTO_USE_MED_ITEM_READER,
-                    warn_on_auto_use_Med_item_reader=c.WARN_ON_AUTO_USE_MED_ITEM_READER,  # noqa
-                    ):
+def read_SoNaR(words_file, sentences_file, validate_xml=c.VALIDATE_XML,
+               words_files_extension=c.WORDS_FILES_EXTENSION,
+               on_missing_document_ID=c.CONLL_ON_MISSING['document_id']):
     """
-    Read in word and sentence data and a document ID from a file from COREA.
+    Read sentences and document ID from a words_file and sentences file from
+    SoNaR.
+
+    Extracts the document ID using the file basename.
+    """
+    # Read document ID
+    document_id = document_ID_from_filename(words_file, words_files_extension)
+    check_document_id(document_id, words_file, on_missing_document_ID)
+
+    # Read words
+    words = SoNaRWordsDocumentReader(validate=validate_xml).extract_items(
+        etree.parse(words_file)
+    )
+
+    # Add sentence data
+    sentence_items = SoNaRSentencesDocumentReader(
+        validate=validate_xml
+    ).extract_items(etree.parse(sentences_file))
+    sentences = add_sentence_layer_to_words(words, sentence_items)
+    del words, sentence_items
+
+    add_word_numbers(sentences)
+
+    return document_id, sentences
+
+
+def read_COREA(
+        filename,
+        extension=c.WORDS_FILES_EXTENSION,
+        validate_xml=c.VALIDATE_XML,
+        on_missing_document_ID=c.CONLL_ON_MISSING['document_id'],
+        warn_on_auto_use_Med_item_reader=c.WARN_ON_AUTO_USE_MED_ITEM_READER):
+    """
+    Read sentences and document ID from a words_file from COREA.
 
     First tries to figure out the document ID using the xml and falls back
     on finding a document ID using the file basename.
@@ -225,29 +272,16 @@ def read_words_file(filename, extension, reader,
     COREA: Coreference Resolution for Extracting Answers for Dutch
     https://link.springer.com/book/10.1007/978-3-642-30910-6
     """
+    reader = COREAWordsDocumentReader(validate=validate_xml)
     xml = etree.parse(filename)
-
     document_id = reader.extract_document_ID(xml)
-    if document_id is None:
+    if document_id is None and extension is not None:
         document_id = document_ID_from_filename(filename, extension)
+    check_document_id(document_id, filename, on_missing_document_ID)
 
-    message = f"No document ID could be found for {filename}."
-    if on_missing_document_ID == 'warn':
-        if document_id is None:
-            logger.warn(message)
-    elif on_missing_document_ID == 'throw':
-        if document_id is None:
-            logger.warn(message)
-    elif on_missing_document_ID != 'nothing':
-        raise ValueError(
-                "`on_missing` should be either 'nothing', 'warn' or 'throw',"
-                " but `on_missing['document_id']` is"
-                f" {on_missing_document_ID!r}"
-            )
-
-    logger.debug(f"auto_use_Med_item_reader: {auto_use_Med_item_reader}")
-    logger.debug(f"document_id: {document_id}")
-    if auto_use_Med_item_reader and document_id.startswith(c.COREA_MED_ID):
+    # Automatically use COREAMedWordReader is the document ID starts with the
+    # ID of the Med part of COREA.
+    if document_id.startswith(c.COREA_MED_ID):
         if warn_on_auto_use_Med_item_reader:
             logger.warn(
                 "Ignoring reader.item_reader and automatically using the item"
@@ -255,8 +289,27 @@ def read_words_file(filename, extension, reader,
             )
         reader.item_reader = COREAMedWordReader()
 
-    sentences = reader.extract_sentences(xml)
-    return document_id, sentences
+    return document_id, reader.extract_sentences(xml)
+
+
+def check_document_id(document_id, filename,
+                      on_missing=c.CONLL_ON_MISSING['document_id']):
+    """
+    Check the document ID of a document.
+    """
+    message = f"No document ID could be found for {filename}."
+    if on_missing == 'warn':
+        if document_id is None:
+            logger.warn(message)
+    elif on_missing == 'throw':
+        if document_id is None:
+            logger.warn(message)
+    elif on_missing != 'nothing':
+        raise ValueError(
+                "`on_missing` should be either 'nothing', 'warn' or 'throw',"
+                " but `on_missing['document_id']` is"
+                f" {on_missing!r}"
+            )
 
 
 def write_conll(filename, writer, document_id, sentences):
@@ -319,9 +372,9 @@ To convert a whole directory recursively, run:
     mmax2conll.py <output folder> -d <input folder> [-d <input folder> ...]
 
 
-To only convert one pair of files, run:
+To only convert one pair (or triple) of files, run:
 
-    mmax2conll.py <output.conll> <*_words.xml> <*_coref_level.xml>
+    mmax2conll.py <output.conll> <*_words.xml> <*coref markables file> [<*_sentence_level.xml>]
 
 
 When passing folders for batch processing using -d, the passed folders are
@@ -335,7 +388,7 @@ original folder has relative to the passed folder the data folder was found in.
          overwriting is allowed according to the configuration, a warning will
          be issued.
 
-""",
+""",  # noqa
         formatter_class=RawDescriptionHelpFormatter
     )
     parser.add_argument('-l', '--log-level', default='INFO',
@@ -350,7 +403,10 @@ original folder has relative to the passed folder the data folder was found in.
     parser.add_argument('words_file', type=file_exists, nargs='?',
                         help="MMAX *_words.xml file to use as input")
     parser.add_argument('coref_file', type=file_exists, nargs='?',
-                        help="MMAX *_coref_level.xml file to use as input")
+                        help="MMAX coreference level markables file to use as"
+                        " input")
+    parser.add_argument('sentences_file', type=file_exists, nargs='?',
+                        help="MMAX *_sentence_level.xml file to use as input")
     args = vars(parser.parse_args())
 
     # Set the logging level
@@ -370,6 +426,7 @@ original folder has relative to the passed folder the data folder was found in.
                 "Please either specify a number of directories or the"
                 " necessary files to use as input, but not both."
             )
+        args.pop('sentences_file')
     else:
         del args['directories']
         args['output_file'] = output
