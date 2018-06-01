@@ -10,7 +10,8 @@ basedata_dir: Basedata
 words_files_extension: _words.xml
 markables_dir: Markables
 coref_files_extension: _np_level.xml
-log_on_error: false
+sentences_files_extension: _sentence_level.xml
+log_on_error: true
 dirs_to_ignore:
     - Configuration
 

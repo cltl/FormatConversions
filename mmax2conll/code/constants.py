@@ -12,7 +12,10 @@ CONLL_EXTENSION = '.conll'
 WORDS_DIR = 'Basedata'
 WORDS_FILES_EXTENSION = '_words.xml'
 MARKABLES_DIR = 'Markables'
-COREF_FILES_EXTENSION = '_coref_level.xml'
+# COREF_FILES_EXTENSION = '_coref_level.xml'          # for COREA
+# SENTENCES_FILES_EXTENSION = None   # for COREA
+COREF_FILES_EXTENSION = '_np_level.xml'             # for SoNaR
+SENTENCES_FILES_EXTENSION = '_sentence_level.xml'   # for SoNaR
 LOG_ON_ERROR = False
 DIRS_TO_IGNORE = {'Configuration'}
 

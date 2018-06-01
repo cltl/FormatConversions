@@ -106,6 +106,7 @@ def dir_main(input_dir, output_dir,
              conll_extension=c.CONLL_EXTENSION,
              words_files_extension=c.WORDS_FILES_EXTENSION,
              coref_files_extension=c.COREF_FILES_EXTENSION,
+             sentences_files_extension=c.SENTENCES_FILES_EXTENSION,
              log_on_error=c.LOG_ON_ERROR,
              **kwargs):
     """
@@ -127,29 +128,77 @@ def dir_main(input_dir, output_dir,
         if filename.endswith(coref_files_extension)
     }
 
-    both = words_files & coref_files
+    if sentences_files_extension is not None:
+        sentences_files = {
+            filename[:-len(sentences_files_extension)]
+            for filename in os.listdir(markables_dir)
+            if filename.endswith(sentences_files_extension)
+        }
 
-    if words_files - both:
+    all_files = words_files & coref_files
+
+    if words_files - coref_files:
         logger.warn(
-            "The following files seem to be words files, but do not have a"
-            " corresponding coreference file:\n\t" + '\n\t'.join(
-                sorted(words_files - both)
+            "The following files seem to be words files, but do not"
+            " have corresponding coreference files:\n\t" + '\n\t'.join(
+                sorted(words_files - coref_files)
             )
         )
 
-    if coref_files - both:
+    if coref_files - words_files:
         logger.warn(
-            "The following files seem to be coreference files, but do not have"
-            "a corresponding words file:\n\t" + '\n\t'.join(
-                sorted(coref_files - both)
+            "The following files seem to be coreference files, but do not"
+            " have corresponding words files:\n\t" + '\n\t'.join(
+                sorted(coref_files - words_files)
             )
         )
 
-    for name in both:
+    if sentences_files_extension is not None:
+        all_files &= sentences_files
+        if words_files - sentences_files:
+            logger.warn(
+                "The following files seem to be words files, but do not"
+                " have corresponding sentences files:\n\t" + '\n\t'.join(
+                    sorted(words_files - sentences_files)
+                )
+            )
+
+        if coref_files - sentences_files:
+            logger.warn(
+                "The following files seem to be coreference files, but do not"
+                " have corresponding sentences files:\n\t" + '\n\t'.join(
+                    sorted(coref_files - sentences_files)
+                )
+            )
+
+        if sentences_files - words_files:
+            logger.warn(
+                "The following files seem to be sentences files, but do not"
+                " have corresponding words files:\n\t" + '\n\t'.join(
+                    sorted(sentences_files - words_files)
+                )
+            )
+
+        if sentences_files - coref_files:
+            logger.warn(
+                "The following files seem to be sentences files, but do not"
+                " have corresponding coreference files:\n\t" + '\n\t'.join(
+                    sorted(sentences_files - coref_files)
+                )
+            )
+
+    for name in all_files:
         words_file = os.path.join(basedata_dir, name) + words_files_extension
+
         coref_file = os.path.join(markables_dir, name) + \
             coref_files_extension
+
+        sentences_file = None \
+            if sentences_files_extension is None \
+            else os.path.join(markables_dir, name) + sentences_files_extension
+
         output_file = os.path.join(output_dir, name) + conll_extension
+
         if os.path.exists(output_file):
             if allow_overwriting:
                 logger.warn(f"Overwriting {output_file}")
@@ -160,6 +209,7 @@ def dir_main(input_dir, output_dir,
                 output_file,
                 words_file,
                 coref_file,
+                sentences_file,
                 words_files_extension=words_files_extension,
                 **kwargs
             )
@@ -363,6 +413,7 @@ def get_args(args_from_config=[
                 'words_files_extension',
                 'markables_dir',
                 'coref_files_extension',
+                'sentences_files_extension',
                 'log_on_error',
                 'dirs_to_ignore'
              ]):
