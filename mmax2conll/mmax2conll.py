@@ -7,7 +7,7 @@ import itertools as it
 from lxml import etree
 
 import code.constants as c
-from code.util import file_exists
+from code.util import file_exists, directory_exists
 
 from code.mmax_document_readers import (
     document_ID_from_filename,
@@ -43,6 +43,7 @@ def find_data_dirs(directory,
         has_words = basedata_dir in subsubdirs
         has_markables = markables_dir in subsubdirs
         if has_words and has_markables:
+            logger.debug(f"subdir: {subdir}")
             yield subdir
         elif has_markables:
             logger.warn(
@@ -62,6 +63,7 @@ def super_dir_main(directories, output_dir,
                    dirs_to_ignore=c.DIRS_TO_IGNORE,
                    allow_overwriting=c.ALLOW_OVERWRITING,
                    **kwargs):
+    logger.debug(f"output_dir: {output_dir}")
     for directory in directories:
         data_dirs = find_data_dirs(
             directory=directory,
@@ -80,6 +82,7 @@ def super_dir_main(directories, output_dir,
                     f" {cur_output_dir}"
                 )
             else:
+                logger.debug(f"Creating: {cur_output_dir}")
                 os.makedirs(cur_output_dir, exist_ok=True)
                 logger.info(
                     f"Saving data converted from {data_dir} in"
@@ -400,7 +403,7 @@ original folder has relative to the passed folder the data folder was found in.
     parser.add_argument('-l', '--log-level', default='INFO',
                         help="Logging level")
     parser.add_argument('-d', '--directory', action='append',
-                        dest='directories',
+                        dest='directories', type=directory_exists,
                         help="Directory to batch convert files from")
     parser.add_argument('config', help="YAML configuration file")
     parser.add_argument('output',
