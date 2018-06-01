@@ -567,12 +567,26 @@ class MMAXCorefDocumentReader(XMLItemReader):
 
         !! NB !! Returns a list because dicts are not hashable
         """
-        markables = {m['id']: m for m in self.extract_items(xml)}
+        all_markables = {m['id']: m for m in self.extract_all_items(xml)}
+        markables = {
+            ID: m
+            for ID, m in filter(
+                lambda tup: self.item_filter(tup[1]),
+                all_markables.items()
+            )
+        }
+
         forward_refs = {}
 
         for markable in markables.values():
             ref = markable.get('ref', None)
             if ref is not None:
+                if self.validate:
+                    if ref not in all_markables:
+                        raise ValidationError(
+                            f"Reference to unknown markable ({ref!r}):"
+                            f" {markable}"
+                        )
                 forward_refs.setdefault(ref, []).append(markable['id'])
 
         sets = []
@@ -586,4 +600,14 @@ class MMAXCorefDocumentReader(XMLItemReader):
                         stack.extend(forward_refs[ID])
                         refset.append(markables[ID])
                 sets.append(refset)
+        if markables and not any(sets):
+            raise ValueError("You lost all your markables!")
+        if self.validate:
+            input_total = len(markables)
+            output_total = sum(map(len, sets))
+            if output_total != input_total:
+                raise ValidationError(
+                    f"Expected {input_total} markables in output, found:"
+                    f" {output_total}"
+                )
         return sets
