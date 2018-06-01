@@ -149,9 +149,14 @@ class MMAXMarkableReader:
     for a description of the MMAX format.
     """
     def __init__(self,
+                 referred_ids,
                  id_attr=c.MMAX_MARKABLE_ID_ATTRIBUTE,
                  span_attr=c.MMAX_SPAN_ATTRIBUTE,
                  mmax_level_attr=c.MMAX_LEVEL_ATTRIBUTE):
+        self.referred_ids = list(referred_ids)
+        self.referred_indices = dict(
+            (ID, i) for i, ID in enumerate(self.referred_ids)
+        )
         self.id_attr = id_attr
         self.span_attr = span_attr
         self.mmax_level_attr = mmax_level_attr
@@ -169,8 +174,7 @@ class MMAXMarkableReader:
         span_text = xml.attrib.get(self.span_attr, None)
         return self.span_from_text(span_text)
 
-    @staticmethod
-    def span_from_text(text):
+    def span_from_text(self, text):
         """
         Expand and split a possibly abbreviated span specification:
             span="word_1..word_5,word_7"
@@ -184,29 +188,14 @@ class MMAXMarkableReader:
                     raise ValueError(
                         "Illegal span specification: only one '..' is allowed:"
                         f" between every pair of ',': {text}")
-                first, last = map(lambda s: s.split('_'), split)
-                try:
-                    first_int = int(first[-1])
-                    last_int = int(last[-1])
-                except ValueError as e:
+                first, last = map(self.referred_indices.get, split)
+                if first > last:
                     raise ValueError(
-                        "Illegal span specification: every word ID in an"
-                        " abbreviated span should end with an integer,"
-                        f" optionally separated from text by an '_': {text}"
-                    ) from e
-                first[-1] = last[-1] = ''
-                if first != last:
-                    raise ValueError(
-                        "Illegal span specification: the word IDs in an"
-                        " abbreviated span should be exactly the same,"
-                        f" except for the trailing integer: {text}"
+                        "Illegal span specification: the first ID of a span"
+                        " abbreviation must appear in the words before the"
+                        f" second ID: {text}"
                     )
-                # This results in a trailing '_', as required
-                str_part = '_'.join(first)
-                new_parts = (
-                    str_part + str(i)
-                    for i in range(first_int, last_int + 1)
-                )
+                new_parts = self.referred_ids[first:last + 1]
             else:
                 new_parts = split
             parts.extend(new_parts)
@@ -242,6 +231,7 @@ class MMAXCorefReader(MMAXMarkableReader):
     for a description of the MMAX format.
     """
     def __init__(self,
+                 referred_ids,
                  head_attr=c.COREF_HEAD_ATTRIBUTE,
                  ref_attr=c.COREF_REF_ATTRIBUTE,
                  type_attr=c.COREF_TYPE_ATTRIBUTE,
@@ -249,7 +239,7 @@ class MMAXCorefReader(MMAXMarkableReader):
                  time_attr=c.COREF_TIME_ATTRIBUTE,
                  mod_attr=c.COREF_MOD_ATTRIBUTE,
                  **kwargs):
-        super(MMAXCorefReader, self).__init__(**kwargs)
+        super(MMAXCorefReader, self).__init__(referred_ids, **kwargs)
         self.head_attr = head_attr
         self.ref_attr = ref_attr
         self.level_attr = level_attr

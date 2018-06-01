@@ -1,7 +1,6 @@
 import itertools as it
 
-from . import constants as c
-from .util import ValidationError, is_consecutive
+from .util import ValidationError
 
 
 class CorefConverter:
@@ -10,8 +9,12 @@ class CorefConverter:
     `.conll_writers.CoNLLWriter`
     """
 
-    def __init__(self, position_from_ID=c.MMAX_POSITION_FROM_ID):
-        self.position_from_ID = position_from_ID
+    def __init__(self, sentences):
+        self.sentences = sentences
+        self.word_ids = tuple(word['id'] for word in it.chain(*sentences))
+        self.word_indices = dict(
+            (ID, i) for i, ID in enumerate(self.word_ids)
+        )
 
     def word_id_map_from_MMAX_sets(self, sets):
         """
@@ -48,13 +51,23 @@ class CorefConverter:
         return word_id_map
 
     def validate_span(self, span):
-        if not is_consecutive(map(self.position_from_ID, span)):
+        first = self.word_indices[span[0]]
+        last = self.word_indices[span[-1]]
+        if first > last:
+            raise ValueError(
+                "Illegal span specification: the first ID of a span"
+                " abbreviation must appear in the words before the"
+                f" last ID: {span}"
+            )
+        correct_span = self.word_ids[first:last + 1]
+
+        if span != correct_span:
             raise ValidationError(
                 "Coreference spans in CoNLL must be consecutive. Found:"
-                f" {span}"
+                f" {span} which should be {correct_span}"
             )
 
-    def add_data_from_coref_sets(self, sentences, coref_sets):
+    def add_data_from_coref_sets(self, coref_sets):
         """
         Add coreference information from reference sets to sentence data.
 
@@ -78,7 +91,7 @@ class CorefConverter:
                     f" {pos}"
                 )
 
-        for sentence in sentences:
+        for sentence in self.sentences:
             for word in sentence:
                 if word['id'] in id_map:
                     word['coref'] = '|'.join(

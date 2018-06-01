@@ -1,7 +1,8 @@
 #! /usr/bin/env python3
 
-import logging
 import os
+import logging
+import itertools as it
 
 from lxml import etree
 
@@ -203,7 +204,9 @@ def single_main(
         )
 
     # Read in coreference data
+    logger.debug("Read coreference data...")
     coref_sets = MMAXCorefDocumentReader(
+        words=it.chain(*sentences),
         validate=validate_xml,
         item_filter=coref_filter,
     ).extract_coref_sets(
@@ -211,7 +214,7 @@ def single_main(
     )
 
     # Merge coref data into sentences (in place)
-    CorefConverter().add_data_from_coref_sets(sentences, coref_sets)
+    CorefConverter(sentences).add_data_from_coref_sets(coref_sets)
 
     # Save the data to CoNLL
     write_conll(
@@ -240,12 +243,15 @@ def read_SoNaR(words_file, sentences_file, validate_xml=c.VALIDATE_XML,
     check_document_id(document_id, words_file, on_missing_document_ID)
 
     # Read words
-    words = SoNaRWordsDocumentReader(validate=validate_xml).extract_items(
+    logger.debug("Read words..")
+    words = list(SoNaRWordsDocumentReader(validate=validate_xml).extract_items(
         etree.parse(words_file)
-    )
+    ))
 
+    logger.debug("Read sentences...")
     # Add sentence data
     sentence_items = SoNaRSentencesDocumentReader(
+        words,
         validate=validate_xml
     ).extract_items(etree.parse(sentences_file))
     sentences = add_sentence_layer_to_words(words, sentence_items)

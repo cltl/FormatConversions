@@ -4,7 +4,7 @@ from os import path
 import itertools as it
 
 from . import constants as c
-from .util import ValidationError, is_consecutive
+from .util import ValidationError
 from .mmax_item_readers import (
     SoNaRWordReader,
     COREAWordReader,
@@ -193,17 +193,21 @@ class SoNaRSentencesDocumentReader(XMLItemReader):
     for a description of the MMAX format.
     """
 
-    def __init__(self, item_reader=None,
+    def __init__(self, words, item_reader=None,
                  validate=c.VALIDATE_XML,
-                 pos_from_word_ID=c.MMAX_POSITION_FROM_ID,
                  pos_from_sentence_ID=c.MMAX_POSITION_FROM_ID,
                  expected_child_tag=c.MMAX_MARKABLE_TAG,
                  expected_root_tag=c.MMAX_MARKABLES_TAG,
                  item_filter=c.MMAX_SENTENCES_FILTER):
+        self.word_ids = [word['id'] for word in words]
+        self.word_indices = dict(
+            (ID, i) for i, ID in enumerate(self.word_ids)
+        )
+
         # Default item_reader
         item_reader = item_reader \
             if item_reader is not None \
-            else MMAXMarkableReader()
+            else MMAXMarkableReader(self.word_ids)
         super(SoNaRSentencesDocumentReader, self).__init__(
             item_reader=item_reader,
             validate=validate,
@@ -211,7 +215,6 @@ class SoNaRSentencesDocumentReader(XMLItemReader):
             expected_root_tag=expected_root_tag,
             item_filter=item_filter,
         )
-        self.pos_from_word_ID = pos_from_word_ID
         self.pos_from_sentence_ID = pos_from_sentence_ID
 
     def extract_items(self, xml):
@@ -226,22 +229,44 @@ class SoNaRSentencesDocumentReader(XMLItemReader):
         return items
 
     def validate_sentence_spans(self, sentence_items):
-        last_pos = None
-        for item in sentence_items:
-            positions = list(map(self.pos_from_word_ID, item['span']))
-            if not is_consecutive(positions):
+        first_span = []
+        index = 0
+        while not first_span and len(sentence_items) > index:
+            first_span = sentence_items[index]['span']
+            index += 1
+        index -= 1
+        if self.word_ids and first_span[0] != self.word_ids[0]:
+            raise ValidationError(
+                "The first non-empty sentence does not start with the first"
+                f" word (id: {self.word_ids[0]}): {sentence_items[index]}"
+            )
+
+        prev_last_id = first_span[-1]
+        for item in sentence_items[index + 1:]:
+            span = item['span']
+            first = self.word_indices[span[0]]
+            last = self.word_indices[span[-1]]
+            if first > last:
+                raise ValueError(
+                    "Illegal span specification: the first ID of a span"
+                    " abbreviation must appear in the words before the"
+                    f" last ID: {span}"
+                )
+            correct_span = self.word_ids[first:last + 1]
+
+            if span != correct_span:
                 raise ValidationError(
-                    "The span of this sentence should be consecutive:"
+                    f"The span of this sentence should be {correct_span}:"
                     f" {item!r}"
                 )
-            if last_pos != positions[0] - 1 and last_pos is not None:
+            if self.word_indices[prev_last_id] != first - 1:
                 raise ValidationError(
-                    f"The first position of this sentence ({positions[0]}) is"
-                    " not directly after the last position of the previous"
-                    f" sentence ({last_pos}): {item}"
+                    f"The first word of this sentence ({span[0]}) is not"
+                    " directly after the last word of the previous sentence"
+                    f" ({prev_last_id}): {item}"
                 )
             else:
-                last_pos = positions[-1]
+                prev_last_id = span[-1]
 
 
 class COREAWordsDocumentReader(XMLItemReader):
@@ -519,7 +544,7 @@ class MMAXCorefDocumentReader(XMLItemReader):
     for a description of the MMAX format.
     """
 
-    def __init__(self, item_reader=None,
+    def __init__(self, words, item_reader=None,
                  validate=c.VALIDATE_XML,
                  expected_child_tag=c.MMAX_MARKABLE_TAG,
                  expected_root_tag=c.MMAX_MARKABLES_TAG,
@@ -527,7 +552,7 @@ class MMAXCorefDocumentReader(XMLItemReader):
                 # Default item_reader
         item_reader = item_reader \
             if item_reader is not None \
-            else MMAXCorefReader()
+            else MMAXCorefReader(word['id'] for word in words)
         super(MMAXCorefDocumentReader, self).__init__(
             item_reader=item_reader,
             validate=validate,
