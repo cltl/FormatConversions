@@ -375,12 +375,12 @@ descriptions of the CoNLL and MMAX formats.
 
 To convert a whole directory recursively, run:
 
-    mmax2conll.py <output folder> -d <input folder> [-d <input folder> ...]
+    mmax2conll.py <config file> <output folder> -d <input folder> [-d <input folder> ...]
 
 
 To only convert one pair (or triple) of files, run:
 
-    mmax2conll.py <output.conll> <*_words.xml> <*coref markables file> [<*_sentence_level.xml>]
+    mmax2conll.py <config file> <output.conll> <*_words.xml> <*coref markables file> [<*_sentence_level.xml>]
 
 
 When passing folders for batch processing using -d, the passed folders are
@@ -399,11 +399,10 @@ original folder has relative to the passed folder the data folder was found in.
     )
     parser.add_argument('-l', '--log-level', default='INFO',
                         help="Logging level")
-    parser.add_argument('-c', '--config', default=c.DEFAULT_CONFIG_FILE,
-                        help="YAML configuration file")
     parser.add_argument('-d', '--directory', action='append',
                         dest='directories',
                         help="Directory to batch convert files from")
+    parser.add_argument('config', help="YAML configuration file")
     parser.add_argument('output',
                         help="Where to save the CoNLL output")
     parser.add_argument('words_file', type=file_exists, nargs='?',

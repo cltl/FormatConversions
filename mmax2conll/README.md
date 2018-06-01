@@ -9,12 +9,12 @@ See `CoNLL-specification.md` and `MMAX-specification.md` for extensive descripti
 To convert a whole folder (that contains a `Basedata` and `Markables` folder as direct children), run:
 
 ```sh
-mmax2conll.py path/to/output_dir -d path/to/some/folder [-d path/to/another/folder ...]
+mmax2conll.py path/to/config.yml path/to/output_dir -d path/to/some/folder [-d path/to/another/folder ...]
 ```
 
 To only convert one pair of files, run:
 ```sh
-mmax2conll.py path/to/output.conll path/to/some_words.xml path/to/a_coref_level.xml
+mmax2conll.py path/to/config.yml path/to/output.conll path/to/some_words.xml path/to/a_coref_level.xml [path/to/a_sentence_level.xml]
 ```
 
 
