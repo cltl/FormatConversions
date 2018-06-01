@@ -187,8 +187,18 @@ class MMAXMarkableReader:
                 if len(split) != 2:
                     raise ValueError(
                         "Illegal span specification: only one '..' is allowed:"
-                        f" between every pair of ',': {text}")
+                        f" between every pair of ',': {text!r}")
                 first, last = map(self.referred_indices.get, split)
+
+                if first is None:
+                    raise ValueError(
+                        f"Unknown ID ({split[0]!r}) in span: {text!r}"
+                    )
+                if last is None:
+                    raise ValueError(
+                        f"Unknown ID ({split[1]!r}) in span: {text!r}"
+                    )
+
                 if first > last:
                     raise ValueError(
                         "Illegal span specification: the first ID of a span"
