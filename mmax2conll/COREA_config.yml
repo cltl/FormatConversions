@@ -31,7 +31,7 @@ conll_defaults:
 on_missing:
     document_id: throw
     part_number: nothing
-    word_number: nothing
+    word_number: throw
     word: throw
     POS: nothing
     parse_bit: nothing
