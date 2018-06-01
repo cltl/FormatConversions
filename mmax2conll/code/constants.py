@@ -96,6 +96,7 @@ COREF_HEAD_ATTRIBUTE = 'head'
 COREF_REF_ATTRIBUTE = 'ref'
 COREF_TIME_ATTRIBUTE = 'time'
 COREF_MOD_ATTRIBUTE = 'mod'
+COREF_EMPTY_REF_VALUE = 'empty'
 
 # The coreference data from the COREA dataset can be of different types:
 

@@ -244,6 +244,7 @@ class MMAXCorefReader(MMAXMarkableReader):
                  referred_ids,
                  head_attr=c.COREF_HEAD_ATTRIBUTE,
                  ref_attr=c.COREF_REF_ATTRIBUTE,
+                 empty_ref_value=c.COREF_EMPTY_REF_VALUE,
                  type_attr=c.COREF_TYPE_ATTRIBUTE,
                  level_attr=c.COREF_LEVEL_ATTRIBUTE,
                  time_attr=c.COREF_TIME_ATTRIBUTE,
@@ -252,6 +253,7 @@ class MMAXCorefReader(MMAXMarkableReader):
         super(MMAXCorefReader, self).__init__(referred_ids, **kwargs)
         self.head_attr = head_attr
         self.ref_attr = ref_attr
+        self.empty_ref_value = empty_ref_value
         self.level_attr = level_attr
         self.type_attr = type_attr
         self.time_attr = time_attr
@@ -269,7 +271,10 @@ class MMAXCorefReader(MMAXMarkableReader):
 
         Return None if the attribute does not exist.
         """
-        return xml.attrib.get(self.ref_attr, None)
+        ref = xml.attrib.get(self.ref_attr, None)
+        if ref == self.empty_ref_value:
+            ref = None
+        return ref
 
     def extract_level(self, xml):
         """
