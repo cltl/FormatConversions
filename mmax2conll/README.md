@@ -1,20 +1,37 @@
 # mmax2conll
-Script to convert coreference data in MMAX format to [CoNLL][] format.
+Script to convert coreference data in MMAX format to [CoNLL][] format or raw text files.
 
 See `CoNLL-specification.md` and `MMAX-specification.md` for extensive descriptions of the CoNLL and MMAX formats.
 
 
 ## Usage
 
-To convert a whole folder (that contains a `Basedata` and `Markables` folder as direct children), run:
+### `mmax2conll.py`
+Because the COREA corpus saves its sentence information in the `*_words.xml` files
+but the SoNaR-1 corpus saves this separately in `*_sentence_level.xml` files,
+specifying a sentences file is optional.
+
+To automatically find all (sub)folders that contain a `Basedata` and `Markables` folder as direct children and convert all data in those folders, run:
 
 ```sh
 mmax2conll.py path/to/config.yml path/to/output_dir -d path/to/some/folder [-d path/to/another/folder ...]
 ```
 
-To only convert one pair of files, run:
+To only convert one pair (or triple) of files, run:
 ```sh
 mmax2conll.py path/to/config.yml path/to/output.conll path/to/some_words.xml path/to/a_coref_level.xml [path/to/a_sentence_level.xml]
+```
+
+### `mmax2raw.py`
+To automatically find all (sub)folders that contain a `Basedata` and `Markables` folder as direct children and convert all data in those folders, run:
+
+```sh
+mmax2conll.py path/to/output_dir -d path/to/some/folder [-d path/to/another/folder ...]
+```
+
+To only convert one file, run:
+```sh
+mmax2conll.py path/to/output.txt path/to/some_words.xml
 ```
 
 
