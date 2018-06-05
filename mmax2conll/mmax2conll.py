@@ -422,12 +422,12 @@ class Main:
                     'warn_on_auto_use_Med_item_reader',
                     'min_column_spacing',
                     'conll_defaults',
+                    'words_files_extension',
                     'on_missing',
                  ], batch_args_from_config=[
                     'allow_overwriting',
                     'conll_extension',
                     'basedata_dir',
-                    'words_files_extension',
                     'markables_dir',
                     'coref_files_extension',
                     'sentences_files_extension',
