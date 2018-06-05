@@ -76,6 +76,7 @@ Column  | Description           | Value                                         
 # Issues
 
  - [ ] 'on_missing' config key is not validated before use
+ - [ ] `basedata_dir` and `markables_dir` should not be configuration keys
 
 # References
 Multi-Level Annotation in MMAX (2003)<br>
