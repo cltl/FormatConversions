@@ -1,0 +1,9 @@
+validate_xml: true
+allow_overwriting: false
+raw_extension: .txt
+basedata_dir: Basedata
+markables_dir: Markables
+words_files_extension: _words.xml
+log_on_error: true
+dirs_to_ignore:
+    - Configuration

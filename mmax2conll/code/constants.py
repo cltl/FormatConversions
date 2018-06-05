@@ -9,6 +9,7 @@ ALLOW_OVERWRITING = False
 COREF_TYPE_FILTER = 'ident_or_bridge'
 COREF_LEVEL_FILTER = 'reference'
 CONLL_EXTENSION = '.conll'
+RAW_EXTENSION = '.txt'
 WORDS_DIR = 'Basedata'
 WORDS_FILES_EXTENSION = '_words.xml'
 MARKABLES_DIR = 'Markables'
