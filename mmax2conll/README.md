@@ -53,7 +53,7 @@ Column  | Description           | Value                                         
     but instead an empty part 0 is added to those files.
 
 \[2\]:
-    The reference spans are not closed in the correct order, if they end at the same word. The following is an example of output from `mmax2conll.py`:
+    The reference spans are not closed in the correct order if they end at the same word. The following is an example of output from `mmax2conll.py`:
     ```
               (10
                 -
