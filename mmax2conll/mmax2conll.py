@@ -266,7 +266,7 @@ class Main:
             )
 
         # Read in coreference data
-        logger.debug("Read coreference data...")
+        logger.debug(f"Read coreference data of {document_id}")
         coref_sets = MMAXCorefDocumentReader(
             words=it.chain(*sentences),
             validate=validate_xml,
@@ -309,14 +309,14 @@ class Main:
         cls.check_document_id(document_id, words_file, on_missing_document_ID)
 
         # Read words
-        logger.debug("Read words..")
+        logger.debug(f"Read words of {document_id}")
         words = list(SoNaRWordsDocumentReader(
             validate=validate_xml
         ).extract_items(
             etree.parse(words_file)
         ))
 
-        logger.debug("Read sentences...")
+        logger.debug(f"Read sentences of {document_id}")
         # Add sentence data
         sentence_items = SoNaRSentencesDocumentReader(
             words,
@@ -365,6 +365,7 @@ class Main:
                 )
             reader.item_reader = COREAMedWordReader()
 
+        logger.debug(f"Read words and sentences of {document_id}")
         return document_id, reader.extract_sentences(xml)
 
     @classmethod

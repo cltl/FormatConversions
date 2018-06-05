@@ -84,7 +84,7 @@ class Main(CoNLLMain):
         """
         Read words from a words_file from COREA or SoNaR.
         """
-        logger.debug("Read words..")
+        logger.debug(f"Read words from {filename}")
         words = SoNaRWordsDocumentReader(
             validate=validate_xml
         ).extract_items(
