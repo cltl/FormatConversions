@@ -473,7 +473,8 @@ class Main:
         parser.add_argument('-d', '--directory', action='append',
                             dest='directories', type=directory_exists,
                             help="Directory to batch convert files from")
-        parser.add_argument('config', help="YAML configuration file")
+        parser.add_argument('config', help="YAML configuration file",
+                            type=file_exists)
         parser.add_argument('output',
                             help="Where to save the CoNLL output")
         parser.add_argument('words_file', type=file_exists, nargs='?',

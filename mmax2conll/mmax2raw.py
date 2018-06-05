@@ -143,7 +143,7 @@ class Main(CoNLLMain):
                             dest='directories', type=directory_exists,
                             help="Directory to batch convert files from")
         parser.add_argument('-c', '--config', help="YAML configuration file",
-                            default='config/raw_config.yml')
+                            default='config/raw_config.yml', type=file_exists)
         parser.add_argument('output',
                             help="Where to save the CoNLL output")
         parser.add_argument('words_file', type=file_exists, nargs='?',
