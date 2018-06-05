@@ -8,7 +8,7 @@ See `CoNLL-specification.md` and `MMAX-specification.md` for extensive descripti
 
 ### `mmax2conll.py`
 Because the COREA corpus saves its sentence information in the `*_words.xml` files
-but the SoNaR-1 corpus saves this separately in `*_sentence_level.xml` files,
+but the [SoNaR-1][] corpus saves this separately in `*_sentence_level.xml` files,
 specifying a sentences file is optional.
 
 To automatically find all (sub)folders that contain a `Basedata` and `Markables` folder as direct children and convert all data in those folders, run:
@@ -107,6 +107,9 @@ Essential Speech and Language Technology for Dutch, Ch.7, p.115 -- 128<br>
 Editors: Peter Spyns, Jan Odijk<br>
 https://link.springer.com/book/10.1007/978-3-642-30910-6<br>
 
+SoNaR: https://ivdnt.org/downloads/taalmaterialen/tstc-sonar-corpus
+
 
 [COREA]: https://link.springer.com/book/10.1007/978-3-642-30910-6
 [CoNLL]: http://conll.cemantix.org/2012/data.html
+[SoNaR-1]: https://ivdnt.org/downloads/taalmaterialen/tstc-sonar-corpus
