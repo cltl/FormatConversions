@@ -48,21 +48,21 @@ COREA does not contain the following information:
 Therefore **these scripts strictly do not output data in CoNLL format**.
 The following values and place-holders are used.
 
-Column  | Description           | Value                                                                         | Conform CoNLL specification?
----:    | ---                   | ---                                                                           | ---
-      1 | Document ID           | file path without extension                                                   | Yes
-      2 | Part number           | `0` or as extracted from `<word>.alpsent` from MMAX `*_words.xml` files \[1\] | Yes
-      3 | Word number           | `<word>.alppos` or `<word>.pos` from MMAX `*_words.xml` files                 | Yes
-      4 | Word itself           | content of `<word>` tags from MMAX `*_words.xml` files                        | Yes
-      5 | POS                   | `[POS]`                                                                       | No
-      6 | Parse bit             | `*`                                                                           | No
-      7 | Predicate lemma       | `-`                                                                           | Yes
-      8 | Predicate Frameset ID | `-`                                                                           | Yes
-      9 | Word sense            | `-`                                                                           | Yes
-     10 | Speaker/Author        | `UNKNOWN`                                                                     | ???
-     11 | Named Entities        | `*`                                                                           | Yes
-      - | Predicate Arguments   | None: column(s) left out entirely                                             | Yes, conform example in CoNLL 2012
-     12 | Coreference           | extracted from MMAX `*_coref_level.xml` files (ISSUE! \[2\])                  | Yes
+| Column  | Description           | Value                                                                         | Conform CoNLL specification?
+| ---:    | ---                   | ---                                                                           | ---
+|       1 | Document ID           | file path without extension                                                   | Yes
+|       2 | Part number           | `0` or as extracted from `<word>.alpsent` from MMAX `*_words.xml` files \[1\] | Yes
+|       3 | Word number           | `<word>.alppos` or `<word>.pos` from MMAX `*_words.xml` files                 | Yes
+|       4 | Word itself           | content of `<word>` tags from MMAX `*_words.xml` files                        | Yes
+|       5 | POS                   | `[POS]`                                                                       | No
+|       6 | Parse bit             | `*`                                                                           | No
+|       7 | Predicate lemma       | `-`                                                                           | Yes
+|       8 | Predicate Frameset ID | `-`                                                                           | Yes
+|       9 | Word sense            | `-`                                                                           | Yes
+|      10 | Speaker/Author        | `UNKNOWN`                                                                     | ???
+|      11 | Named Entities        | `*`                                                                           | Yes
+|       - | Predicate Arguments   | None: column(s) left out entirely                                             | Yes, conform example in CoNLL 2012
+|      12 | Coreference           | extracted from MMAX `*_coref_level.xml` files (ISSUE! \[2\])                  | Yes
 
 \[1\]:
     The part numbers of DCOI start at 1, where the part numbers in a CoNLL file start at 0.
