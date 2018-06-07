@@ -5,10 +5,10 @@ import logging
 
 from lxml import etree
 
-import code.constants as c
-from code.util import file_exists, directory_exists
+import mmax2conll.constants as c
+from mmax2conll.util import file_exists, directory_exists
 
-from code.mmax_document_readers import (
+from mmax2conll.mmax_document_readers import (
     SoNaRWordsDocumentReader,
 )
 

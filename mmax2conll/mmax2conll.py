@@ -6,10 +6,10 @@ import itertools as it
 
 from lxml import etree
 
-import code.constants as c
-from code.util import file_exists, directory_exists
+import mmax2conll.constants as c
+from mmax2conll.util import file_exists, directory_exists
 
-from code.mmax_document_readers import (
+from mmax2conll.mmax_document_readers import (
     document_ID_from_filename,
     add_sentence_layer_to_words,
     add_word_numbers,
@@ -18,9 +18,9 @@ from code.mmax_document_readers import (
     SoNaRSentencesDocumentReader,
     MMAXCorefDocumentReader,
 )
-from code.mmax_item_readers import COREAMedWordReader
-from code.conll_converters import CorefConverter
-from code.conll_writers import CoNLLWriter
+from mmax2conll.mmax_item_readers import COREAMedWordReader
+from mmax2conll.conll_converters import CorefConverter
+from mmax2conll.conll_writers import CoNLLWriter
 
 logger = logging.getLogger(None if __name__ == '__main__' else __name__)
 
