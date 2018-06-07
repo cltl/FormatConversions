@@ -72,12 +72,43 @@ def add_word_numbers(sentences):
             word['word_number'] = number
 
 
-def split_on_numbering(sequence, get_number, validate=c.VALIDATE):
+def split_on_numbering(sequence, get_number, validate=c.VALIDATE,
+                       start_number=0):
     """
     Split a sequence into subsequences using the number returned by
     `get_number(element)`.
 
     If `validate` is truthy, the following is validated:
-     - ...
+     - `get_number(first_element)` is `start_number`
+     - `get_number(element)` is equal to or exactly one greater than
+       `get_number(previous_element)`
     """
-    ...
+    current_inner = []
+    new_outer = [current_inner]
+    sequence = iter(sequence)
+    try:
+        current_inner.append(next(sequence))
+    except StopIteration:
+        return []
+    prev_number = get_number(current_inner[0])
+    if validate and prev_number != start_number:
+        raise ValidationError(
+            "The first number of the sequence must be `start_number`"
+            f" ({start_number}), found: {prev_number}"
+        )
+
+    for element in sequence:
+        current_number = get_number(element)
+        if current_number != prev_number:
+            if validate and current_number != prev_number + 1:
+                raise ValidationError(
+                    f"The number of an element ({current_number}) must either"
+                    " be equal to, or exactly one greater than the number of"
+                    f" the previous element ({prev_number})."
+                )
+            current_inner = []
+            new_outer.append(current_inner)
+        current_inner.append(element)
+        prev_number = current_number
+
+    return new_outer
