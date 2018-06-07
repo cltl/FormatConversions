@@ -33,18 +33,18 @@ class CorefConverter:
         all_spans = set()
         unique_sets = []
         for refset in sets:
-            spans = frozenset(map(lambda ref: tuple(ref['span']), refset))
+            refset = list(map(tuple, refset))
+            spans = frozenset(refset)
             if spans not in all_spans:
                 all_spans.add(spans)
                 spans = set()
                 new_refset = []
-                for ref in refset:
-                    span = tuple(ref['span'])
+                for span in refset:
                     if span not in spans:
                         spans.add(span)
-                        new_refset.append(ref)
+                        new_refset.append(list(span))
                     else:
-                        logger.debug(f"Discarding reference: {ref}")
+                        logger.debug(f"Discarding reference: {span}")
                 if new_refset:
                     unique_sets.append(new_refset)
                 else:
@@ -58,15 +58,22 @@ class CorefConverter:
             )
         return unique_sets
 
-    def word_id_map_from_MMAX_sets(self, sets):
+    @staticmethod
+    def coref_sets_from_MMAX_chains(chains):
+        """
+        Extract spans from MMAX coreference markable chains
+        """
+        return ([markable['span'] for markable in chain] for chain in chains)
+
+    def word_id_map_from_coref_sets(self, sets):
         """
         Extract a `{word_id: (reference ID, position)}` map from a reference
-        chain, where `position` is either `start`, `end` or `singleton`.
+        set, where `position` is either `start`, `end` or `singleton`.
 
         Validates whether the span refers to a consecutive collection of words.
 
         Assumes:
-         - the span is a list of word IDs
+         - a reference set is a list of lists of word IDs
 
         Incrementally assigns a reference ID to reference sets.
         """
@@ -77,8 +84,7 @@ class CorefConverter:
 
         # Randomly create a reference ID for every reference refset
         for refID, refset in enumerate(sets):
-            for ref in refset:
-                span = ref['span']
+            for span in refset:
                 self.validate_span(span)
                 if len(span) == 1:
                     word_id_map.setdefault(span[0], []).append(
@@ -111,6 +117,18 @@ class CorefConverter:
                 f" {span} which should be {correct_span}"
             )
 
+    def add_data_from_MMAX_chains(self, chains):
+        """
+        Add coreference information from reference sets to sentence data.
+
+        !! NB !! Changes data in-place.
+
+        Assumes every word has an ID stored in 'id'.
+        """
+        self.add_data_from_coref_sets(
+            self.coref_sets_from_MMAX_chains(chains)
+        )
+
     def add_data_from_coref_sets(self, coref_sets):
         """
         Add coreference information from reference sets to sentence data.
@@ -119,7 +137,7 @@ class CorefConverter:
 
         Assumes every word has an ID stored in 'id'.
         """
-        id_map = self.word_id_map_from_MMAX_sets(coref_sets)
+        id_map = self.word_id_map_from_coref_sets(coref_sets)
 
         def ref_to_str(refID, pos):
             if pos == 'singleton':

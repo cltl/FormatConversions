@@ -269,7 +269,7 @@ class Main:
 
         # Read in coreference data
         logger.debug(f"Read coreference data of {document_id}")
-        coref_sets = MMAXCorefDocumentReader(
+        coref_chains = MMAXCorefDocumentReader(
             words=it.chain(*sentences),
             validate=validate_xml,
             item_filter=coref_filter,
@@ -281,7 +281,7 @@ class Main:
         CorefConverter(
             sentences,
             uniqueyfy=uniqueyfy
-        ).add_data_from_coref_sets(coref_sets)
+        ).add_data_from_MMAX_chains(coref_chains)
 
         # Save the data to CoNLL
         cls.write_conll(
