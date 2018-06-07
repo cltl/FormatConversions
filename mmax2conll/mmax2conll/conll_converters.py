@@ -112,7 +112,7 @@ class CorefConverter:
         correct_span = self.word_ids[first:last + 1]
 
         if span != correct_span:
-            raise ValidationError(
+            raise ValueError(
                 "Coreference spans in CoNLL must be consecutive. Found:"
                 f" {span} which should be {correct_span}"
             )
