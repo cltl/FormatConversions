@@ -1,33 +1,26 @@
-min_column_spacing: 3
+# Data processing
 validate_xml: true
-auto_use_Med_item_reader: false
-warn_on_auto_use_Med_item_reader: true
-allow_overwriting: false
 coref_type_filter: ident_or_bridge
 coref_level_filter: reference
-conll_extension: .conll
+
+# Reporting
+allow_overwriting: false
+log_on_error: true
+auto_use_Med_item_reader: false
+warn_on_auto_use_Med_item_reader: true
+
+# MMAX
 basedata_dir: Basedata
-words_files_extension: _words.xml
 markables_dir: Markables
+words_files_extension: _words.xml
 coref_files_extension: _np_level.xml
 sentences_files_extension: _sentence_level.xml
-log_on_error: true
 dirs_to_ignore:
     - Configuration
 
-conll_defaults:
-    document_id: UNKNOWN
-    part_number: 0
-    word_number: '[WORD_NUMBER]'
-    word: '[WORD]'
-    POS: '[POS]'
-    parse_bit: '*'
-    pred_lemma: '-'
-    pred_frameset_ID: '-'
-    word_sense: '-'
-    speaker: UNKNOWN
-    named_entities: '*'
-    coref: '-'
+# CoNLL
+conll_extension: .conll
+min_column_spacing: 3
 
 on_missing:
     document_id: throw
@@ -42,3 +35,17 @@ on_missing:
     speaker: nothing
     named_entities: nothing
     coref: nothing
+
+conll_defaults:
+    document_id: UNKNOWN
+    part_number: 0
+    word_number: '[WORD_NUMBER]'
+    word: '[WORD]'
+    POS: '[POS]'
+    parse_bit: '*'
+    pred_lemma: '-'
+    pred_frameset_ID: '-'
+    word_sense: '-'
+    speaker: UNKNOWN
+    named_entities: '*'
+    coref: '-'

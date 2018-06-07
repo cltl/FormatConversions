@@ -1,9 +1,16 @@
+# Data processing
 validate_xml: true
+
+# Reporting
 allow_overwriting: false
-raw_extension: .txt
+log_on_error: true
+
+# MMAX
 basedata_dir: Basedata
 markables_dir: Markables
 words_files_extension: _words.xml
-log_on_error: true
 dirs_to_ignore:
     - Configuration
+
+# Raw
+raw_extension: .txt
