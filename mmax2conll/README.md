@@ -93,6 +93,7 @@ The following values and place-holders are used.
 
  - [ ] 'on_missing' config key is not validated before use
  - [ ] `basedata_dir` and `markables_dir` should not be configuration keys
+ - [ ] Too many methods in `mmax2conll.py` are marked as class methods
 
 # References
 Multi-Level Annotation in MMAX (2003)<br>
