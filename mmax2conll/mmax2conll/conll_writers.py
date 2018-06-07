@@ -122,7 +122,8 @@ class CoNLLWriter:
             if prev_part != current_part:
                 if prev_part > current_part:
                     raise ValueError(
-                        f"The part number should be a increasing in: {sentence}"
+                        "The part number should be a increasing in:"
+                        f" {sentence}"
                     )
                 while prev_part != current_part:
                     # First end the previous part
