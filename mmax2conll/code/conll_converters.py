@@ -1,6 +1,7 @@
 import logging
 import itertools as it
 
+from . import constants as c
 from .util import ValidationError
 
 logger = logging.getLogger(None if __name__ == '__main__' else __name__)
@@ -12,8 +13,9 @@ class CorefConverter:
     `.conll_writers.CoNLLWriter`
     """
 
-    def __init__(self, sentences):
+    def __init__(self, sentences, uniqueyfy=c.UNIQUEYFY):
         self.sentences = sentences
+        self.should_uniqueyfy = uniqueyfy
         self.word_ids = [word['id'] for word in it.chain(*sentences)]
         self.word_indices = dict(
             (ID, i) for i, ID in enumerate(self.word_ids)
@@ -69,10 +71,13 @@ class CorefConverter:
 
         Incrementally assigns a reference ID to reference sets.
         """
+        if self.should_uniqueyfy:
+            sets = self.uniqueyfy(sets)
+
         word_id_map = {}
 
         # Randomly create a reference ID for every reference refset
-        for refID, refset in enumerate(self.uniqueyfy(sets)):
+        for refID, refset in enumerate(sets):
             for ref in refset:
                 span = ref['span']
                 self.validate_span(span)

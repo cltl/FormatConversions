@@ -241,6 +241,7 @@ class Main:
             sentences_file=None,
             words_files_extension=c.WORDS_FILES_EXTENSION,
             validate_xml=c.VALIDATE_XML,
+            uniqueyfy=c.UNIQUEYFY,
             auto_use_Med_item_reader=c.AUTO_USE_MED_ITEM_READER,
             warn_on_auto_use_Med_item_reader=c.WARN_ON_AUTO_USE_MED_ITEM_READER,  # noqa
             conll_defaults=c.CONLL_DEFAULTS,
@@ -276,7 +277,10 @@ class Main:
         )
 
         # Merge coref data into sentences (in place)
-        CorefConverter(sentences).add_data_from_coref_sets(coref_sets)
+        CorefConverter(
+            sentences,
+            uniqueyfy=uniqueyfy
+        ).add_data_from_coref_sets(coref_sets)
 
         # Save the data to CoNLL
         cls.write_conll(
@@ -419,6 +423,7 @@ class Main:
     @classmethod
     def get_args(cls, args_from_config=[
                     'validate_xml',
+                    'uniqueyfy',
                     'auto_use_Med_item_reader',
                     'warn_on_auto_use_Med_item_reader',
                     'min_column_spacing',

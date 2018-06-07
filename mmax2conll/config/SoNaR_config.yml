@@ -1,5 +1,6 @@
 # Data processing
 validate_xml: true
+uniqueyfy: true
 coref_type_filter: ident_or_bridge
 coref_level_filter: reference
 

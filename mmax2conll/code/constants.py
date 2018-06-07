@@ -2,6 +2,7 @@
 DEFAULT_CONFIG_FILE = './default_config.yml'
 MIN_COLUMN_SPACING = 3
 VALIDATE_XML = True
+UNIQUEYFY = True
 # The following value is different from the one in ./default_config.yml
 AUTO_USE_MED_ITEM_READER = False
 WARN_ON_AUTO_USE_MED_ITEM_READER = True
