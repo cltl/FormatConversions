@@ -67,7 +67,6 @@ class CorefConverter:
 
         Assumes:
          - the span is a list of word IDs
-         - `str(ID).split('_')[-1]` is the position of a word
 
         Incrementally assigns a reference ID to reference sets.
         """
