@@ -45,12 +45,15 @@ class CorefConverter:
                         logger.debug(f"Discarding reference: {ref}")
                 if new_refset:
                     unique_sets.append(new_refset)
+                else:
+                    logger.debug("Discarding empty reference set")
             else:
                 logger.debug(f"Discarding reference set: {refset}")
-        logger.debug(
-            f"Kept {len(all_spans)} reference sets"
-            f" with {sum(map(len, all_spans))} references"
-        )
+        if logger.getEffectiveLevel() <= logging.DEBUG:
+            logger.debug(
+                f"Kept {len(all_spans)} reference sets"
+                f" with {sum(map(len, all_spans))} references"
+            )
         return unique_sets
 
     def word_id_map_from_MMAX_sets(self, sets):
