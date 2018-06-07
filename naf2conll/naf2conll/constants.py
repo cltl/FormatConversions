@@ -1,3 +1,4 @@
+#  ---- Configuration defaults ---- start
 # Data processing
 VALIDATE = True
 UNIQUEYFY = False
@@ -9,7 +10,6 @@ LOG_ON_ERROR = True
 # NAF
 NAF_EXTENSION = '.naf'
 DIRS_TO_IGNORE = []
-
 
 # CoNLL
 CONLL_EXTENSION = '.conll'
@@ -58,3 +58,6 @@ CONLL_DEFAULTS = {
     'named_entities': '*',
     'coref': '-',
 }
+#  ---- Configuration defaults ---- end
+
+SENTENCE_START_NUMBER = 1

@@ -3,6 +3,8 @@
 import os
 import logging
 
+from KafNafParserPy import KafNafParser
+
 from . import constants as c
 from .util import (
     file_exists,
@@ -11,6 +13,7 @@ from .util import (
     document_ID_from_filename,
     add_word_numbers,
 )
+from .naf_readers import NAFReader
 from .conll_converters import CorefConverter
 from .conll_writers import CoNLLWriter
 
@@ -143,7 +146,21 @@ class Main:
         cls.check_document_id(document_id, naf_file, on_missing['document_id'])
 
         # Read data
-        sentences = cls.read_NAF(naf_file, validate=validate)
+        reader = NAFReader(validate=validate)
+        nafobj = KafNafParser(naf_file)
+        sentences = reader.extract_sentences(nafobj)
+        coref_sets = reader.extract_coref_sets(nafobj)
+        del reader, nafobj
+
+        add_word_numbers(sentences)
+
+        CorefConverter(
+            sentences,
+            uniqueyfy=uniqueyfy
+        ).add_data_from_coref_sets(
+            coref_sets
+        )
+        del coref_sets
 
         # Save the data to CoNLL
         cls.write_conll(
@@ -152,29 +169,11 @@ class Main:
                 defaults=conll_defaults,
                 min_column_spacing=min_column_spacing,
                 on_missing=on_missing,
-                conll_columns=conll_columns
+                columns=conll_columns
             ),
             document_id=document_id,
             sentences=sentences
         )
-
-    @staticmethod
-    def read_NAF(filename, validate=c.VALIDATE):
-        """
-        Read sentences and document ID from a naf_file.
-
-        Extracts the document ID using the file basename.
-        """
-
-        # Read words
-        words = ...
-
-        sentences = split_on_numbering(words, ...)
-        del words
-
-        add_word_numbers(sentences)
-
-        return sentences
 
     @staticmethod
     def check_document_id(document_id, filename,

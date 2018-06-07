@@ -91,6 +91,9 @@ class CorefConverter:
                         (refID, 'end')
                     )
 
+        if len(word_id_map) == 0:
+            logger.warn("No coreference data found.")
+
         return word_id_map
 
     def validate_span(self, span):
