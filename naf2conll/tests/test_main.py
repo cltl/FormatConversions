@@ -6,7 +6,7 @@ import subprocess
 logger = logging.getLogger(None if __name__ == '__main__' else __name__)
 
 
-def test_empty_dir(caplog):
+def test_empty_dir(caplog, empty_dir):
     caplog.set_level(logging.DEBUG)
     logger.debug(os.path.realpath(os.curdir))
     output_dir = 'output_dir'
@@ -18,7 +18,7 @@ def test_empty_dir(caplog):
                 "naf2conll",
                 output_dir,
                 "-d",
-                "./tests/resources/empty_dir"
+                empty_dir
             ],
             check=True
         )
@@ -27,7 +27,7 @@ def test_empty_dir(caplog):
             os.rmdir(output_dir)
 
 
-def test_no_coref_file(caplog):
+def test_no_coref_file(caplog, naffile_no_coref):
     caplog.set_level(logging.DEBUG)
     logger.debug(os.path.realpath(os.curdir))
     output_file = 'output.conll'
@@ -38,7 +38,7 @@ def test_no_coref_file(caplog):
                 "-m",
                 "naf2conll",
                 output_file,
-                "./tests/resources/no_coref.naf"
+                naffile_no_coref
             ],
             check=True
         )
