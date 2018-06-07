@@ -21,6 +21,20 @@ SENTENCES_FILES_EXTENSION = '_sentence_level.xml'   # for SoNaR
 LOG_ON_ERROR = False
 DIRS_TO_IGNORE = {'Configuration'}
 
+CONLL_COLUMNS = [
+    'part_number',
+    'word_number',
+    'word',
+    # 'POS',
+    # 'parse_bit',
+    # 'pred_lemma',
+    # 'pred_frameset_ID',
+    # 'word_sense',
+    # 'speaker',
+    # 'named_entities',
+    'coref',
+]
+
 CONLL_DEFAULTS = {
     'document_id': 'UNKNOWN',
     'part_number': '0',

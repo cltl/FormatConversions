@@ -246,6 +246,7 @@ class Main:
             warn_on_auto_use_Med_item_reader=c.WARN_ON_AUTO_USE_MED_ITEM_READER,  # noqa
             conll_defaults=c.CONLL_DEFAULTS,
             min_column_spacing=c.MIN_COLUMN_SPACING,
+            conll_columns=c.CONLL_COLUMNS,
             on_missing=c.CONLL_ON_MISSING,
             coref_filter=c.MMAX_COREF_FILTER):
         # Read sentences
@@ -288,7 +289,8 @@ class Main:
             writer=CoNLLWriter(
                 defaults=conll_defaults,
                 min_column_spacing=min_column_spacing,
-                on_missing=on_missing
+                on_missing=on_missing,
+                columns=conll_columns,
             ),
             document_id=document_id,
             sentences=sentences
@@ -427,8 +429,9 @@ class Main:
                     'auto_use_Med_item_reader',
                     'warn_on_auto_use_Med_item_reader',
                     'min_column_spacing',
-                    'conll_defaults',
                     'words_files_extension',
+                    'conll_columns',
+                    'conll_defaults',
                     'on_missing',
                  ], batch_args_from_config=[
                     'allow_overwriting',

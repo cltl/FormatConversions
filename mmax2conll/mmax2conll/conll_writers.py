@@ -84,26 +84,14 @@ class CoNLLWriter:
 
     """
 
-    COLUMNS = [
-        'part_number',
-        'word_number',
-        'word',
-        'POS',
-        'parse_bit',
-        'pred_lemma',
-        'pred_frameset_ID',
-        'word_sense',
-        'speaker',
-        'named_entities',
-        'coref',
-    ]
-
     def __init__(self, defaults=c.CONLL_DEFAULTS,
                  min_column_spacing=c.MIN_COLUMN_SPACING,
-                 on_missing=c.CONLL_ON_MISSING):
+                 on_missing=c.CONLL_ON_MISSING,
+                 columns=c.CONLL_COLUMNS):
         self.min_column_spacing = min_column_spacing
         self.defaults = defaults
         self.on_missing = on_missing
+        self.columns = columns
 
     def write(self, writeable, document_id, sentences):
         """
@@ -183,7 +171,7 @@ class CoNLLWriter:
         Always raises an exception if something is missing.
         """
         writeable.write(document_id)
-        for column in self.COLUMNS:
+        for column in self.columns:
             writeable.write(self.min_column_spacing * ' ')
             value = word[column]
             writeable.write((column_sizes[column] - len(value)) * ' ')
@@ -201,15 +189,14 @@ class CoNLLWriter:
         self.add_missing_data_to_sentence(sentence)
         self.convert_values_to_string(sentence)
 
-    @staticmethod
-    def convert_values_to_string(sentence):
+    def convert_values_to_string(self, sentence):
         """
         Make sure all values are strings.
 
         Changes the sentence in place!
         """
         for word in sentence:
-            for column in CoNLLWriter.COLUMNS:
+            for column in self.columns:
                 value = word[column]
                 word[column] = str(value) if value is not None else ''
 
@@ -220,7 +207,7 @@ class CoNLLWriter:
         Changes the sentence in place!
         Complains according to self.on_missing if data is missing.
         """
-        for column in self.COLUMNS:
+        for column in self.columns:
             on_missing = self.on_missing[column]
             if on_missing == 'nothing':
                 default = self.defaults[column]
@@ -252,16 +239,15 @@ class CoNLLWriter:
         """
         return f"The column {column!r} is missing from the word: {word!r}"
 
-    @staticmethod
-    def get_column_sizes(sentence):
+    def get_column_sizes(self, sentence):
         """
         Calculate the size of the columns for this sentence
         """
         return {
-            column: CoNLLWriter.get_max_length(
+            column: self.get_max_length(
                 word[column] for word in sentence
             )
-            for column in CoNLLWriter.COLUMNS
+            for column in self.columns
         }
 
     @staticmethod
