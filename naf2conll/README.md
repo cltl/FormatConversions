@@ -76,4 +76,5 @@ If you choose to output more columns, the following values and place-holders are
 # Issues
 
  - [ ] 'on_missing' config key is not validated before use
+ - [ ] Raise an error when there is no coref layer in `extract_coref_sets`
 
