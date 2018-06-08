@@ -58,13 +58,6 @@ class CorefConverter:
             )
         return unique_sets
 
-    @staticmethod
-    def coref_sets_from_MMAX_chains(chains):
-        """
-        Extract spans from MMAX coreference markable chains
-        """
-        return ([markable['span'] for markable in chain] for chain in chains)
-
     def word_id_map_from_coref_sets(self, sets):
         """
         Extract a `{word_id: (reference ID, position)}` map from a reference
@@ -117,18 +110,6 @@ class CorefConverter:
                 f" {span} which should be {correct_span}"
             )
 
-    def add_data_from_MMAX_chains(self, chains):
-        """
-        Add coreference information from reference sets to sentence data.
-
-        !! NB !! Changes data in-place.
-
-        Assumes every word has an ID stored in 'id'.
-        """
-        self.add_data_from_coref_sets(
-            self.coref_sets_from_MMAX_chains(chains)
-        )
-
     def add_data_from_coref_sets(self, coref_sets):
         """
         Add coreference information from reference sets to sentence data.
@@ -159,3 +140,24 @@ class CorefConverter:
                     word['coref'] = '|'.join(
                         it.starmap(ref_to_str, id_map[word['id']])
                     )
+
+
+class MMAXCorefConverter(CorefConverter):
+    def add_data_from_MMAX_chains(self, chains):
+        """
+        Add coreference information from reference sets to sentence data.
+
+        !! NB !! Changes data in-place.
+
+        Assumes every word has an ID stored in 'id'.
+        """
+        self.add_data_from_coref_sets(
+            self.coref_sets_from_MMAX_chains(chains)
+        )
+
+    @staticmethod
+    def coref_sets_from_MMAX_chains(chains):
+        """
+        Extract spans from MMAX coreference markable chains
+        """
+        return ([markable['span'] for markable in chain] for chain in chains)

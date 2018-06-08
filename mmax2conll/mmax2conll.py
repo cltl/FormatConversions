@@ -19,7 +19,7 @@ from mmax2conll.mmax_document_readers import (
     MMAXCorefDocumentReader,
 )
 from mmax2conll.mmax_item_readers import COREAMedWordReader
-from mmax2conll.conll_converters import CorefConverter
+from mmax2conll.conll_converters import MMAXCorefConverter
 from mmax2conll.conll_writers import CoNLLWriter
 
 logger = logging.getLogger(None if __name__ == '__main__' else __name__)
@@ -278,7 +278,7 @@ class Main:
         )
 
         # Merge coref data into sentences (in place)
-        CorefConverter(
+        MMAXCorefConverter(
             sentences,
             uniqueyfy=uniqueyfy
         ).add_data_from_MMAX_chains(coref_chains)
