@@ -25,7 +25,7 @@ conll_extension: .conll
 min_column_spacing: 3
 
 conll_columns:
-    - part_number
+    # - part_number
     - word_number
     - word
     # - problem
