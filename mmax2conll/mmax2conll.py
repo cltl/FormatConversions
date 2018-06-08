@@ -429,6 +429,8 @@ class Main:
                     'validate_xml',
                     'uniqueyfy',
                     'fill_non_consecutive_coref_spans',
+                    'coref_type_filter',
+                    'coref_level_filter',
                     'auto_use_Med_item_reader',
                     'warn_on_auto_use_Med_item_reader',
                     'min_column_spacing',
@@ -541,9 +543,16 @@ class Main:
         args.update(
             cls.keys_from_config(config, args_from_config, config_file)
         )
+
+        coref_type_filter = c.MMAX_TYPE_FILTERS[
+            args.pop('coref_type_filter')
+        ]
+        coref_level_filter = c.MMAX_LEVEL_FILTERS[
+            args.pop('coref_level_filter')
+        ]
         args['coref_filter'] = lambda i: \
-            c.MMAX_TYPE_FILTERS[config['coref_type_filter']](i) and \
-            c.MMAX_LEVEL_FILTERS[config['coref_level_filter']](i)
+            coref_type_filter(i) and \
+            coref_level_filter(i)
 
         # Read batch keys
         if batch:
