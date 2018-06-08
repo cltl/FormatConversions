@@ -127,17 +127,18 @@ class Main:
 
     @classmethod
     def single_main(
-            cls,
-            output_file,
-            naf_file,
-            naf_extension=c.NAF_EXTENSION,
-            validate=c.VALIDATE,
-            uniqueyfy=c.UNIQUEYFY,
-            conll_columns=c.CONLL_COLUMNS,
-            conll_defaults=c.CONLL_DEFAULTS,
-            min_column_spacing=c.MIN_COLUMN_SPACING,
-            on_missing=c.CONLL_ON_MISSING,
-            ):
+           cls,
+           output_file,
+           naf_file,
+           naf_extension=c.NAF_EXTENSION,
+           validate=c.VALIDATE,
+           uniqueyfy=c.UNIQUEYFY,
+           fill_non_consecutive_coref_spans=c.FILL_NON_CONSECUTIVE_COREF_SPANS,
+           conll_columns=c.CONLL_COLUMNS,
+           conll_defaults=c.CONLL_DEFAULTS,
+           min_column_spacing=c.MIN_COLUMN_SPACING,
+           on_missing=c.CONLL_ON_MISSING,
+           ):
         # Read document ID
         document_id = document_ID_from_filename(
             naf_file,
@@ -156,7 +157,8 @@ class Main:
 
         CorefConverter(
             sentences,
-            uniqueyfy=uniqueyfy
+            uniqueyfy=uniqueyfy,
+            fill_spans=fill_non_consecutive_coref_spans,
         ).add_data_from_coref_sets(
             coref_sets
         )
@@ -227,6 +229,7 @@ class Main:
     def get_args(cls, args_from_config=[
                     'validate',
                     'uniqueyfy',
+                    'fill_non_consecutive_coref_spans',
                     'naf_extension',
                     'min_column_spacing',
                     'conll_columns',
