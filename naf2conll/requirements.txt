@@ -1,3 +1,2 @@
 pyaml==17.12.1
 KafNafParserPy==1.88
-hypothesis==3.57.0
