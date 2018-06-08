@@ -1,6 +1,7 @@
 # Data processing
 validate_xml: true
 uniqueyfy: true
+fill_non_consecutive_coref_spans: false
 coref_type_filter: ident_or_bridge
 coref_level_filter: reference
 
@@ -27,6 +28,7 @@ conll_columns:
     - part_number
     - word_number
     - word
+    # - problem
     # - POS
     # - parse_bit
     # - pred_lemma
@@ -41,6 +43,7 @@ on_missing:
     part_number: nothing
     word_number: throw
     word: throw
+    problem: nothing
     POS: nothing
     parse_bit: nothing
     pred_lemma: nothing
@@ -55,6 +58,7 @@ conll_defaults:
     part_number: 0
     word_number: '[WORD_NUMBER]'
     word: '[WORD]'
+    problem: ''
     POS: '[POS]'
     parse_bit: '*'
     pred_lemma: '-'

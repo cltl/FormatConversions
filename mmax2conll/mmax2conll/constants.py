@@ -3,6 +3,7 @@ DEFAULT_CONFIG_FILE = './default_config.yml'
 MIN_COLUMN_SPACING = 3
 VALIDATE_XML = True
 UNIQUEYFY = True
+FILL_NON_CONSECUTIVE_COREF_SPANS = False
 AUTO_USE_MED_ITEM_READER = False
 WARN_ON_AUTO_USE_MED_ITEM_READER = True
 ALLOW_OVERWRITING = False
@@ -24,6 +25,7 @@ CONLL_COLUMNS = [
     'part_number',
     'word_number',
     'word',
+    'problem',
     # 'POS',
     # 'parse_bit',
     # 'pred_lemma',
@@ -39,6 +41,7 @@ CONLL_DEFAULTS = {
     'part_number': '0',
     'word_number': '[WORD_NUMBER]',
     'word': '[WORD]',
+    'problem': '',
     'POS': '[POS]',
     'parse_bit': '*',
     'pred_lemma': '-',
@@ -54,6 +57,7 @@ CONLL_ON_MISSING = {
     'part_number': 'nothing',
     'word_number': 'throw',
     'word': 'throw',
+    'problem': 'nothing',
     'POS': 'nothing',
     'parse_bit': 'nothing',
     'pred_lemma': 'nothing',

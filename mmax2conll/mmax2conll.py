@@ -234,21 +234,22 @@ class Main:
 
     @classmethod
     def single_main(
-            cls,
-            output_file,
-            words_file,
-            coref_file,
-            sentences_file=None,
-            words_files_extension=c.WORDS_FILES_EXTENSION,
-            validate_xml=c.VALIDATE_XML,
-            uniqueyfy=c.UNIQUEYFY,
-            auto_use_Med_item_reader=c.AUTO_USE_MED_ITEM_READER,
-            warn_on_auto_use_Med_item_reader=c.WARN_ON_AUTO_USE_MED_ITEM_READER,  # noqa
-            conll_defaults=c.CONLL_DEFAULTS,
-            min_column_spacing=c.MIN_COLUMN_SPACING,
-            conll_columns=c.CONLL_COLUMNS,
-            on_missing=c.CONLL_ON_MISSING,
-            coref_filter=c.MMAX_COREF_FILTER):
+           cls,
+           output_file,
+           words_file,
+           coref_file,
+           sentences_file=None,
+           words_files_extension=c.WORDS_FILES_EXTENSION,
+           validate_xml=c.VALIDATE_XML,
+           uniqueyfy=c.UNIQUEYFY,
+           fill_non_consecutive_coref_spans=c.FILL_NON_CONSECUTIVE_COREF_SPANS,
+           auto_use_Med_item_reader=c.AUTO_USE_MED_ITEM_READER,
+           warn_on_auto_use_Med_item_reader=c.WARN_ON_AUTO_USE_MED_ITEM_READER,
+           conll_defaults=c.CONLL_DEFAULTS,
+           min_column_spacing=c.MIN_COLUMN_SPACING,
+           conll_columns=c.CONLL_COLUMNS,
+           on_missing=c.CONLL_ON_MISSING,
+           coref_filter=c.MMAX_COREF_FILTER):
         # Read sentences
         if sentences_file is None:
             document_id, sentences = cls.read_COREA(
@@ -280,7 +281,8 @@ class Main:
         # Merge coref data into sentences (in place)
         MMAXCorefConverter(
             sentences,
-            uniqueyfy=uniqueyfy
+            uniqueyfy=uniqueyfy,
+            fill_spans=fill_non_consecutive_coref_spans,
         ).add_data_from_MMAX_chains(coref_chains)
 
         # Save the data to CoNLL
@@ -426,6 +428,7 @@ class Main:
     def get_args(cls, args_from_config=[
                     'validate_xml',
                     'uniqueyfy',
+                    'fill_non_consecutive_coref_spans',
                     'auto_use_Med_item_reader',
                     'warn_on_auto_use_Med_item_reader',
                     'min_column_spacing',
