@@ -65,3 +65,45 @@ def test_coref_file(caplog, naffile_coref):
     finally:
         if os.path.exists(output_file):
             os.remove(output_file)
+
+
+def test_fill_spans(caplog, naffile_not_consec_coref, fill_spans_config):
+    caplog.set_level(logging.DEBUG)
+    logger.debug(os.path.realpath(os.curdir))
+    output_file = 'output.conll'
+    try:
+        subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "naf2conll",
+                output_file,
+                naffile_not_consec_coref,
+                '-c',
+                fill_spans_config
+            ],
+            check=True
+        )
+    finally:
+        if os.path.exists(output_file):
+            os.remove(output_file)
+
+
+def test_not_fill_spans(caplog, naffile_not_consec_coref):
+    caplog.set_level(logging.DEBUG)
+    logger.debug(os.path.realpath(os.curdir))
+    output_file = 'output.conll'
+    try:
+        res = subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "naf2conll",
+                output_file,
+                naffile_not_consec_coref,
+            ]
+        )
+    finally:
+        if os.path.exists(output_file):
+            os.remove(output_file)
+    assert res.returncode != 0

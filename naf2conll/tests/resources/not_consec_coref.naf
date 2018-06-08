@@ -45201,10 +45201,8 @@
         <target id="t_26" head="yes"/>
       </span>
       <span>
-        <!-- "Dynamiek" is removed because it causes a non consecutive span -->
-        <!-- <target id="t_0" head="yes"/> -->
-        <!-- <target id="t_4"/> -->
-        <target id="t_4" head="yes"/>
+        <target id="t_0" head="yes"/>
+        <target id="t_4"/>
         <target id="t_5"/>
         <target id="t_6"/>
         <target id="t_7"/>
@@ -45258,9 +45256,8 @@
       </span>
       <span>
         <target id="t_95" head="yes"/>
-        <!-- "," and "." are removed because they cause a non consecutive span -->
-        <!-- <target id="t_99"/> -->
-        <!-- <target id="t_107"/> -->
+        <target id="t_99"/>
+        <target id="t_107"/>
       </span>
       <span>
         <target id="t_1878" head="yes"/>
@@ -45269,10 +45266,8 @@
         <target id="t_1066" head="yes"/>
       </span>
       <span>
-        <!-- "Dynamiek" is removed because it causes a non consecutive span -->
-        <!-- <target id="t_214" head="yes"/> -->
-        <!-- <target id="t_218"/> -->
-        <target id="t_218" head="yes"/>
+        <target id="t_214" head="yes"/>
+        <target id="t_218"/>
         <target id="t_219"/>
         <target id="t_220"/>
         <target id="t_221"/>
@@ -45430,8 +45425,7 @@
       <span>
         <target id="t_663"/>
         <target id="t_664" head="yes"/>
-        <!-- "." is removed because it causes a non consecutive span -->
-        <!-- <target id="t_670"/> -->
+        <target id="t_670"/>
       </span>
       <span>
         <target id="t_665" head="yes"/>
@@ -45901,22 +45895,19 @@
     </coref>
     <coref id="co29" type="entity">
       <span>
-        <!-- removed because they cause a non consecutive span -->
-        <!-- <target id="t_290" head="yes"/> -->
-        <!-- <target id="t_292"/> -->
-        <!-- <target id="t_293"/> -->
-        <!-- <target id="t_295"/> -->
-        <target id="t_295" head="yes"/>
+        <target id="t_290" head="yes"/>
+        <target id="t_292"/>
+        <target id="t_293"/>
+        <target id="t_295"/>
         <target id="t_296"/>
         <target id="t_297"/>
       </span>
       <span>
         <target id="t_288"/>
         <target id="t_289" head="yes"/>
-        <!-- removed because they cause a non consecutive span -->
-        <!-- <target id="t_291"/> -->
-        <!-- <target id="t_294"/> -->
-        <!-- <target id="t_298"/> -->
+        <target id="t_291"/>
+        <target id="t_294"/>
+        <target id="t_298"/>
       </span>
     </coref>
     <coref id="co30" type="entity">
@@ -45925,10 +45916,8 @@
         <target id="t_1586"/>
         <target id="t_1587"/>
         <target id="t_1588"/>
-        <target id="t_1589" head="yes"/>
-        <!-- <target id="t_1589"/> -->
-        <!-- removed because they cause a non consecutive span -->
-        <!-- <target id="t_1592" head="yes"/> -->
+        <target id="t_1589"/>
+        <target id="t_1592" head="yes"/>
       </span>
       <span>
         <target id="t_295"/>
@@ -45957,8 +45946,7 @@
         <target id="t_1805" head="yes"/>
       </span>
       <span>
-        <!-- removed because they cause a non consecutive span -->
-        <!-- <target id="t_2050"/> -->
+        <target id="t_2050"/>
         <target id="t_2055" head="yes"/>
       </span>
       <span>
@@ -46408,13 +46396,11 @@
       </span>
       <span>
         <target id="t_1044" head="yes"/>
-        <!-- removed because they cause a non consecutive span -->
-        <!-- <target id="t_1054"/> -->
+        <target id="t_1054"/>
       </span>
       <span>
         <target id="t_1031" head="yes"/>
-        <!-- removed because they cause a non consecutive span -->
-        <!-- <target id="t_1043"/> -->
+        <target id="t_1043"/>
       </span>
     </coref>
     <coref id="co61" type="entity">
@@ -46567,8 +46553,7 @@
         <target id="t_1408" head="yes"/>
       </span>
       <span>
-        <!-- removed because they cause a non consecutive span -->
-        <!-- <target id="t_1403"/> -->
+        <target id="t_1403"/>
         <target id="t_1406" head="yes"/>
       </span>
     </coref>
@@ -46606,8 +46591,7 @@
     <coref id="co76" type="entity">
       <span>
         <target id="t_1496" head="yes"/>
-        <!-- removed because they cause a non consecutive span -->
-        <!-- <target id="t_1506"/> -->
+        <target id="t_1506"/>
       </span>
       <span>
         <target id="t_1508" head="yes"/>
@@ -46650,8 +46634,7 @@
         <target id="t_1536" head="yes"/>
       </span>
       <span>
-        <!-- removed because they cause a non consecutive span -->
-        <!-- <target id="t_1522"/> -->
+        <target id="t_1522"/>
         <target id="t_1525" head="yes"/>
       </span>
       <span>
@@ -46825,8 +46808,7 @@
         <target id="t_1967" head="yes"/>
       </span>
       <span>
-        <!-- removed because they cause a non consecutive span -->
-        <!-- <target id="t_1952"/> -->
+        <target id="t_1952"/>
         <target id="t_1956"/>
         <target id="t_1957" head="yes"/>
       </span>
@@ -46839,8 +46821,7 @@
       <span>
         <target id="t_1981"/>
         <target id="t_1982" head="yes"/>
-        <!-- removed because they cause a non consecutive span -->
-        <!-- <target id="t_1987"/> -->
+        <target id="t_1987"/>
       </span>
     </coref>
     <coref id="co94" type="entity">

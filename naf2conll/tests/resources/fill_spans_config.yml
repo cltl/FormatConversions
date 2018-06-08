@@ -1,7 +1,7 @@
 # Data processing
 validate: true
 uniqueyfy: false
-fill_non_consecutive_coref_spans: false
+fill_non_consecutive_coref_spans: true
 
 # Reporting
 allow_overwriting: false
@@ -19,7 +19,7 @@ conll_columns:
     # - part_number
     - word_number
     - word
-    # - problem
+    - problem
     # - POS
     # - parse_bit
     # - pred_lemma
