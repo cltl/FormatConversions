@@ -4,6 +4,7 @@ uniqueyfy: true
 fill_non_consecutive_coref_spans: false
 coref_type_filter: ident_or_bridge
 coref_level_filter: reference
+sentence_filter: none
 
 # Reporting
 allow_overwriting: false

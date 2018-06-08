@@ -249,7 +249,8 @@ class Main:
            min_column_spacing=c.MIN_COLUMN_SPACING,
            conll_columns=c.CONLL_COLUMNS,
            on_missing=c.CONLL_ON_MISSING,
-           coref_filter=c.MMAX_COREF_FILTER):
+           coref_filter=c.MMAX_COREF_FILTER,
+           sentence_filter=c.SENTENCE_DEFAULT_FILTER):
         # Read sentences
         if sentences_file is None:
             document_id, sentences = cls.read_COREA(
@@ -284,6 +285,8 @@ class Main:
             uniqueyfy=uniqueyfy,
             fill_spans=fill_non_consecutive_coref_spans,
         ).add_data_from_MMAX_chains(coref_chains)
+
+        sentences = filter(sentence_filter, sentences)
 
         # Save the data to CoNLL
         cls.write_conll(
@@ -431,6 +434,7 @@ class Main:
                     'fill_non_consecutive_coref_spans',
                     'coref_type_filter',
                     'coref_level_filter',
+                    'sentence_filter',
                     'auto_use_Med_item_reader',
                     'warn_on_auto_use_Med_item_reader',
                     'min_column_spacing',
@@ -553,6 +557,8 @@ class Main:
         args['coref_filter'] = lambda i: \
             coref_type_filter(i) and \
             coref_level_filter(i)
+
+        args['sentence_filter'] = c.SENTENCE_FILTERS[args['sentence_filter']]
 
         # Read batch keys
         if batch:

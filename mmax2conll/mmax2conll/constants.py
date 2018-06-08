@@ -9,6 +9,7 @@ WARN_ON_AUTO_USE_MED_ITEM_READER = True
 ALLOW_OVERWRITING = False
 COREF_TYPE_FILTER = 'ident_or_bridge'
 COREF_LEVEL_FILTER = 'reference'
+SENTENCE_FILTER = 'none'
 CONLL_EXTENSION = '.conll'
 RAW_EXTENSION = '.txt'
 WORDS_DIR = 'Basedata'
@@ -67,6 +68,13 @@ CONLL_ON_MISSING = {
     'named_entities': 'nothing',
     'coref': 'nothing',
 }
+
+SENTENCE_FILTERS = {
+    'none': lambda x: x,
+    'has_problem': lambda s: any('problem' in w for w in s),
+    'no_problem': lambda s: all('problem' not in w for w in s),
+}
+SENTENCE_DEFAULT_FILTER = SENTENCE_FILTERS[SENTENCE_FILTER]
 
 # COREA details
 COREA_CGN_ID = 'CGN'
