@@ -3,6 +3,7 @@
 VALIDATE = True
 UNIQUEYFY = False
 FILL_NON_CONSECUTIVE_COREF_SPANS = False
+SENTENCE_FILTER = 'none'
 
 # Reporting
 ALLOW_OVERWRITING = False
@@ -65,3 +66,10 @@ CONLL_DEFAULTS = {
 #  ---- Configuration defaults ---- end
 
 SENTENCE_START_NUMBER = 1
+
+SENTENCE_FILTERS = {
+    'none': lambda x: x,
+    'has_problem': lambda s: any('problem' in w for w in s),
+    'no_problem': lambda s: all('problem' not in w for w in s),
+}
+SENTENCE_DEFAULT_FILTER = SENTENCE_FILTERS[SENTENCE_FILTER]

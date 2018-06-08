@@ -134,6 +134,7 @@ class Main:
            validate=c.VALIDATE,
            uniqueyfy=c.UNIQUEYFY,
            fill_non_consecutive_coref_spans=c.FILL_NON_CONSECUTIVE_COREF_SPANS,
+           sentence_filter=c.SENTENCE_DEFAULT_FILTER,
            conll_columns=c.CONLL_COLUMNS,
            conll_defaults=c.CONLL_DEFAULTS,
            min_column_spacing=c.MIN_COLUMN_SPACING,
@@ -163,6 +164,8 @@ class Main:
             coref_sets
         )
         del coref_sets
+
+        sentences = filter(sentence_filter, sentences)
 
         # Save the data to CoNLL
         cls.write_conll(
@@ -230,6 +233,7 @@ class Main:
                     'validate',
                     'uniqueyfy',
                     'fill_non_consecutive_coref_spans',
+                    'sentence_filter',
                     'naf_extension',
                     'min_column_spacing',
                     'conll_columns',
@@ -324,6 +328,8 @@ class Main:
         args.update(
             cls.keys_from_config(config, args_from_config, config_file)
         )
+
+        args['sentence_filter'] = c.SENTENCE_FILTERS[args['sentence_filter']]
 
         # Read batch keys
         if batch:

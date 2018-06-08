@@ -2,6 +2,7 @@
 validate: true
 uniqueyfy: false
 fill_non_consecutive_coref_spans: false
+sentence_filter: none
 
 # Reporting
 allow_overwriting: false
