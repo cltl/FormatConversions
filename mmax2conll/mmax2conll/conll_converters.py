@@ -16,7 +16,7 @@ class CorefConverter:
                  fill_spans=c.FILL_NON_CONSECUTIVE_COREF_SPANS):
         self.sentences = sentences
         self.should_uniqueyfy = uniqueyfy
-        self.fill_spans = fill_spans
+        self.should_fill_spans = fill_spans
         self.word_ids = [word['id'] for word in it.chain(*sentences)]
         self.word_indices = dict(
             (ID, i) for i, ID in enumerate(self.word_ids)
@@ -44,7 +44,7 @@ class CorefConverter:
                     # Keep track of which sets I discarded
                     if span not in refset:
                         refset.add(span)
-                        new_refset.append(list(span))
+                        new_refset.append(span)
                     else:
                         logger.debug(f"Discarding reference: {span}")
                 if new_refset:
@@ -60,13 +60,50 @@ class CorefConverter:
             )
         return unique_sets
 
+    def check_and_fill_spans(self, sets):
+        """
+        Find spans that are not consecutive.
+
+        If self.should_fill_spans, the second return value is a
+        {span: [missing word IDs]} map, pointing to the word IDs that would
+        have been in this span if it had been consecutive.
+
+        Otherwise raises a ValueError when a span is not a consecutive
+        collection of words.
+
+        :return:    list of tuples of word IDs, span: word IDs
+        """
+        out = []
+        problem_map = {}
+        for refset in sets:
+            new_refset = []
+            out.append(new_refset)
+            for span in refset:
+                correct_span = tuple(self.get_correct_span(span))
+                span = tuple(span)
+                if span != correct_span:
+                    if self.should_fill_spans:
+                        # Mark the words that are filled in
+                        for wordID in self.find_missing(span, correct_span):
+                            problem_map.setdefault(correct_span, []).append(
+                                wordID
+                            )
+                        span = correct_span
+                    else:
+                        raise ValueError(
+                            "Coreference spans in CoNLL must be consecutive."
+                            f" Found: {span}, which should be: {correct_span}"
+                        )
+                new_refset.append(span)
+        return out, problem_map
+
     def word_id_map_from_coref_sets(self, sets):
         """
         Extract a `{word_id: [(reference ID, position), ...]}` map from a
         reference set, where `position` is either `start`, `end` or
         `singleton`.
 
-        If self.fill_spans, the second return value is a
+        If self.should_fill_spans, the second return value is a
         {word_id: [reference ID, ...]} map, pointing to the reference spans
         this word was not in, but would have been if the span were consecutive.
 
@@ -78,6 +115,8 @@ class CorefConverter:
 
         Incrementally assigns a reference ID to reference sets.
         """
+        sets, set_problem_map = self.check_and_fill_spans(sets)
+
         if self.should_uniqueyfy:
             sets = self.uniqueyfy(sets)
 
@@ -87,20 +126,10 @@ class CorefConverter:
         # Randomly create a reference ID for every reference refset
         for refID, refset in enumerate(sets):
             for span in refset:
-                correct_span = self.get_correct_span(span)
-                if span != correct_span:
-                    if self.fill_spans:
-                        # Mark the words that are filled in
-                        for wordID in self.find_missing(span, correct_span):
-                            word_problem_map.setdefault(wordID, []).append(
-                                refID
-                            )
-                        span = correct_span
-                    else:
-                        raise ValueError(
-                            "Coreference spans in CoNLL must be consecutive."
-                            f" Found: {span}, which should be: {correct_span}"
-                        )
+                for wordID in set_problem_map.get(span, []):
+                    word_problem_map.setdefault(wordID, []).append(
+                        refID
+                    )
 
                 if len(span) == 1:
                     word_id_map.setdefault(span[0], []).append(
