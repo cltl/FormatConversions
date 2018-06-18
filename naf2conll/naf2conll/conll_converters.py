@@ -1,5 +1,6 @@
 import logging
 import itertools as it
+from collections import Counter
 
 from . import constants as c
 
@@ -13,10 +14,12 @@ class CorefConverter:
     """
 
     def __init__(self, sentences, uniqueyfy=c.UNIQUEYFY,
-                 fill_spans=c.FILL_NON_CONSECUTIVE_COREF_SPANS):
+                 fill_spans=c.FILL_NON_CONSECUTIVE_COREF_SPANS,
+                 sort_key=c.MMAX_SAFE_POSITION_FROM_ID):
         self.sentences = sentences
         self.should_uniqueyfy = uniqueyfy
-        self.fill_spans = fill_spans
+        self.should_fill_spans = fill_spans
+        self.sort_key = sort_key
         self.word_ids = [word['id'] for word in it.chain(*sentences)]
         self.word_indices = dict(
             (ID, i) for i, ID in enumerate(self.word_ids)
@@ -29,35 +32,96 @@ class CorefConverter:
         have a unique set of spans (i.e. no other refset has exactly the same
         set of spans).
 
-        Also discards empty reference sets
+        Also discards empty reference sets and discards reference sets that
+        are (strict) subsets of other reference sets.
         """
-        all_spans = set()
-        unique_sets = []
-        for refset in sets:
-            refset = list(map(tuple, refset))
-            spans = frozenset(refset)
-            if spans not in all_spans:
-                all_spans.add(spans)
-                spans = set()
-                new_refset = []
-                for span in refset:
-                    if span not in spans:
-                        spans.add(span)
-                        new_refset.append(list(span))
-                    else:
-                        logger.debug(f"Discarding reference: {span}")
-                if new_refset:
-                    unique_sets.append(new_refset)
-                else:
-                    logger.debug("Discarding empty reference set")
-            else:
-                logger.debug(f"Discarding reference set: {refset}")
+        all_refsets = set()
+        all_spans = {}
+        for refcollection in sets:
+            if not refcollection:
+                logger.debug("Discarding empty reference set")
+                continue
+            # Keep track of which spans I discarded
+            refcounts = Counter(map(tuple, refcollection))
+            refset = frozenset(refcounts)
+            if refset in all_refsets:
+                logger.debug(
+                    f"Discarding duplicate reference set: {refcollection}"
+                )
+                continue
+            all_refsets.add(refset)
+            for span in refset:
+                all_spans.setdefault(span, set()).add(refset)
+            for span in (s for s in refcounts.elements() if refcounts[c] > 1):
+                logger.debug(f"Discarding duplicate reference: {span}")
+
         if logger.getEffectiveLevel() <= logging.DEBUG:
             logger.debug(
-                f"Kept {len(all_spans)} reference sets"
-                f" with {sum(map(len, all_spans))} references"
+                f"Kept {len(all_refsets)} reference sets"
+                f" with {sum(map(len, all_refsets))} references"
             )
-        return unique_sets
+        # Check for spans that are in multiple reference sets
+        extra = sorted((sp, rs) for sp, rs in all_spans.items() if len(rs) > 1)
+        for span, sets in extra:
+            biggest = max(sets)
+            others = sets - {biggest}
+            if all(biggest > refset for refset in others):
+                logger.debug(
+                    "Discarding reference sets that are strictly smaller than"
+                    f" another: {sorted(others)}"
+                )
+                all_refsets -= others
+            else:
+                uncomparable = {
+                    refset - {span}
+                    for refset in sets
+                    if any(
+                        not refset > rs and not rs > refset
+                        for rs in sets
+                    )
+                }
+                logger.warn(
+                    "Span in multiple reference sets that are quite different:"
+                    f" {span}. Sets: {sorted(map(sorted, uncomparable))}"
+                )
+        return all_refsets
+
+    def check_and_fill_spans(self, sets):
+        """
+        Find spans that are not consecutive.
+
+        If self.should_fill_spans, the second return value is a
+        {span: [missing word IDs]} map, pointing to the word IDs that would
+        have been in this span if it had been consecutive.
+
+        Otherwise raises a ValueError when a span is not a consecutive
+        collection of words.
+
+        :return:    list of tuples of word IDs, span: word IDs
+        """
+        out = []
+        problem_map = {}
+        for refset in sets:
+            new_refset = []
+            out.append(new_refset)
+            for span in refset:
+                correct_span = tuple(self.get_correct_span(span))
+                span = tuple(span)
+                if span != correct_span:
+                    if self.should_fill_spans:
+                        # Mark the words that are filled in
+                        for wordID in self.find_missing(span, correct_span):
+                            problem_map.setdefault(correct_span, []).append(
+                                wordID
+                            )
+                        span = correct_span
+                    else:
+                        raise ValueError(
+                            "Coreference spans in CoNLL must be consecutive."
+                            f" Found: {span}, which should be: {correct_span}"
+                        )
+                new_refset.append(span)
+        return out, problem_map
 
     def word_id_map_from_coref_sets(self, sets):
         """
@@ -65,7 +129,7 @@ class CorefConverter:
         reference set, where `position` is either `start`, `end` or
         `singleton`.
 
-        If self.fill_spans, the second return value is a
+        If self.should_fill_spans, the second return value is a
         {word_id: [reference ID, ...]} map, pointing to the reference spans
         this word was not in, but would have been if the span were consecutive.
 
@@ -77,29 +141,35 @@ class CorefConverter:
 
         Incrementally assigns a reference ID to reference sets.
         """
+        sets, set_problem_map = self.check_and_fill_spans(sets)
+
         if self.should_uniqueyfy:
             sets = self.uniqueyfy(sets)
 
         word_id_map = {}
         word_problem_map = {}
 
+        sorted_sets = sorted(
+            map(
+                lambda refset: sorted(
+                    refset,
+                    key=lambda span: tuple(map(self.sort_key, span))
+                ),
+                sets
+            ),
+            key=lambda refset: tuple(map(
+                lambda span: tuple(map(self.sort_key, span)),
+                refset
+            ))
+        )
+
         # Randomly create a reference ID for every reference refset
-        for refID, refset in enumerate(sets):
+        for refID, refset in enumerate(sorted_sets):
             for span in refset:
-                correct_span = self.get_correct_span(span)
-                if span != correct_span:
-                    if self.fill_spans:
-                        # Mark the words that are filled in
-                        for wordID in self.find_missing(span, correct_span):
-                            word_problem_map.setdefault(wordID, []).append(
-                                refID
-                            )
-                        span = correct_span
-                    else:
-                        raise ValueError(
-                            "Coreference spans in CoNLL must be consecutive."
-                            f" Found: {span}, which should be: {correct_span}"
-                        )
+                for wordID in set_problem_map.get(span, []):
+                    word_problem_map.setdefault(wordID, []).append(
+                        refID
+                    )
 
                 if len(span) == 1:
                     word_id_map.setdefault(span[0], []).append(

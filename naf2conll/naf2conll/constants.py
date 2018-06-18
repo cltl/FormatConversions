@@ -73,3 +73,21 @@ SENTENCE_FILTERS = {
     'no_problem': lambda s: all('problem' not in w for w in s),
 }
 SENTENCE_DEFAULT_FILTER = SENTENCE_FILTERS[SENTENCE_FILTER]
+
+
+# MMAX details
+def MMAX_POSITION_FROM_ID(ID):
+    """
+    Extract the position from a MMAX ID
+    """
+    return int(str(ID).split('_')[-1])
+
+
+def MMAX_SAFE_POSITION_FROM_ID(ID):
+    """
+    Extract the position from a MMAX ID and return ID on failure
+    """
+    try:
+        return MMAX_POSITION_FROM_ID(ID)
+    except ValueError:
+        return ID
