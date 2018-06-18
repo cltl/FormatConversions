@@ -67,12 +67,12 @@ class Main:
                        **kwargs):
         logger.debug(f"output_dir: {output_dir}")
         for directory in directories:
-            data_dirs = cls.find_data_dirs(
+            data_dirs = sorted(cls.find_data_dirs(
                 directory=directory,
                 basedata_dir=basedata_dir,
                 markables_dir=markables_dir,
                 dirs_to_ignore=dirs_to_ignore
-            )
+            ))
             for data_dir in data_dirs:
                 cur_output_dir = os.path.join(
                     output_dir,
@@ -192,7 +192,7 @@ class Main:
                     )
                 )
 
-        for name in all_files:
+        for name in sorted(all_files):
             words_file = os.path.join(basedata_dir, name) + \
                 words_files_extension
 

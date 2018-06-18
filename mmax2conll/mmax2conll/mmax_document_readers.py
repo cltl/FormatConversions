@@ -612,6 +612,6 @@ class MMAXCorefDocumentReader(XMLItemReader):
                 missing = in_ids - out_ids
                 raise ValidationError(
                     f"Expected {input_total} markables in output, found:"
-                    f" {output_total}. Missing markable IDs: {missing}"
+                    f" {output_total}. Missing markable IDs: {sorted(missing)}"
                 )
         return sets

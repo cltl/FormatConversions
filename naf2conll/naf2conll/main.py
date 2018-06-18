@@ -47,11 +47,11 @@ class Main:
                        **kwargs):
         logger.debug(f"output_dir: {output_dir}")
         for directory in directories:
-            data_dirs = cls.find_data_dirs(
+            data_dirs = sorted(cls.find_data_dirs(
                 directory=directory,
                 naf_extension=naf_extension,
                 dirs_to_ignore=dirs_to_ignore
-            )
+            ))
             for data_dir in data_dirs:
                 cur_output_dir = os.path.join(
                     output_dir,
@@ -88,11 +88,11 @@ class Main:
         """
         Batch convert all NAF files in `input_dir`.
         """
-        files = {
+        files = sorted(
             filename
             for filename in os.listdir(input_dir)
             if filename.endswith(naf_extension)
-        }
+        )
 
         for name in files:
             naf_file = os.path.join(input_dir, name)
