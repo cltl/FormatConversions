@@ -86,7 +86,6 @@ class XMLItemReader:
         # Create `rm_ns` function to remove the name space
         if self.validate and None in root.nsmap:
             ns = root.nsmap[None]
-            logger.debug(f"Name space: {ns!r}")
             nslen = len(ns)
 
             def rm_ns(tag):
