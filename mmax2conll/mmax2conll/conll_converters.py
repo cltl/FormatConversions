@@ -31,18 +31,19 @@ class CorefConverter:
 
         Also discards empty reference sets
         """
-        all_spans = set()
+        all_refsets = set()
         unique_sets = []
-        for refset in sets:
-            refset = list(map(tuple, refset))
-            spans = frozenset(refset)
-            if spans not in all_spans:
-                all_spans.add(spans)
-                spans = set()
+        for refcollection in sets:
+            refcollection = list(map(tuple, refcollection))
+            refset = frozenset(refcollection)
+            if refset not in all_refsets:
+                all_refsets.add(refset)
+                refset = set()
                 new_refset = []
-                for span in refset:
-                    if span not in spans:
-                        spans.add(span)
+                for span in refcollection:
+                    # Keep track of which sets I discarded
+                    if span not in refset:
+                        refset.add(span)
                         new_refset.append(list(span))
                     else:
                         logger.debug(f"Discarding reference: {span}")
@@ -51,11 +52,11 @@ class CorefConverter:
                 else:
                     logger.debug("Discarding empty reference set")
             else:
-                logger.debug(f"Discarding reference set: {refset}")
+                logger.debug(f"Discarding reference set: {refcollection}")
         if logger.getEffectiveLevel() <= logging.DEBUG:
             logger.debug(
-                f"Kept {len(all_spans)} reference sets"
-                f" with {sum(map(len, all_spans))} references"
+                f"Kept {len(all_refsets)} reference sets"
+                f" with {sum(map(len, all_refsets))} references"
             )
         return unique_sets
 
