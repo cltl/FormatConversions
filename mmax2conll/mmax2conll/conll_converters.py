@@ -14,10 +14,12 @@ class CorefConverter:
     """
 
     def __init__(self, sentences, uniqueyfy=c.UNIQUEYFY,
-                 fill_spans=c.FILL_NON_CONSECUTIVE_COREF_SPANS):
+                 fill_spans=c.FILL_NON_CONSECUTIVE_COREF_SPANS,
+                 sort_key=c.MMAX_SAFE_POSITION_FROM_ID):
         self.sentences = sentences
         self.should_uniqueyfy = uniqueyfy
         self.should_fill_spans = fill_spans
+        self.sort_key = sort_key
         self.word_ids = [word['id'] for word in it.chain(*sentences)]
         self.word_indices = dict(
             (ID, i) for i, ID in enumerate(self.word_ids)
@@ -119,8 +121,22 @@ class CorefConverter:
         word_id_map = {}
         word_problem_map = {}
 
+        sorted_sets = sorted(
+            map(
+                lambda refset: sorted(
+                    refset,
+                    key=lambda span: tuple(map(self.sort_key, span))
+                ),
+                sets
+            ),
+            key=lambda refset: tuple(map(
+                lambda span: tuple(map(self.sort_key, span)),
+                refset
+            ))
+        )
+
         # Randomly create a reference ID for every reference refset
-        for refID, refset in enumerate(sets):
+        for refID, refset in enumerate(sorted_sets):
             for span in refset:
                 for wordID in set_problem_map.get(span, []):
                     word_problem_map.setdefault(wordID, []).append(

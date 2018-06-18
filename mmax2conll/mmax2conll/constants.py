@@ -90,6 +90,16 @@ def MMAX_POSITION_FROM_ID(ID):
     return int(str(ID).split('_')[-1])
 
 
+def MMAX_SAFE_POSITION_FROM_ID(ID):
+    """
+    Extract the position from a MMAX ID and return ID on failure
+    """
+    try:
+        return MMAX_POSITION_FROM_ID(ID)
+    except ValueError:
+        return ID
+
+
 # Words files details
 MMAX_WORD_TAG = 'word'
 MMAX_WORDS_TAG = 'words'
