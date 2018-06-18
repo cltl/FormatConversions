@@ -1,5 +1,6 @@
 import logging
 import itertools as it
+from collections import Counter
 
 from . import constants as c
 
@@ -32,33 +33,28 @@ class CorefConverter:
         Also discards empty reference sets
         """
         all_refsets = set()
-        unique_sets = []
         for refcollection in sets:
-            refcollection = list(map(tuple, refcollection))
-            refset = frozenset(refcollection)
-            if refset not in all_refsets:
-                all_refsets.add(refset)
-                refset = set()
-                new_refset = []
-                for span in refcollection:
-                    # Keep track of which sets I discarded
-                    if span not in refset:
-                        refset.add(span)
-                        new_refset.append(span)
-                    else:
-                        logger.debug(f"Discarding reference: {span}")
-                if new_refset:
-                    unique_sets.append(new_refset)
-                else:
-                    logger.debug("Discarding empty reference set")
-            else:
-                logger.debug(f"Discarding reference set: {refcollection}")
+            if not refcollection:
+                logger.debug("Discarding empty reference set")
+                continue
+            # Keep track of which spans I discarded
+            refcounts = Counter(map(tuple, refcollection))
+            refset = frozenset(refcounts)
+            if refset in all_refsets:
+                logger.debug(
+                    f"Discarding duplicate reference set: {refcollection}"
+                )
+                continue
+            all_refsets.add(refset)
+            for span in (s for s in refcounts.elements() if refcounts[c] > 1):
+                logger.debug(f"Discarding duplicate reference: {span}")
+
         if logger.getEffectiveLevel() <= logging.DEBUG:
             logger.debug(
                 f"Kept {len(all_refsets)} reference sets"
                 f" with {sum(map(len, all_refsets))} references"
             )
-        return unique_sets
+        return all_refsets
 
     def check_and_fill_spans(self, sets):
         """
