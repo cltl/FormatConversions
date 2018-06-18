@@ -608,8 +608,11 @@ class MMAXCorefDocumentReader(XMLItemReader):
             input_total = len(markables)
             output_total = sum(map(len, sets))
             if output_total != input_total:
+                out_ids = set(m['id'] for refset in sets for m in refset)
+                in_ids = set(markables)
+                missing = in_ids - out_ids
                 raise ValidationError(
                     f"Expected {input_total} markables in output, found:"
-                    f" {output_total}"
+                    f" {output_total}. Missing markable IDs: {missing}"
                 )
         return sets
