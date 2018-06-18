@@ -32,9 +32,11 @@ class CorefConverter:
         have a unique set of spans (i.e. no other refset has exactly the same
         set of spans).
 
-        Also discards empty reference sets
+        Also discards empty reference sets and discards reference sets that
+        are (strict) subsets of other reference sets.
         """
         all_refsets = set()
+        all_spans = {}
         for refcollection in sets:
             if not refcollection:
                 logger.debug("Discarding empty reference set")
@@ -48,6 +50,8 @@ class CorefConverter:
                 )
                 continue
             all_refsets.add(refset)
+            for span in refset:
+                all_spans.setdefault(span, set()).add(refset)
             for span in (s for s in refcounts.elements() if refcounts[c] > 1):
                 logger.debug(f"Discarding duplicate reference: {span}")
 
@@ -56,6 +60,30 @@ class CorefConverter:
                 f"Kept {len(all_refsets)} reference sets"
                 f" with {sum(map(len, all_refsets))} references"
             )
+        # Check for spans that are in multiple reference sets
+        extra = sorted((sp, rs) for sp, rs in all_spans.items() if len(rs) > 1)
+        for span, sets in extra:
+            biggest = max(sets)
+            others = sets - {biggest}
+            if all(biggest > refset for refset in others):
+                logger.debug(
+                    "Discarding reference sets that are strictly smaller than"
+                    f" another: {sorted(others)}"
+                )
+                all_refsets -= others
+            else:
+                uncomparable = {
+                    refset - {span}
+                    for refset in sets
+                    if any(
+                        not refset > rs and not rs > refset
+                        for rs in sets
+                    )
+                }
+                logger.warn(
+                    "Span in multiple reference sets that are quite different:"
+                    f" {span}. Sets: {sorted(map(sorted, uncomparable))}"
+                )
         return all_refsets
 
     def check_and_fill_spans(self, sets):
