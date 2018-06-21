@@ -249,6 +249,7 @@ class Main:
 
         # Read command line arguments
         parser = ArgumentParser(
+            prog='python -m naf2conll',
             description="""
     Script to convert coreference data in NAF format to [CoNLL][] format.
 
@@ -259,12 +260,12 @@ class Main:
 
     To convert a whole directory recursively, run:
 
-        naf2conll.py <output folder> -d <input folder> [-d <input folder> ...]
+        python -m naf2conll <output folder> -d <input folder> [-d <input folder> ...]
 
 
     To only convert one file, run:
 
-        naf2conll.py <output.conll> <naf file>
+        python -m naf2conll <output.conll> <naf file>
 
 
     When passing folders for batch processing using -d, the passed folders are
