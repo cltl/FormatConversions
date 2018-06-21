@@ -1,0 +1,61 @@
+# Data processing
+validate: true
+uniqueyfy: false
+fill_non_consecutive_coref_spans: true
+sentence_filter: none
+
+# Reporting
+allow_overwriting: false
+log_on_error: true
+
+# NAF
+naf_extension: '.naf'
+dirs_to_ignore: []
+
+# CoNLL
+conll_extension: .conll
+min_column_spacing: 3
+
+conll_columns:
+    # - part_number
+    - word_number
+    - word
+    - problem
+    # - POS
+    # - parse_bit
+    # - pred_lemma
+    # - pred_frameset_ID
+    # - word_sense
+    # - speaker
+    # - named_entities
+    - coref
+
+on_missing:
+    document_id: throw
+    part_number: nothing
+    word_number: throw
+    word: throw
+    problem: nothing
+    POS: nothing
+    parse_bit: nothing
+    pred_lemma: nothing
+    pred_frameset_ID: nothing
+    word_sense: nothing
+    speaker: nothing
+    named_entities: nothing
+    coref: nothing
+
+conll_defaults:
+    document_id: UNKNOWN
+    part_number: 0
+    word_number: '[WORD_NUMBER]'
+    word: '[WORD]'
+    problem: ''
+    POS: '[POS]'
+    parse_bit: '*'
+    pred_lemma: '-'
+    pred_frameset_ID: '-'
+    word_sense: '-'
+    speaker: UNKNOWN
+    named_entities: '*'
+    coref: '-'
