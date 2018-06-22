@@ -54,12 +54,6 @@ class CorefConverter:
                 all_spans.setdefault(span, set()).add(refset)
             for span in (s for s in refcounts.elements() if refcounts[c] > 1):
                 logger.debug(f"Discarding duplicate reference: {span}")
-
-        if logger.getEffectiveLevel() <= logging.DEBUG:
-            logger.debug(
-                f"Kept {len(all_refsets)} reference sets"
-                f" with {sum(map(len, all_refsets))} references"
-            )
         # Check for spans that are in multiple reference sets
         extra = sorted((sp, rs) for sp, rs in all_spans.items() if len(rs) > 1)
         for span, sets in extra:
@@ -84,6 +78,13 @@ class CorefConverter:
                     "Span in multiple reference sets that are quite different:"
                     f" {span}. Sets: {sorted(map(sorted, uncomparable))}"
                 )
+
+        if logger.getEffectiveLevel() <= logging.DEBUG:
+            logger.debug(
+                f"Kept {len(all_refsets)} reference sets"
+                f" with {sum(map(len, all_refsets))} references"
+            )
+
         return all_refsets
 
     def check_and_fill_spans(self, sets):
