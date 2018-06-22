@@ -87,7 +87,7 @@ On the XML level, relations are expressed like normal attributes, with the only 
 ## Scheme files
 (Written by @mpvharmelen, using only an example scheme file.)
 
-A scheme file contains a `<annotationscheme>` tag, which contains `<attribute>` tags that describe legal attri.
+A scheme file contains a `<annotationscheme>` tag, which contains `<attribute>` tags that describe legal attributes.
 
 `<attribute>` tags have the following attributes:
 
