@@ -1,5 +1,5 @@
 # naf2conll
-Script to convert coreference data in NAF format to [CoNLL][] format.
+Script to convert coreference data in NAF format to [CoNLL format][].
 
 !! NB !! At the moment, this script only supports the following columns:
 
@@ -15,7 +15,7 @@ The following CoNLL columns are supported by NAF, but are not (yet) processed (c
  - ...?
  - 11: named entities
 
-See `CoNLL-specification.md` for an extensive description of the CoNLL format.
+See [CoNLL-specification.md][CoNLL format] for an extensive description of the [CoNLL format][].
 
 
 ## Usage
@@ -78,4 +78,4 @@ If you choose to output more columns, the following values and place-holders are
  - [ ] 'on_missing' config key is not validated before use
  - [ ] Raise an error when there is no coref layer in `extract_coref_sets`
 
-[CoNLL]: ../mmax2conll/CoNLL-specification.md
+[CoNLL format]: ../mmax2conll/CoNLL-specification.md
