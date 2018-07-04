@@ -15,6 +15,12 @@ can differ between sentences,
 because of the predicate arguments.
 Columns are right aligned.
 
+For the [reference coreference scorer][] it does not seem to matter which columns are in the file,
+as long as the document ID is the first column and
+the coreference is in the last column.
+This means **any column can be added or removed**,
+as long as the first and last columns contain the document ID and coreference, respectively.
+
 Column  | Type                    | Description
 -------:|-------------------------|----------
 1       | Document ID             | This is a variation on the document filename. Mostly it's the path of the file without the extension.
@@ -41,3 +47,4 @@ for newline delimited block as sentence in file:
 
 [CoNLL-2012]: http://conll.cemantix.org/2012/data.html
 [LDC2011T03]: https://catalog.ldc.upenn.edu/LDC2011T03
+[reference coreference scorer]: https://github.com/conll/reference-coreference-scorers
