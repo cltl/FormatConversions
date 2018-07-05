@@ -26,12 +26,12 @@ mmax2conll.py path/to/config.yml path/to/output.conll path/to/some_words.xml pat
 To automatically find all (sub)folders that contain a `Basedata` and `Markables` folder as direct children and convert all data in those folders, run:
 
 ```sh
-mmax2conll.py path/to/output_dir -d path/to/some/folder [-d path/to/another/folder ...]
+mmax2raw.py path/to/output_dir -d path/to/some/folder [-d path/to/another/folder ...]
 ```
 
 To only convert one file, run:
 ```sh
-mmax2conll.py path/to/output.txt path/to/some_words.xml
+mmax2raw.py path/to/output.txt path/to/some_words.xml
 ```
 
 
