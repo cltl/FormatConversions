@@ -456,6 +456,7 @@ class Main:
 
         # Read command line arguments
         parser = ArgumentParser(
+            prog='python -m mmax2conll',
             description="""
     Script to convert coreference data in MMAX format to CoNLL format.
 
@@ -464,12 +465,12 @@ class Main:
 
     To convert a whole directory recursively, run:
 
-        mmax2conll.py <config file> <output folder> -d <input folder> [-d <input folder> ...]
+        python -m mmax2conll <config file> <output folder> -d <input folder> [-d <input folder> ...]
 
 
     To only convert one pair (or triple) of files, run:
 
-        mmax2conll.py <config file> <output.conll> <*_words.xml> <*coref markables file> [<*_sentence_level.xml>]
+        python -m mmax2conll <config file> <output.conll> <*_words.xml> <*coref markables file> [<*_sentence_level.xml>]
 
 
     When passing folders for batch processing using -d, the passed folders are
