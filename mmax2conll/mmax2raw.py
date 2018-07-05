@@ -12,7 +12,7 @@ from mmax2conll.mmax_document_readers import (
     SoNaRWordsDocumentReader,
 )
 
-from mmax2conll import Main as CoNLLMain
+from mmax2conll.main import Main as CoNLLMain
 
 logger = logging.getLogger(None if __name__ == '__main__' else __name__)
 
