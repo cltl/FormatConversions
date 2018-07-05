@@ -14,12 +14,12 @@ specifying a sentences file is optional.
 To automatically find all (sub)folders that contain a `Basedata` and `Markables` folder as direct children and convert all data in those folders, run:
 
 ```sh
-mmax2conll.py path/to/config.yml path/to/output_dir -d path/to/some/folder [-d path/to/another/folder ...]
+python -m mmax2conll path/to/config.yml path/to/output_dir -d path/to/some/folder [-d path/to/another/folder ...]
 ```
 
 To only convert one pair (or triple) of files, run:
 ```sh
-mmax2conll.py path/to/config.yml path/to/output.conll path/to/some_words.xml path/to/a_coref_level.xml [path/to/a_sentence_level.xml]
+python -m mmax2conll path/to/config.yml path/to/output.conll path/to/some_words.xml path/to/a_coref_level.xml [path/to/a_sentence_level.xml]
 ```
 
 ### `mmax2raw.py`
@@ -70,7 +70,7 @@ The following values and place-holders are used.
   but instead an empty part 0 is added to those files.
 
 \[2\]:
-  The reference spans are not closed in the correct order if they end at the same word. The following is an example of output from `mmax2conll.py`:
+  The reference spans are not closed in the correct order if they end at the same word. The following is an example of output from `mmax2conll`:
 
               (10
                 -
@@ -93,7 +93,7 @@ The following values and place-holders are used.
 
  - [ ] 'on_missing' config key is not validated before use
  - [ ] `basedata_dir` and `markables_dir` should not be configuration keys
- - [ ] Too many methods in `mmax2conll.py` are marked as class methods
+ - [ ] Too many methods in `main.py` are marked as class methods
 
 # References
 Multi-Level Annotation in MMAX (2003)<br>
