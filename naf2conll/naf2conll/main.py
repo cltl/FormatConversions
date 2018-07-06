@@ -244,7 +244,7 @@ class Main:
                 os.remove(output)
 
     @classmethod
-    def get_args(cls, args_from_config=[
+    def get_args(cls, cmdline_args=None, args_from_config=[
                     'validate',
                     'uniqueyfy',
                     'fill_non_consecutive_coref_spans',
@@ -308,7 +308,8 @@ class Main:
                             help="Where to save the CoNLL output")
         parser.add_argument('naf_file', type=file_exists, nargs='?',
                             help="NAF file to use as input")
-        args = vars(parser.parse_args())
+        args = vars(parser.parse_args(cmdline_args))
+        del cmdline_args
 
         # Set the logging level
         logging.basicConfig(level=args.pop('log_level'))
@@ -399,8 +400,9 @@ class Main:
         return config
 
     @classmethod
-    def main(cls):
-        batch, args = cls.get_args()
+    def main(cls, cmdline_args=None):
+        batch, args = cls.get_args(cmdline_args)
+        del cmdline_args
         if batch:
             cls.super_dir_main(**args)
         else:
