@@ -346,6 +346,7 @@ class Main:
 
         return batch, args
 
+    @staticmethod
     def keys_from_config(config, keys, filename):
         """
         Select some `keys` with their values from a dictionary
