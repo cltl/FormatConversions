@@ -3,6 +3,8 @@ import sys
 import logging
 import subprocess
 
+from naf2conll.main import Main
+
 logger = logging.getLogger(None if __name__ == '__main__' else __name__)
 
 
@@ -84,6 +86,36 @@ def test_fill_spans(caplog, naffile_not_consec_coref, fill_spans_config):
             ],
             check=True
         )
+    finally:
+        if os.path.exists(output_file):
+            os.remove(output_file)
+
+
+def test_problem_only(caplog, naffile_not_consec_coref, problem_only_config):
+    caplog.set_level(logging.DEBUG)
+    output_file = 'output.conll'
+    try:
+        Main.main([
+            output_file,
+            naffile_not_consec_coref,
+            '-c',
+            problem_only_config
+        ]),
+    finally:
+        if os.path.exists(output_file):
+            os.remove(output_file)
+
+
+def test_default_config(caplog, naffile_coref, default_config):
+    caplog.set_level(logging.DEBUG)
+    output_file = 'output.conll'
+    try:
+        Main.main([
+            output_file,
+            naffile_coref,
+            '-c',
+            default_config
+        ]),
     finally:
         if os.path.exists(output_file):
             os.remove(output_file)
