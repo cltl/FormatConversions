@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE markables SYSTEM "markables.dtd">
+<markables xmlns="www.eml.org/NameSpaces/coref">
+<markable id="markable_18" span="word_123..word_124" ref="empty"  head="adernetten" />
+<markable id="markable_33" span="word_215..word_216" head="ontlasting" />
+<markable id="markable_47" span="word_280..word_281" ref="empty"  head="vochtverlies" />
+<markable id="markable_76" span="word_490..word_491" head="wondje" />
+<markable id="markable_28" span="word_194..word_195" ref="empty"  head="hinderlijk" />
+<markable id="markable_5" span="word_36..word_37" ref="empty"  head="endeldarm" />
+<markable id="markable_53" span="word_315" head="persen" />
+<markable id="markable_32" span="word_213" ref="empty"  head="zitten" />
+<markable id="markable_23" span="word_164" head="chronische" />
+<markable id="markable_75" span="word_486..word_487" ref="empty"  head="slijmvlies" />
+<markable id="markable_90" span="word_25" level="reference"  ref="markable_4"  type="ident"  time="none"  head="plexus"  mod="no" />
+<markable id="markable_31" span="word_211" head="verergerend" />
+<markable id="markable_61" span="word_390..word_392" ref="empty"  head="dag" />
+<markable id="markable_56" span="word_359" head="maag" />
+<markable id="markable_94" span="word_203..word_236" ref="empty"  head="pijn" />
+<markable id="markable_91" span="word_27" level="reference"  ref="markable_96"  type="ident"  time="none"  head="die"  mod="no" />
+<markable id="markable_89" span="word_5..word_44" level="reference"  ref="empty"  type="ident"  time="none"  head="verwijding"  mod="no" />
+<markable id="markable_50" span="word_294" level="reference"  ref="markable_51"  type="ident"  time="none"  head="aarskloven"  mod="no" />
+<markable id="markable_34" span="word_218..word_220" head="jeuk" />
+<markable id="markable_19" span="word_136" head="aanleg" />
+<markable id="markable_60" span="word_382..word_383" head="ontlasting" />
+<markable id="markable_82" span="word_524" head="injecties" />
+<markable id="markable_66" span="word_439" head="eczeem" />
+<markable id="markable_78" span="word_504" head="proctoscoop" />
+<markable id="markable_14" span="word_99" level="reference"  ref="markable_1"  type="ident"  time="none"  head="aambeien"  mod="no" />
+<markable id="markable_67" span="word_441" head="jeuk" />
+<markable id="markable_6" span="word_42..word_43" level="reference"  ref="markable_10"  type="ident"  time="none"  head="anus"  mod="no" />
+<markable id="markable_45" span="word_272" level="reference"  ref="markable_41"  type="ident"  time="none"  head="aambeien"  mod="no" />
+<markable id="markable_58" span="word_370" level="reference"  ref="markable_59"  type="ident"  time="none"  head="zemelen"  mod="no" />
+<markable id="markable_79" span="word_508..word_509" head="anus" />
+<markable id="markable_36" span="word_229" head="bloed" />
+<markable id="markable_68" span="word_443..word_445" head="zitbad" />
+<markable id="markable_4" span="word_18" level="reference"  ref="markable_3"  type="ident"  time="none"  head="adernetten"  mod="no" />
+<markable id="markable_95" span="word_198..word_200" level="reference"  ref="markable_94"  type="pred"  time="none"  head="verschijnselen"  mod="no" />
+<markable id="markable_73" span="word_472..word_473" level="reference"  ref="markable_49"  type="bridge"  time="none"  head="aambeien"  mod="no" />
+<markable id="markable_48" span="word_284" ref="empty"  head="ontstekingen" />
+<markable id="markable_51" span="word_297" head="aarskloof" />
+<markable id="markable_27" span="word_181" level="reference"  ref="markable_20"  type="ident"  time="none"  head="aambeien"  mod="no" />
+<markable id="markable_86" span="word_546" level="reference"  ref="markable_83"  type="ident"  time="none"  head="aambeien"  mod="no" />
+<markable id="markable_41" span="word_256..word_257" level="reference"  ref="markable_27"  type="ident"  time="none"  head="aambei"  mod="no" />
+<markable id="markable_74" span="word_478..word_480" head="bandje" />
+<markable id="markable_85" span="word_543" head="hemorroïdectomie" />
+<markable id="markable_80" span="word_516" head="poliklinisch" />
+<markable id="markable_93" span="word_191" level="reference"  ref="markable_27"  type="ident"  time="none"  head="zij"  mod="no" />
+<markable id="markable_2" span="word_3" level="reference"  ref="markable_89"  type="ident"  time="none"  head="hemorroïde"  mod="no" />
+<markable id="markable_29" span="word_203..word_206" level="reference"  ref="markable_64"  type="ident"  time="none"  head="pijn"  mod="no" />
+<markable id="markable_30" span="word_208..word_209" level="reference"  ref="markable_63"  type="ident"  time="none"  head="anus"  mod="no" />
+<markable id="markable_35" span="word_222..word_226" head="bloeding" />
+<markable id="markable_92" span="word_46" level="reference"  ref="empty"  type="ident"  time="none"  head="zij"  mod="no" />
+<markable id="markable_54" span="word_339..word_340" head="eten" />
+<markable id="markable_88" span="word_556..word_558" head="zwangerschap" />
+<markable id="markable_70" span="word_462" head="zalven" />
+<markable id="markable_20" span="word_141" level="reference"  ref="markable_17"  type="ident"  time="none"  head="aambeien"  mod="no" />
+<markable id="markable_42" span="word_262" head="inklemming" />
+<markable id="markable_64" span="word_433..word_435" head="gevoel" />
+<markable id="markable_17" span="word_117" level="reference"  ref="markable_14"  type="ident"  time="none"  head="aambeien"  mod="no" />
+<markable id="markable_69" span="word_450..word_451" head="lichaamsbeweging" />
+<markable id="markable_8" span="word_56..word_57" level="reference"  ref="markable_2"  type="bridge"  time="none"  head="aambeien"  mod="no" />
+<markable id="markable_83" span="word_536" level="reference"  ref="markable_81"  type="ident"  time="none"  head="aambeien"  mod="no" />
+<markable id="markable_72" span="word_472" head="hardnekkige" />
+<markable id="markable_16" span="word_112..word_113" head="pijnlijk" />
+<markable id="markable_26" span="word_178" head="aderwanden" />
+<markable id="markable_7" span="word_52" head="slijmvlies" />
+<markable id="markable_25" span="word_167" level="reference"  ref="markable_53"  type="ident"  time="none"  head="persen"  mod="no" />
+<markable id="markable_46" span="word_274..word_275" level="reference"  ref="markable_66"  type="ident"  time="none"  head="eczemen"  mod="no" />
+<markable id="markable_44" span="word_266..word_267" level="reference"  ref="markable_41"  type="ident"  time="none"  head="aambei"  mod="no" />
+<markable id="markable_39" span="word_246..word_247" ref="empty"  head="pijnlijk" />
+<markable id="markable_11" span="word_74..word_75" level="reference"  ref="markable_92"  type="ident"  time="none"  head="knobbels"  mod="no" />
+<markable id="markable_81" span="word_521..word_522" level="reference"  ref="markable_49"  type="ident"  time="none"  head="aambei"  mod="no" />
+<markable id="markable_65" span="word_437" head="pijn" />
+<markable id="markable_13" span="word_90..word_94" ref="empty"  head="stoelgang" />
+<markable id="markable_43" span="word_264" ref="empty"  head="trombose" />
+<markable id="markable_24" span="word_165" ref="empty"  head="verstopping" />
+<markable id="markable_1" span="word_1" level="reference"  ref="markable_2"  type="ident"  time="none"  head="aambei"  mod="no" />
+<markable id="markable_59" span="word_373..word_374" level="reference"  ref="markable_62"  type="ident"  time="none"  head="zemelen"  mod="no" />
+<markable id="markable_12" span="word_84..word_85" level="reference"  ref="markable_8"  type="ident"  time="none"  head="aambeien"  mod="no" />
+<markable id="markable_84" span="word_539" head="operatief" />
+<markable id="markable_87" span="word_548..word_550" head="zwangerschap" />
+<markable id="markable_62" span="word_393" head="zemelen" />
+<markable id="markable_37" span="word_231..word_236" head="ontlasting" />
+<markable id="markable_40" span="word_253..word_254" ref="empty"  head="bloedstolsel" />
+<markable id="markable_52" span="word_312" level="reference"  ref="markable_60"  type="ident"  time="none"  head="ontlasting"  mod="no" />
+<markable id="markable_21" span="word_150..word_152" ref="empty"  head="bloedafvoer" />
+<markable id="markable_15" span="word_106" head="stolsels" />
+<markable id="markable_63" span="word_426..word_427" level="reference"  ref="markable_79"  type="ident"  time="none"  head="anus"  mod="no" />
+<markable id="markable_38" span="word_238..word_240" ref="empty"  head="zwelling" />
+<markable id="markable_49" span="word_287" level="reference"  ref="markable_45"  type="ident"  time="none"  head="aambeien"  mod="yes" />
+<markable id="markable_10" span="word_70..word_71" level="reference"  ref="markable_30"  type="ident"  time="none"  head="anus"  mod="no" />
+<markable id="markable_3" span="word_16" level="reference"  ref="empty"  type="ident"  time="none"  head="bloedvaten"  mod="no" />
+<markable id="markable_9" span="word_65..word_66" level="reference"  ref="markable_2"  type="bridge"  time="none"  head="aambeien"  mod="no" />
+<markable id="markable_96" span="word_10..word_16" level="reference"  ref="markable_92"  type="ident"  time="none"  mod="no" />
+<markable id="markable_55" span="word_349..word_351" head="morgens" />
+<markable id="markable_57" span="word_365..word_367" head="dag" />
+<markable id="markable_22" span="word_162" ref="empty"  head="lichaamsgewicht" />
+<markable id="markable_77" span="word_496" ref="empty"  head="barron-ligatie" />
+<markable id="markable_71" span="word_464" head="zetpillen" />
+</markables>
