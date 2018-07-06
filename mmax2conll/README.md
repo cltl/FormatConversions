@@ -91,6 +91,7 @@ The following values and place-holders are used.
 
 # Issues
 
+ - [ ] Skipping a whole file one any error is too wasteful
  - [ ] 'on_missing' config key is not validated before use
  - [ ] `basedata_dir` and `markables_dir` should not be configuration keys
  - [ ] Too many methods in `main.py` are marked as class methods
