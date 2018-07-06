@@ -9,7 +9,6 @@ from . import constants as c
 from .util import (
     file_exists,
     directory_exists,
-    split_on_numbering,
     document_ID_from_filename,
     add_word_numbers,
 )
