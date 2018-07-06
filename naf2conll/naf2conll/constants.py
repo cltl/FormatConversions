@@ -21,7 +21,7 @@ CONLL_COLUMNS = [
     # 'part_number',
     'word_number',
     'word',
-    'problem',
+    # 'problem',
     # 'POS',
     # 'parse_bit',
     # 'pred_lemma',
