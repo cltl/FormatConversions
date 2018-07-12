@@ -15,7 +15,7 @@ The following CoNLL columns are supported by NAF, but are not (yet) processed (c
  - ...?
  - 11: named entities
 
-See [CoNLL-specification.md][CoNLL format] for an extensive description of the [CoNLL format][].
+See [CoNLL-specification.md][CoNLL format] for an extensive description of the CoNLL format.
 
 
 ## Usage
@@ -78,4 +78,4 @@ If you choose to output more columns, the following values and place-holders are
  - [ ] 'on_missing' config key is not validated before use
  - [ ] Raise an error when there is no coref layer in `extract_coref_sets`
 
-[CoNLL format]: ../mmax2conll/CoNLL-specification.md
+[CoNLL format]: https://github.com/cltl/FormatConversions/blob/master/mmax2conll/CoNLL-specification.md
