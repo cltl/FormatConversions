@@ -20,6 +20,7 @@ setup(
     ],
     classifiers=[
         'Intended Audience :: Developers',
+        'Intended Audience :: Science/Research',
         'License :: OSI Approved :: Apache Software License',
         'Development Status :: 5 - Production/Stable',
         'Programming Language :: Python :: 3.6',
