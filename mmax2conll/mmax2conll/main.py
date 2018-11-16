@@ -428,7 +428,7 @@ class Main:
                 os.remove(output)
 
     @classmethod
-    def get_args(cls, args_from_config=[
+    def get_args(cls, cmdline_args=None, args_from_config=[
                     'validate_xml',
                     'uniqueyfy',
                     'fill_non_consecutive_coref_spans',
@@ -456,6 +456,7 @@ class Main:
 
         # Read command line arguments
         parser = ArgumentParser(
+            prog='python -m mmax2conll',
             description="""
     Script to convert coreference data in MMAX format to CoNLL format.
 
@@ -464,12 +465,12 @@ class Main:
 
     To convert a whole directory recursively, run:
 
-        mmax2conll.py <config file> <output folder> -d <input folder> [-d <input folder> ...]
+        python -m mmax2conll <config file> <output folder> -d <input folder> [-d <input folder> ...]
 
 
     To only convert one pair (or triple) of files, run:
 
-        mmax2conll.py <config file> <output.conll> <*_words.xml> <*coref markables file> [<*_sentence_level.xml>]
+        python -m mmax2conll <config file> <output.conll> <*_words.xml> <*coref markables file> [<*_sentence_level.xml>]
 
 
     When passing folders for batch processing using -d, the passed folders are
@@ -509,7 +510,8 @@ class Main:
             nargs='?',
             help="MMAX *_sentence_level.xml file to use as input"
         )
-        args = vars(parser.parse_args())
+        args = vars(parser.parse_args(cmdline_args))
+        del cmdline_args
 
         # Set the logging level
         logging.basicConfig(level=args.pop('log_level'))
@@ -605,8 +607,9 @@ class Main:
         return config
 
     @classmethod
-    def main(cls):
-        batch, args = cls.get_args()
+    def main(cls, cmdline_args=None):
+        batch, args = cls.get_args(cmdline_args)
+        del cmdline_args
         if batch:
             cls.super_dir_main(**args)
         else:

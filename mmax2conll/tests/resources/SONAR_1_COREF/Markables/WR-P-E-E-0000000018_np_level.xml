@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE markables  SYSTEM 'markables.dtd'><markables xmlns="www.eml.org/NameSpaces/np">
+<markable head="group 2000" id="markable_102" mmax_level="np" ref="empty" span="word_329..word_332"/>
+<markable id="markable_101" mmax_level="np" span="word_332"/>
+<markable id="markable_100" mmax_level="np" span="word_324..word_326"/>
+<markable head="taalcursus" id="markable_66" mmax_level="np" ref="empty" span="word_192..word_197"/>
+<markable head="group 2000" id="markable_106" level="reference" mmax_level="np" mod="no" ref="markable_102" span="word_334..word_335" time="none" type="ident"/>
+<markable id="markable_68" mmax_level="np" span="word_206..word_210"/>
+<markable head="initiatief" id="markable_104" level="reference" mmax_level="np" mod="no" ref="markable_98" span="word_320..word_332" time="none" type="pred"/>
+<markable id="markable_69" mmax_level="np" span="word_214..word_215"/>
+<markable id="markable_103" mmax_level="np" span="word_324..word_332"/>
+<markable id="markable_62" mmax_level="np" span="word_189"/>
+<markable id="markable_63" mmax_level="np" span="word_186..word_187"/>
+<markable id="markable_64" mmax_level="np" span="word_193"/>
+<markable id="markable_65" mmax_level="np" span="word_196..word_197"/>
+<markable id="markable_107" mmax_level="np" span="word_337..word_339"/>
+<markable id="markable_108" mmax_level="np" span="word_345..word_346"/>
+<markable id="markable_109" mmax_level="np" span="word_348"/>
+<markable id="markable_111" mmax_level="np" span="word_350"/>
+<markable id="markable_110" mmax_level="np" span="word_345..word_348"/>
+<markable id="markable_79" mmax_level="np" span="word_265..word_266"/>
+<markable id="markable_114" mmax_level="np" span="word_353"/>
+<markable head="telefoonnummer" id="markable_77" mmax_level="np" ref="empty" span="word_251..word_252"/>
+<markable id="markable_117" mmax_level="np" span="word_359..word_360"/>
+<markable id="markable_78" mmax_level="np" span="word_263"/>
+<markable id="markable_75" mmax_level="np" span="word_247..word_249"/>
+<markable head="zin" id="markable_73" level="reference" mmax_level="np" mod="no" ref="markable_72" span="word_241..word_242" time="none" type="ident"/>
+<markable head="zijn" id="markable_74" level="reference" mmax_level="np" mod="no" ref="markable_71" span="word_247" time="none" type="ident"/>
+<markable head="cursist" id="markable_71" mmax_level="np" ref="empty" span="word_233..word_234"/>
+<markable head="tekst" id="markable_72" mmax_level="np" ref="empty" span="word_236..word_238"/>
+<markable id="markable_44" mmax_level="np" span="word_159"/>
+<markable id="markable_45" mmax_level="np" span="word_136..word_159"/>
+<markable id="markable_46" mmax_level="np" span="word_127..word_159"/>
+<markable id="markable_47" mmax_level="np" span="word_124..word_159"/>
+<markable id="markable_48" mmax_level="np" span="word_121..word_159"/>
+<markable id="markable_49" mmax_level="np" span="word_111..word_159"/>
+<markable id="markable_40" mmax_level="np" span="word_147..word_148"/>
+<markable id="markable_41" mmax_level="np" span="word_145..word_148"/>
+<markable head="informatiebronnen" id="markable_42" mmax_level="np" ref="empty" span="word_140..word_148"/>
+<markable head="elkaar" id="markable_43" level="reference" mmax_level="np" mod="no" ref="markable_42" span="word_151" time="none" type="ident"/>
+<markable head="l&amp;c" id="markable_57" level="reference" mmax_level="np" mod="no" ref="markable_294" span="word_182" time="none" type="ident"/>
+<markable id="markable_58" level="reference" mmax_level="np" mod="no" span="word_184" time="none" type="ident"/>
+<markable id="markable_56" mmax_level="np" span="word_175..word_176"/>
+<markable id="markable_59" mmax_level="np" ref="empty" span="word_178..word_184"/>
+<markable id="markable_50" mmax_level="np" ref="empty" span="word_161..word_162"/>
+<markable id="markable_53" mmax_level="np" span="word_164..word_173"/>
+<markable id="markable_51" mmax_level="np" span="word_170..word_171"/>
+<markable id="markable_52" mmax_level="np" span="word_167..word_171"/>
+<markable id="markable_160" mmax_level="np" span="word_445..word_494"/>
+<markable id="markable_141" mmax_level="np" span="word_412..word_423"/>
+<markable id="markable_161" mmax_level="np" span="word_450..word_452"/>
+<markable id="markable_142" mmax_level="np" span="word_406..word_423"/>
+<markable id="markable_162" mmax_level="np" span="word_447..word_494"/>
+<markable id="markable_163" mmax_level="np" span="word_443..word_494"/>
+<markable id="markable_140" mmax_level="np" span="word_414..word_418"/>
+<markable id="markable_164" mmax_level="np" span="word_438..word_494"/>
+<markable id="markable_145" mmax_level="np" span="word_431..word_436"/>
+<markable id="markable_146" mmax_level="np" span="word_429..word_436"/>
+<markable id="markable_166" mmax_level="np" span="word_518..word_518.5"/>
+<markable id="markable_167" mmax_level="np" span="word_514..word_518.5"/>
+<markable id="markable_144" mmax_level="np" span="word_433"/>
+<markable id="markable_168" mmax_level="np" span="word_516..word_518.5"/>
+<markable id="markable_149" mmax_level="np" span="word_456..word_460"/>
+<markable id="markable_169" mmax_level="np" span="word_514..word_518.5"/>
+<markable id="markable_147" mmax_level="np" span="word_426..word_436"/>
+<markable id="markable_148" mmax_level="np" span="word_440"/>
+<markable id="markable_170" mmax_level="np" span="word_512..word_518.5"/>
+<markable id="markable_171" mmax_level="np" span="word_500"/>
+<markable id="markable_150" mmax_level="np" span="word_475..word_476"/>
+<markable id="markable_174" mmax_level="np" span="word_504..word_509"/>
+<markable id="markable_151" mmax_level="np" span="word_479..word_480"/>
+<markable id="markable_175" mmax_level="np" ref="empty" span="word_500..word_509"/>
+<markable id="markable_152" mmax_level="np" span="word_470..word_480"/>
+<markable id="markable_172" mmax_level="np" span="word_502"/>
+<markable id="markable_153" mmax_level="np" span="word_492..word_494"/>
+<markable id="markable_173" mmax_level="np" span="word_507..word_509"/>
+<markable id="markable_154" mmax_level="np" span="word_488..word_494"/>
+<markable id="markable_178" mmax_level="np" span="word_523..word_524"/>
+<markable id="markable_155" mmax_level="np" span="word_485..word_494"/>
+<markable id="markable_179" mmax_level="np" span="word_521..word_524"/>
+<markable id="markable_156" mmax_level="np" span="word_464..word_494"/>
+<markable head="project" id="markable_176" level="reference" mmax_level="np" mod="no" ref="markable_130" span="word_497..word_509" time="none" type="ident"/>
+<markable id="markable_157" mmax_level="np" span="word_467..word_494"/>
+<markable id="markable_177" mmax_level="np" span="word_523"/>
+<markable id="markable_158" mmax_level="np" span="word_464..word_494"/>
+<markable id="markable_159" mmax_level="np" span="word_443..word_494"/>
+<markable id="markable_119" mmax_level="np" span="word_363..word_364"/>
+<markable head="faculteit" id="markable_118" mmax_level="np" ref="empty" span="word_354..word_360"/>
+<markable id="markable_286" mmax_level="np" span="word_808..word_837"/>
+<markable id="markable_81" mmax_level="np" span="word_267..word_268"/>
+<markable id="markable_183" mmax_level="np" span="word_549..word_550"/>
+<markable id="markable_287" mmax_level="np" span="word_847"/>
+<markable id="markable_80" mmax_level="np" span="word_267"/>
+<markable id="markable_120" mmax_level="np" span="word_365"/>
+<markable id="markable_184" mmax_level="np" span="word_546..word_550"/>
+<markable id="markable_288" mmax_level="np" span="word_844..word_847"/>
+<markable id="markable_83" mmax_level="np" span="word_275"/>
+<markable id="markable_185" mmax_level="np" span="word_559..word_561"/>
+<markable id="markable_289" mmax_level="np" span="word_841..word_847"/>
+<markable id="markable_82" mmax_level="np" span="word_272"/>
+<markable id="markable_186" mmax_level="np" span="word_555..word_561"/>
+<markable id="markable_85" mmax_level="np" span="word_258..word_276"/>
+<markable head="website" id="markable_84" level="reference" mmax_level="np" mod="no" ref="markable_295" span="word_260..word_276" time="none" type="ident"/>
+<markable id="markable_180" mmax_level="np" span="word_529..word_532"/>
+<markable id="markable_181" mmax_level="np" span="word_536..word_538"/>
+<markable id="markable_86" mmax_level="np" ref="empty" span="word_254..word_276"/>
+<markable id="markable_182" mmax_level="np" span="word_541..word_542"/>
+<markable head="nummer" id="markable_89" level="reference" mmax_level="np" mod="no" ref="markable_77" span="word_279..word_288" time="none" type="ident"/>
+<markable id="markable_127" mmax_level="np" span="word_386..word_388"/>
+<markable id="markable_88" mmax_level="np" span="word_285..word_286"/>
+<markable id="markable_128" mmax_level="np" span="word_383..word_388"/>
+<markable head="projectvoorstel" id="markable_280" level="reference" mmax_level="np" mod="no" ref="markable_269" span="word_822..word_824" time="none" type="ident"/>
+<markable id="markable_125" mmax_level="np" span="word_368..word_374"/>
+<markable id="markable_281" mmax_level="np" span="word_819..word_824"/>
+<markable id="markable_126" mmax_level="np" span="word_381"/>
+<markable id="markable_282" mmax_level="np" span="word_817..word_824"/>
+<markable id="markable_123" mmax_level="np" span="word_372..word_374"/>
+<markable id="markable_187" mmax_level="np" span="word_552..word_561"/>
+<markable head="blueprint" id="markable_283" level="reference" mmax_level="np" mod="no" ref="markable_271" span="word_827..word_829" time="none" type="ident"/>
+<markable id="markable_124" mmax_level="np" span="word_371..word_374"/>
+<markable head="onderzoeksinstituut" id="markable_284" level="reference" mmax_level="np" mod="no" ref="markable_298" span="word_836..word_837" time="none" type="ident"/>
+<markable id="markable_121" mmax_level="np" span="word_372"/>
+<markable head="project" id="markable_189" level="reference" mmax_level="np" mod="no" ref="markable_176" span="word_563..word_564" time="none" type="ident"/>
+<markable id="markable_285" mmax_level="np" span="word_833..word_837"/>
+<markable id="markable_122" mmax_level="np" span="word_374"/>
+<markable id="markable_129" mmax_level="np" span="word_379..word_388"/>
+<markable id="markable_90" mmax_level="np" span="word_291..word_293"/>
+<markable head="aclc" id="markable_299" level="reference" mmax_level="np" mod="no" ref="markable_298" span="word_844..word_845" time="none" type="ident"/>
+<markable id="markable_94" mmax_level="np" span="word_308"/>
+<markable id="markable_196" mmax_level="np" span="word_582..word_594"/>
+<markable head="en" id="markable_197" level="reference" mmax_level="np" mod="no" ref="markable_297" span="word_570..word_594" time="none" type="ident"/>
+<markable head="deelprojecten" id="markable_297" mmax_level="np" ref="empty" span="word_566..word_567"/>
+<markable id="markable_92" mmax_level="np" span="word_295..word_296"/>
+<markable head="project" id="markable_130" mmax_level="np" ref="empty" span="word_376..word_388"/>
+<markable id="markable_194" mmax_level="np" span="word_586..word_588"/>
+<markable head="center" id="markable_298" mmax_level="np" ref="empty" span="word_620..word_626"/>
+<markable id="markable_131" mmax_level="np" span="word_391"/>
+<markable id="markable_195" mmax_level="np" span="word_591..word_594"/>
+<markable head="taalcursus" id="markable_98" level="reference" mmax_level="np" mod="no" ref="markable_66" span="word_316..word_318" time="none" type="ident"/>
+<markable id="markable_192" mmax_level="np" span="word_573..word_577"/>
+<markable id="markable_193" mmax_level="np" span="word_570..word_577"/>
+<markable id="markable_190" mmax_level="np" span="word_577"/>
+<markable id="markable_95" mmax_level="np" span="word_311..word_313"/>
+<markable id="markable_191" mmax_level="np" span="word_575..word_577"/>
+<markable id="markable_291" mmax_level="np" span="word_852..word_855"/>
+<markable id="markable_136" mmax_level="np" span="word_398..word_401.5"/>
+<markable head="faculteit" id="markable_137" level="reference" mmax_level="np" mod="no" ref="markable_118" span="word_420..word_423" time="none" type="ident"/>
+<markable id="markable_138" mmax_level="np" span="word_406..word_423"/>
+<markable id="markable_99" mmax_level="np" span="word_326"/>
+<markable id="markable_139" mmax_level="np" span="word_416..word_418"/>
+<markable head="vakantietaal.nl" id="markable_295" mmax_level="np" ref="empty" span="word_258"/>
+<markable id="markable_132" mmax_level="np" span="word_390..word_391"/>
+<markable head="dienst" id="markable_296" level="reference" mmax_level="np" mod="no" ref="markable_77" span="word_254..word_258" time="none" type="pred"/>
+<markable id="markable_133" mmax_level="np" span="word_394..word_396"/>
+<markable id="markable_134" mmax_level="np" span="word_365..word_396"/>
+<markable head="elkaar" id="markable_198" level="reference" mmax_level="np" mod="no" ref="markable_297" span="word_600" time="none" type="ident"/>
+<markable head="taaltechnologiebedrijf" id="markable_294" mmax_level="np" ref="empty" span="word_102..word_107"/>
+<markable id="markable_199" mmax_level="np" span="word_566..word_601"/>
+<markable head="projectgroepen" id="markable_258" level="reference" mmax_level="np" mod="no" ref="markable_245" span="word_747..word_748" time="none" type="ident"/>
+<markable head="hun" id="markable_259" level="reference" mmax_level="np" mod="no" ref="markable_258" span="word_750" time="none" type="ident"/>
+<markable id="markable_254" mmax_level="np" span="word_723..word_730"/>
+<markable head="groepen" id="markable_253" level="reference" mmax_level="np" mod="no" ref="markable_221" span="word_728..word_730" time="none" type="ident"/>
+<markable id="markable_256" mmax_level="np" span="word_734..word_744"/>
+<markable head="blueprint" id="markable_255" mmax_level="np" ref="empty" span="word_739..word_741"/>
+<markable id="markable_250" mmax_level="np" span="word_717..word_721"/>
+<markable head="dwarsverbanden" id="markable_251" mmax_level="np" ref="empty" span="word_704..word_721"/>
+<markable id="markable_16" mmax_level="np" span="word_51..word_52"/>
+<markable id="markable_18" mmax_level="np" span="word_66"/>
+<markable id="markable_17" mmax_level="np" span="word_56"/>
+<markable id="markable_12" mmax_level="np" span="word_28..word_30"/>
+<markable id="markable_11" mmax_level="np" span="word_24"/>
+<markable id="markable_14" mmax_level="np" span="word_37..word_39"/>
+<markable id="markable_10" mmax_level="np" span="word_21..word_22"/>
+<markable id="markable_249" mmax_level="np" span="word_721"/>
+<markable id="markable_248" mmax_level="np" span="word_719"/>
+<markable id="markable_247" mmax_level="np" span="word_717"/>
+<markable id="markable_246" mmax_level="np" span="word_706..word_709"/>
+<markable head="projectgroepen" id="markable_245" level="reference" mmax_level="np" mod="no" ref="markable_221" span="word_708..word_709" time="none" type="ident"/>
+<markable head=";" id="markable_243" level="reference" mmax_level="np" mod="no" ref="markable_221" span="word_668..word_699" time="none" type="ident"/>
+<markable id="markable_242" mmax_level="np" span="word_699"/>
+<markable id="markable_241" mmax_level="np" span="word_695..word_697"/>
+<markable id="markable_240" mmax_level="np" span="word_697"/>
+<markable id="markable_239" mmax_level="np" span="word_695"/>
+<markable id="markable_275" mmax_level="np" span="word_796..word_797"/>
+<markable id="markable_278" mmax_level="np" span="word_811..word_815"/>
+<markable id="markable_279" mmax_level="np" span="word_808..word_815"/>
+<markable id="markable_270" mmax_level="np" span="word_785"/>
+<markable id="markable_272" mmax_level="np" span="word_783..word_792"/>
+<markable id="markable_8" mmax_level="np" span="word_17..word_18"/>
+<markable head="blueprint" id="markable_271" level="reference" mmax_level="np" mod="no" ref="markable_255" span="word_790..word_792" time="none" type="ident"/>
+<markable id="markable_9" mmax_level="np" span="word_15"/>
+<markable id="markable_274" mmax_level="np" span="word_800..word_803"/>
+<markable id="markable_33" mmax_level="np" ref="empty" span="word_93..word_97"/>
+<markable head="l&amp;c" id="markable_36" level="reference" mmax_level="np" mod="no" ref="markable_294" span="word_109" time="none" type="ident"/>
+<markable id="markable_38" mmax_level="np" span="word_99..word_100"/>
+<markable id="markable_37" mmax_level="np" span="word_102..word_109"/>
+<markable id="markable_39" mmax_level="np" span="word_117..word_119"/>
+<markable id="markable_32" mmax_level="np" span="word_96..word_97"/>
+<markable id="markable_31" mmax_level="np" span="word_86"/>
+<markable id="markable_266" mmax_level="np" span="word_770..word_771"/>
+<markable id="markable_265" mmax_level="np" span="word_766"/>
+<markable head="projectvoorstel" id="markable_269" mmax_level="np" ref="empty" span="word_779..word_780"/>
+<markable id="markable_268" mmax_level="np" span="word_776"/>
+<markable id="markable_19" mmax_level="np" span="word_64..word_68"/>
+<markable id="markable_263" mmax_level="np" span="word_753..word_764"/>
+<markable id="markable_262" mmax_level="np" span="word_757..word_764"/>
+<markable id="markable_261" mmax_level="np" ref="empty" span="word_747..word_751"/>
+<markable head="dwarsverbanden" id="markable_260" level="reference" mmax_level="np" mod="no" ref="markable_251" span="word_750..word_751" time="none" type="ident"/>
+<markable id="markable_7" mmax_level="np" span="word_12..word_14"/>
+<markable id="markable_25" mmax_level="np" span="word_78..word_80"/>
+<markable id="markable_6" mmax_level="np" span="word_14"/>
+<markable id="markable_5" mmax_level="np" span="word_11"/>
+<markable id="markable_23" mmax_level="np" span="word_73..word_74"/>
+<markable id="markable_2" mmax_level="np" span="word_3..word_4"/>
+<markable id="markable_28" mmax_level="np" span="word_85"/>
+<markable id="markable_1" mmax_level="np" span="word_1"/>
+<markable id="markable_21" mmax_level="np" span="word_56..word_68"/>
+<markable id="markable_20" mmax_level="np" span="word_61..word_68"/>
+<markable id="markable_213" mmax_level="np" span="word_636..word_639"/>
+<markable id="markable_214" mmax_level="np" span="word_631..word_639"/>
+<markable id="markable_215" mmax_level="np" span="word_641..word_643"/>
+<markable id="markable_216" mmax_level="np" span="word_644..word_648"/>
+<markable head="aclc" id="markable_211" level="reference" mmax_level="np" mod="no" ref="markable_298" span="word_628" time="none" type="ident"/>
+<markable id="markable_212" mmax_level="np" span="word_620..word_628"/>
+<markable id="markable_208" mmax_level="np" span="word_618"/>
+<markable id="markable_205" mmax_level="np" span="word_613..word_616"/>
+<markable id="markable_202" mmax_level="np" span="word_605..word_606"/>
+<markable id="markable_203" mmax_level="np" span="word_608"/>
+<markable id="markable_230" mmax_level="np" span="word_682"/>
+<markable id="markable_231" mmax_level="np" span="word_680..word_682"/>
+<markable id="markable_232" mmax_level="np" span="word_684..word_685"/>
+<markable id="markable_233" mmax_level="np" span="word_687"/>
+<markable id="markable_234" mmax_level="np" span="word_684..word_687"/>
+<markable id="markable_235" mmax_level="np" span="word_689"/>
+<markable id="markable_236" mmax_level="np" span="word_691"/>
+<markable id="markable_237" mmax_level="np" span="word_693"/>
+<markable id="markable_238" mmax_level="np" span="word_689..word_693"/>
+<markable id="markable_229" mmax_level="np" span="word_680"/>
+<markable id="markable_228" mmax_level="np" span="word_674..word_678"/>
+<markable id="markable_222" mmax_level="np" span="word_657..word_666"/>
+<markable id="markable_223" mmax_level="np" span="word_668..word_669"/>
+<markable id="markable_220" mmax_level="np" span="word_655..word_656"/>
+<markable head="projectgroepen" id="markable_221" mmax_level="np" ref="empty" span="word_664..word_666"/>
+<markable id="markable_226" mmax_level="np" span="word_676"/>
+<markable id="markable_227" mmax_level="np" span="word_678"/>
+<markable id="markable_224" mmax_level="np" span="word_671..word_672"/>
+<markable id="markable_225" mmax_level="np" span="word_674"/>
+<markable head="instituut" id="markable_219" level="reference" mmax_level="np" mod="no" ref="markable_298" span="word_651..word_652" time="none" type="ident"/>
+</markables>

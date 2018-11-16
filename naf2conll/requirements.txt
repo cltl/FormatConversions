@@ -1,2 +1,0 @@
-pyaml==17.12.1
-KafNafParserPy==1.88

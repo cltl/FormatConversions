@@ -9,7 +9,6 @@ from . import constants as c
 from .util import (
     file_exists,
     directory_exists,
-    split_on_numbering,
     document_ID_from_filename,
     add_word_numbers,
 )
@@ -209,9 +208,25 @@ class Main:
             writer.write(fd, document_id, sentences)
 
     @staticmethod
-    def can_output_to(output, config, batch):
+    def can_output_to(output, batch, allow_overwriting=None):
+        """
+        Check whether the specified output location is legal.
+
+        Handles batch and single file separately.
+
+        :param output:              specified output location (may be both a
+                                    directory or a file)
+        :param batch:               whether the output location is for batch
+                                    processing or a single file
+        :param allow_overwriting:   whether to allow overwriting existing
+                                    files or directories. Defaults to
+                                    c.ALLOW_OVERWRITING if `None`.
+        """
+        if allow_overwriting is None:
+            allow_overwriting = c.ALLOW_OVERWRITING
+
         if os.path.exists(output):
-            if not config['allow_overwriting']:
+            if not allow_overwriting:
                 thing = "folder" if batch else "file"
                 raise ValueError(
                     "The configuration specifies overwriting is not allowed,"
@@ -229,7 +244,7 @@ class Main:
                 os.remove(output)
 
     @classmethod
-    def get_args(cls, args_from_config=[
+    def get_args(cls, cmdline_args=None, args_from_config=[
                     'validate',
                     'uniqueyfy',
                     'fill_non_consecutive_coref_spans',
@@ -288,12 +303,13 @@ class Main:
                             dest='directories', type=directory_exists,
                             help="Directory to batch convert files from")
         parser.add_argument('-c', '--config', help="YAML configuration file",
-                            type=file_exists, default='default_config.yml')
+                            type=file_exists)
         parser.add_argument('output',
                             help="Where to save the CoNLL output")
         parser.add_argument('naf_file', type=file_exists, nargs='?',
                             help="NAF file to use as input")
-        args = vars(parser.parse_args())
+        args = vars(parser.parse_args(cmdline_args))
+        del cmdline_args
 
         # Set the logging level
         logging.basicConfig(level=args.pop('log_level'))
@@ -321,32 +337,40 @@ class Main:
                     " number of directories to use as input instead."
                 )
 
-        # Read configuration
-        config_file = args.pop('config')
-        config = cls.read_config(config_file)
-
-        # Read common keys
-        args.update(
-            cls.keys_from_config(config, args_from_config, config_file)
-        )
-
-        args['sentence_filter'] = c.SENTENCE_FILTERS[args['sentence_filter']]
-
-        # Read batch keys
         if batch:
-            args.update(
-                cls.keys_from_config(
-                    config,
-                    batch_args_from_config,
-                    config_file
-                )
-            )
+            args_from_config.extend(batch_args_from_config)
+            del batch_args_from_config
+
+        cls.process_config(args, args_from_config)
 
         # Verify the output location
-        cls.can_output_to(output, config, batch)
+        cls.can_output_to(output, batch, args.get('allow_overwriting', None))
 
         return batch, args
 
+    @classmethod
+    def process_config(cls, args, args_from_config):
+        """
+        Read arguments from configuration file if a configuration file is given
+        in the `config` key of `args`.
+
+        Changes `args` in place.
+        """
+        filename = args.pop('config', None)
+        if filename is not None:
+            # Read configuration
+            config = cls.read_config(filename)
+
+            # Read common keys
+            args.update(
+                cls.keys_from_config(config, args_from_config, filename)
+            )
+
+            args['sentence_filter'] = c.SENTENCE_FILTERS[
+                args['sentence_filter']
+            ]
+
+    @staticmethod
     def keys_from_config(config, keys, filename):
         """
         Select some `keys` with their values from a dictionary
@@ -376,8 +400,9 @@ class Main:
         return config
 
     @classmethod
-    def main(cls):
-        batch, args = cls.get_args()
+    def main(cls, cmdline_args=None):
+        batch, args = cls.get_args(cmdline_args)
+        del cmdline_args
         if batch:
             cls.super_dir_main(**args)
         else:

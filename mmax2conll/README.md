@@ -91,21 +91,24 @@ The following values and place-holders are used.
 
 # Issues
 
+ - [ ] Skipping a whole file one any error is too wasteful
  - [ ] 'on_missing' config key is not validated before use
  - [ ] `basedata_dir` and `markables_dir` should not be configuration keys
  - [ ] Too many methods in `main.py` are marked as class methods
 
 # References
-Multi-Level Annotation in MMAX (2003)<br>
-... (To Do)<br>
-http://www.speech.cs.cmu.edu/sigdial2003/proceedings/07_LONG_strube_paper.pdf
+Christoph Müller and Michael Strube.<br>
+Multi-Level Annotation in MMAX<br>
+In Proceedings of the 4th SIGDIAL Workshop. 2003.<br>
+URL http://www.speech.cs.cmu.edu/sigdial2003/proceedings/07_LONG_strube_paper.pdf
 
 
+Iris Hendrickx, Gosse Bouma, Walter Daelemans and Véronique Hoste.<br>
 COREA: Coreference Resolution for Extracting Answers for Dutch<br>
-Iris Hendrickx, Gosse Bouma, Walter Daelemans, and Véronique Hoste.<br>
-Essential Speech and Language Technology for Dutch, Ch.7, p.115 -- 128<br>
+Essential Speech and Language Technology for Dutch, Ch.7, p.115 -- 128. 2013.<br>
 Editors: Peter Spyns, Jan Odijk<br>
 https://link.springer.com/book/10.1007/978-3-642-30910-6<br>
+10.1007/978-3-642-30910-6<br>
 
 SoNaR: https://ivdnt.org/downloads/taalmaterialen/tstc-sonar-corpus
 

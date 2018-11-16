@@ -5,7 +5,12 @@ import pytest
 
 @pytest.fixture
 def resources_dir():
-    return './tests/resources/'
+    return './resources/'
+
+
+@pytest.fixture
+def config_dir():
+    return '../config/'
 
 
 @pytest.fixture
@@ -35,5 +40,15 @@ def nafobj(naffile_coref):
 
 
 @pytest.fixture
-def fill_spans_config(resources_dir):
-    return os.path.join(resources_dir, 'fill_spans_config.yml')
+def default_config(config_dir):
+    return os.path.join(config_dir, 'default_config.yml')
+
+
+@pytest.fixture
+def fill_spans_config(config_dir):
+    return os.path.join(config_dir, 'fill_config.yml')
+
+
+@pytest.fixture
+def problem_only_config(config_dir):
+    return os.path.join(config_dir, 'problem_only_config.yml')
