@@ -6,7 +6,7 @@ with open('README.md') as f:
 
 setup(
     name='mmax2conll',
-    version='1.0.0',
+    version='1.0.1',
     description='Script to convert data in MMAX format to CoNLL format',
     long_description=readme,
     long_description_content_type="text/markdown",
