@@ -399,7 +399,7 @@ class Main:
 
         # Read the configuration file
         with open(filename) as config_fd:
-            config = yaml.load(config_fd)
+            config = yaml.safe_load(config_fd)
 
         return config
 
