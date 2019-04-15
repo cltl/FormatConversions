@@ -266,27 +266,31 @@ class Main:
         parser = ArgumentParser(
             prog='python -m naf2conll',
             description="""
-    Script to convert coreference data in NAF format to [CoNLL][] format.
+    Script to convert coreference data in NAF format to CoNLL format.
 
-    !! NB !! Although both NAF and CoNLL support POS-tags and constituency
-             trees, this script does not (yet) output these to CoNLL.
+    !! NB !! At the moment, this script only supports the following columns:
 
-    See `CoNLL-specification.md` for an extensive description of the CoNLL format.
+     -  1: Document ID
+     -  3: Word number
+     -  4: Word itself
+     - 12: Coreference
 
-    To convert a whole directory recursively, run:
+    See `CoNLL-specification.md` for an extensive description of the CoNLL format:
+    https://github.com/cltl/FormatConversions/blob/master/mmax2conll/CoNLL-specification.md
+
+    To automatically find all (sub)folders that contain NAF files and convert all
+    data in those folders, run:
 
         python -m naf2conll <output folder> -d <input folder> [-d <input folder> ...]
-
 
     To only convert one file, run:
 
         python -m naf2conll <output.conll> <naf file>
 
 
-    When passing folders for batch processing using -d, the passed folders are
-    searched for a data folder containing both a `Basedata` and `Markables` folder.
-    The output is saved using the same path relative to the output folder as the
-    original folder has relative to the passed folder the data folder was found in.
+    When passing folders for batch processing using -d, the output is saved using
+    the same path relative to the output folder as the original folder has relative
+    to the folder passed using `-d`.
 
     !! NB !! This means that the data of two folders is merged if they happen
              to have the same path relative to passed folders. No files will be
