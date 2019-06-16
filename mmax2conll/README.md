@@ -1,5 +1,5 @@
 # mmax2conll
-Script to convert coreference data in MMAX format to [CoNLL][] format or raw text files.
+Script to convert coreference data in MMAX (Müller and Strube, 2003) format to [CoNLL][] format or raw text files.
 
 See `CoNLL-specification.md` and `MMAX-specification.md` for extensive descriptions of the CoNLL and MMAX formats.
 
@@ -7,8 +7,8 @@ See `CoNLL-specification.md` and `MMAX-specification.md` for extensive descripti
 ## Usage
 
 ### `mmax2conll.py`
-Because the COREA corpus saves its sentence information in the `*_words.xml` files
-but the [SoNaR-1][] corpus saves this separately in `*_sentence_level.xml` files,
+Because the [COREA][] corpus saves its sentence information in the `*_words.xml` files
+but the SoNaR-1 part of the [SoNaR][] corpus saves this separately in `*_sentence_level.xml` files,
 specifying a sentences file is optional.
 
 To automatically find all (sub)folders that contain a `Basedata` and `Markables` folder as direct children and convert all data in those folders, run:
@@ -36,7 +36,7 @@ mmax2raw.py path/to/output.txt path/to/some_words.xml
 
 
 ## Columns of CoNLL output
-These scripts were first used to convert data from the [COREA][] (Ch.7 p.115 -- 128) dataset to CoNLL and
+These scripts were first used to convert data from the COREA dataset (Hendrickx et al., 2013) to CoNLL and
 COREA does not contain the following information:
 
  - POS tags
@@ -108,11 +108,11 @@ COREA: Coreference Resolution for Extracting Answers for Dutch<br>
 Essential Speech and Language Technology for Dutch, Ch.7, p.115 -- 128. 2013.<br>
 Editors: Peter Spyns, Jan Odijk<br>
 https://link.springer.com/book/10.1007/978-3-642-30910-6<br>
-10.1007/978-3-642-30910-6<br>
+DOI: [10.1007/978-3-642-30910-6](https://doi.org/10.1007/978-3-642-30910-6)<br>
 
-SoNaR: https://ivdnt.org/downloads/taalmaterialen/tstc-sonar-corpus
+SoNaR: https://ivdnt.org/downloads/taalmaterialen/tstc-sonar-corpus<br>
+COREA: https://ivdnt.org/downloads/taalmaterialen/tstc-corea-coreferentiecorpus
 
-
-[COREA]: https://link.springer.com/book/10.1007/978-3-642-30910-6
+[COREA]: https://ivdnt.org/downloads/taalmaterialen/tstc-corea-coreferentiecorpus
 [CoNLL]: http://conll.cemantix.org/2012/data.html
-[SoNaR-1]: https://ivdnt.org/downloads/taalmaterialen/tstc-sonar-corpus
+[SoNaR]: https://ivdnt.org/downloads/taalmaterialen/tstc-sonar-corpus
