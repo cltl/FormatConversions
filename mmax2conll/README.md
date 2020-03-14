@@ -3,6 +3,7 @@ Script to convert coreference data in MMAX (Müller and Strube, 2003) format to 
 
 See `CoNLL-specification.md` and `MMAX-specification.md` for extensive descriptions of the CoNLL and MMAX formats.
 
+If you're trying to use this, you probably want to use https://github.com/andreasvc/dutchcoref/blob/master/mmaxconll.py instead. (14-03-2014)
 
 ## Usage
 
